@@ -27,6 +27,7 @@ def page_header(req):
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="../style.css">
 </head>
 <body>
 """)

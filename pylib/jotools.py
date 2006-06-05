@@ -19,5 +19,43 @@
 
 # This file contains general helper functions
 
+import codecs
+import re
+import _config
+
+def _call_handler(db, module, funcname, paramlist):
+	if module == 'joeditors':
+		import joeditors
+		return joeditors.call(db, funcname, paramlist)
+	return "Error: unknown module"
+
 def write(req, string):
 	req.write(unicode(string).encode("UTF-8"))
+
+def process_template(req, db, static_vars, template_name, lang, module):
+	tmplfilename = _config.TEMPLATE_PATH + '/' + template_name + '_' + lang + '.txt'
+	tmplfile = codecs.open(tmplfilename, 'r', 'utf-8')
+	var_re = re.compile("^(.*)\\$\\$(.*)\\$\\$(.*)$")
+	func_re = re.compile("^(.*)\\((.*)\\)$")
+	file_cont = True
+	while file_cont:
+		# FIXME: only one variable/function allowed on one line
+		line = tmplfile.readline()
+		file_cont = line.endswith('\n')
+		var_match = var_re.match(line)
+		if var_match != None:
+			req.write(var_match.group(1))
+			func_match = func_re.match(var_match.group(2))
+			if func_match == None:
+				req.write(static_vars[var_match.group(2)])
+			else:
+				paramlist = []
+				for param in func_match.group(2).split(','):
+					param = param.strip()
+					if param != '':
+						paramlist.append(static_vars[param])
+				req.write(_call_handler(db, module, func_match.group(1), paramlist))
+			req.write(var_match.group(3) + u'\n')
+		else:
+			req.write(line)
+	tmplfile.close()

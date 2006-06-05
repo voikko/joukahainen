@@ -8,6 +8,9 @@ MODULE_PATH_JOUKAHAINEN = 'hunspell-fi-svn/trunk/joukahainen/pylib'
 # Path to module directory (Hunspell-fi tools)
 MODULE_PATH_HFTOOLS = 'hunspell-fi-svn/trunk/tools/pylib'
 
+# Path to template directory
+TEMPLATE_PATH = 'hunspell-fi-svn/trunk/joukahainen/templates'
+
 # Database connection parameters
 DBHOST = 'localhost'
 DB_PORT = 5432

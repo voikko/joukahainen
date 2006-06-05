@@ -17,24 +17,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# This file contains methods to query the word database
+# This file contains metadata display and editor components
 
-from mod_python import apache
+def _word_class(db, classid):
+	results = db.query("SELECT name FROM wordclass WHERE classid = %i" % classid)
+	if results.ntuples() == 0:
+		return "Error: word class %i does not exists" % classid
+	return ("<span class=\"fheader\">Sanaluokka:</span>" +
+	        " <span class=\"fsvalue\">%s</span>") % results.getresult()[0][0]
 
-import sys
-import _apply_config
-import joheaders
-import jotools
-import jodb
-
-def listwords(req):
-	joheaders.page_header(req)
-	jotools.write(req, u"<h1>Kaikki sanat</h1>\n")
-	db = jodb.connect()
-	results = db.query("select wid, word from word")
-	jotools.write(req, "<table><tr><th>Sana</th></tr>\n")
-	for result in results.getresult():
-		jotools.write(req, "<tr><td><a href=\"../word/edit?wid=%s\">%s</a></td></tr>\n" % result)
-	jotools.write(req, "</table>\n")
-	joheaders.page_footer(req)
-	return "</html>"
+def call(db, funcname, paramlist):
+	if funcname == 'word_class':
+		if len(paramlist) != 1: return "Error: 1 parameter expected"
+		return _word_class(db, paramlist[0])
+	return "Error: unknown function"

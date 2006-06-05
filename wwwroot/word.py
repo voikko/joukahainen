@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# This file contains methods to query the word database
+# This file contains the word editor
 
 from mod_python import apache
 
@@ -27,14 +27,16 @@ import joheaders
 import jotools
 import jodb
 
-def listwords(req):
+def edit(req, wid):
 	joheaders.page_header(req)
-	jotools.write(req, u"<h1>Kaikki sanat</h1>\n")
 	db = jodb.connect()
-	results = db.query("select wid, word from word")
-	jotools.write(req, "<table><tr><th>Sana</th></tr>\n")
-	for result in results.getresult():
-		jotools.write(req, "<tr><td><a href=\"../word/edit?wid=%s\">%s</a></td></tr>\n" % result)
-	jotools.write(req, "</table>\n")
+	wid_n = int(wid)
+	results = db.query("select word, class from word where wid = %i" % wid_n)
+	if results.ntuples() == 0:
+		jotools.write(req, u"Sanaa %i ei ole\n" % wid_n)
+	else:
+		wordinfo = results.getresult()[0]
+		static_vars = {'WORD': wordinfo[0], 'CLASSID': wordinfo[1]}
+		jotools.process_template(req, db, static_vars, 'word_edit', 'fi', 'joeditors')
 	joheaders.page_footer(req)
 	return "</html>"
