@@ -2,4 +2,6 @@
 <p>
 $$word_class(CLASSID)$$
 </p>
-
+<p>
+$$noun_inflection(WID,WORD)$$
+</p>

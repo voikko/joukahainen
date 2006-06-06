@@ -36,7 +36,7 @@ def edit(req, wid):
 		jotools.write(req, u"Sanaa %i ei ole\n" % wid_n)
 	else:
 		wordinfo = results.getresult()[0]
-		static_vars = {'WORD': wordinfo[0], 'CLASSID': wordinfo[1]}
+		static_vars = {'WID': wid_n, 'WORD': wordinfo[0], 'CLASSID': wordinfo[1]}
 		jotools.process_template(req, db, static_vars, 'word_edit', 'fi', 'joeditors')
 	joheaders.page_footer(req)
 	return "</html>"
