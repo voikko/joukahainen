@@ -5,3 +5,20 @@ span.fheader {
 span.fsvalue {
 	font-family: monospace;
 }
+
+table.inflection {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background-color: green; 
+}
+
+tr > td {
+	color: gray;
+	display: none;
+}
+
+tr.characteristic > td {
+	color: black;
+	display: table-cell;
+}

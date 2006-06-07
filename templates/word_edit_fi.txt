@@ -2,6 +2,13 @@
 <p>
 $$word_class(CLASSID)$$
 </p>
+<h2>Asetetut liput</h2>
+<p>
+$$flag_attributes(WID)$$
+</p>
+<h2>Taivutus</h2>
+<p>
+<span class="fheader">Taivutusluokka:</span> <span class="fsvalue">$$string_attribute(WID,1)$$</span>
 <p>
 $$noun_inflection(WID,WORD)$$
 </p>

@@ -19,11 +19,17 @@ CREATE TABLE wordclass (
   name varchar NOT NULL -- name of the word class
 );
 
+-- A word attribute type. Static.
+CREATE TABLE attribute_type (
+  type integer PRIMARY KEY, -- attribute type identifier
+  descr varchar NOT NULL -- attribute type description
+);
+
 -- A word attribute. Static.
 CREATE TABLE attribute (
   aid integer PRIMARY KEY, -- attribute identifier
-  name varchar NOT NULL, -- attribute name
-  type integer NOT NULL, -- attribute type (references to types in program code)
+  descr varchar NOT NULL, -- attribute description
+  type integer NOT NULL REFERENCES attribute_type, -- attribute type
   editable boolean NOT NULL -- is this attribute editable by users?
 );
 
@@ -49,8 +55,14 @@ CREATE TABLE string_attribute_value (
   PRIMARY KEY (wid, aid)
 );
 
+-- Word attribute value (flag). Dynamic.
+CREATE TABLE flag_attribute_value (
+  wid integer NOT NULL REFERENCES word, -- word
+  aid integer NOT NULL REFERENCES attribute, -- attribute
+  PRIMARY KEY (wid, aid)
+);
 
 -- Grant privileges
 GRANT SELECT ON language, wordclass, attribute, attribute_class TO joukahainen;
-GRANT ALL ON word, string_attribute_value TO joukahainen;
+GRANT ALL ON word, string_attribute_value, flag_attribute_value TO joukahainen;
 

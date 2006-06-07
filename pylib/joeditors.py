@@ -30,11 +30,13 @@ def _word_class(db, classid):
 	return ("<span class=\"fheader\">Sanaluokka:</span>" +
 	        " <span class=\"fsvalue\">%s</span>") % results.getresult()[0][0]
 
+CHARACTERISTIC_NOUN_FORMS = ['nominatiivi', 'genetiivi', 'partitiivi', 'illatiivi',
+                             'genetiivi_mon', 'partitiivi_mon', 'illatiivi_mon']
+
 def _noun_inflection(db, wid, word):
 	results = db.query(("SELECT value FROM string_attribute_value " +
 	                    "WHERE wid = %i AND aid = 1") % wid)
-	if results.ntuples() != 1:
-		return "(no inflection data)"
+	if results.ntuples() != 1: return "(taivutuksia ei ole saatavilla)"
 	result = results.getresult()[0]
 	
 	infclass_parts = result[0].split('-')
@@ -46,16 +48,35 @@ def _noun_inflection(db, wid, word):
 		grad_type = infclass_parts[2]
 	
 	noun_classes = hfaffix.read_noun_classes(_config.HF_DATA + "/subst.aff")
-	retdata = u"<table>\n<tr><th>Sijamuoto</th><th>Sana</th></tr>\n"
+	retdata = u"<table class=\"inflection\">\n<tr><th colspan=\"2\">Taivutus</th></tr>\n"
 	for noun_class in noun_classes:
 		if noun_class['cname'] != infclass_main: continue
 		inflected_words = hfaffix.inflect_noun(word, grad_type, noun_class)
 		if inflected_words == None: continue
 		for inflected_word in inflected_words:
 			if hfutils.read_option(inflected_word[2], 'ps', '-') != 'r':
-				retdata = retdata + ("<tr><td>%s</td><td>%s</td></tr>\n" %
-				          (inflected_word[0], inflected_word[1]))
+				if inflected_word[0] in CHARACTERISTIC_NOUN_FORMS:
+					htmlclass = ' class="characteristic"'
+				else:
+					htmlclass = ''
+				retdata = retdata + ("<tr%s><td>%s</td><td>%s</td></tr>\n" %
+				          (htmlclass, inflected_word[0], inflected_word[1]))
 	return retdata + "</table>\n"
+
+def _flag_attributes(db, wid):
+	results = db.query(("SELECT a.descr FROM attribute a, flag_attribute_value f " +
+	                    "WHERE a.aid = f.aid AND a.type = 2 AND f.wid = %i") % wid)
+	if results.ntuples() == 0: return "(ei asetettuja lippuja)"
+	retdata = "<ul>\n"
+	for result in results.getresult():
+		retdata = retdata + ("<li>%s</li>\n" % result[0])
+	return retdata + "</ul>\n"
+
+def _string_attribute(db, wid, aid):
+	results = db.query(("SELECT s.value FROM string_attribute_value s " +
+	                    "WHERE s.wid = %i AND s.aid = %i") % (wid, aid))
+	if results.ntuples() == 0: return "(ei asetettu)"
+	return results.getresult()[0][0]
 
 def call(db, funcname, paramlist):
 	if funcname == 'word_class':
@@ -64,4 +85,10 @@ def call(db, funcname, paramlist):
 	if funcname == 'noun_inflection':
 		if len(paramlist) != 2: return "Error: 2 parameters expected"
 		return _noun_inflection(db, paramlist[0], paramlist[1])
+	if funcname == 'flag_attributes':
+		if len(paramlist) != 1: return "Error: 1 parameter expected"
+		return _flag_attributes(db, paramlist[0])
+	if funcname == 'string_attribute':
+		if len(paramlist) != 2: return "Error: 2 parameters expected"
+		return _string_attribute(db, paramlist[0], paramlist[1])
 	return "Error: unknown function"

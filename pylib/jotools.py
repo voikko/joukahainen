@@ -52,7 +52,11 @@ def process_template(req, db, static_vars, template_name, lang, module):
 				paramlist = []
 				for param in func_match.group(2).split(','):
 					param = param.strip()
-					if param != '':
+					if param == '':
+						paramlist.append(None)
+					elif param[0] in '0123456789':
+						paramlist.append(int(param))
+					else:
 						paramlist.append(static_vars[param])
 				req.write(_call_handler(db, module, func_match.group(1), paramlist))
 			req.write(var_match.group(3) + u'\n')
