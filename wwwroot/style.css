@@ -13,12 +13,12 @@ table.inflection {
 	background-color: green; 
 }
 
-tr > td {
+table.inflection tr > td {
 	color: gray;
 	display: none;
 }
 
-tr.characteristic > td {
+table.inflection tr.characteristic > td {
 	color: black;
 	display: table-cell;
 }

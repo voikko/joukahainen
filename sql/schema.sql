@@ -64,5 +64,6 @@ CREATE TABLE flag_attribute_value (
 
 -- Grant privileges
 GRANT SELECT ON language, wordclass, attribute, attribute_class TO joukahainen;
+GRANT SELECT, UPDATE on word_wid_seq TO joukahainen;
 GRANT ALL ON word, string_attribute_value, flag_attribute_value TO joukahainen;
 

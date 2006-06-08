@@ -34,7 +34,8 @@ def listwords(req):
 	results = db.query("select wid, word from word")
 	jotools.write(req, "<table><tr><th>Sana</th></tr>\n")
 	for result in results.getresult():
-		jotools.write(req, "<tr><td><a href=\"../word/edit?wid=%s\">%s</a></td></tr>\n" % result)
+		jotools.write(req, "<tr><td><a href=\"../word/edit?wid=%i\">%s</a></td></tr>\n" %
+		              (result[0], unicode(result[1].decode('UTF-8'))))
 	jotools.write(req, "</table>\n")
 	joheaders.page_footer(req)
 	return "</html>"

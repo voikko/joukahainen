@@ -21,6 +21,7 @@
 
 import hfaffix
 import hfutils
+import types
 import _config
 
 def _word_class(db, classid):
@@ -40,28 +41,29 @@ def _noun_inflection(db, wid, word):
 	result = results.getresult()[0]
 	
 	infclass_parts = result[0].split('-')
-	if len(infclass_parts) == 2:
+	if len(infclass_parts) == 1:
 		infclass_main = result[0]
 		grad_type = '-'
-	elif len(infclass_parts) == 3:
-		infclass_main = infclass_parts[0]+'-'+infclass_parts[1]
-		grad_type = infclass_parts[2]
+	elif len(infclass_parts) == 2:
+		infclass_main = infclass_parts[0]
+		grad_type = infclass_parts[1]
+	else: return u"(virheellinen taivutusluokka)"
 	
 	noun_classes = hfaffix.read_noun_classes(_config.HF_DATA + "/subst.aff")
 	retdata = u"<table class=\"inflection\">\n<tr><th colspan=\"2\">Taivutus</th></tr>\n"
 	for noun_class in noun_classes:
-		if noun_class['cname'] != infclass_main: continue
+		if not infclass_main in noun_class['smcnames']: continue
 		inflected_words = hfaffix.inflect_noun(word, grad_type, noun_class)
 		if inflected_words == None: continue
 		for inflected_word in inflected_words:
 			if hfutils.read_option(inflected_word[2], 'ps', '-') != 'r':
 				if inflected_word[0] in CHARACTERISTIC_NOUN_FORMS:
-					htmlclass = ' class="characteristic"'
+					htmlclass = u' class="characteristic"'
 				else:
 					htmlclass = ''
-				retdata = retdata + ("<tr%s><td>%s</td><td>%s</td></tr>\n" %
+				retdata = retdata + (u"<tr%s><td>%s</td><td>%s</td></tr>\n" %
 				          (htmlclass, inflected_word[0], inflected_word[1]))
-	return retdata + "</table>\n"
+	return retdata + u"</table>\n"
 
 def _flag_attributes(db, wid):
 	results = db.query(("SELECT a.descr FROM attribute a, flag_attribute_value f " +
@@ -75,20 +77,20 @@ def _flag_attributes(db, wid):
 def _string_attribute(db, wid, aid):
 	results = db.query(("SELECT s.value FROM string_attribute_value s " +
 	                    "WHERE s.wid = %i AND s.aid = %i") % (wid, aid))
-	if results.ntuples() == 0: return "(ei asetettu)"
+	if results.ntuples() == 0: return u"(ei asetettu)"
 	return results.getresult()[0][0]
 
 def call(db, funcname, paramlist):
 	if funcname == 'word_class':
-		if len(paramlist) != 1: return "Error: 1 parameter expected"
+		if len(paramlist) != 1: return u"Error: 1 parameter expected"
 		return _word_class(db, paramlist[0])
 	if funcname == 'noun_inflection':
-		if len(paramlist) != 2: return "Error: 2 parameters expected"
+		if len(paramlist) != 2: return u"Error: 2 parameters expected"
 		return _noun_inflection(db, paramlist[0], paramlist[1])
 	if funcname == 'flag_attributes':
-		if len(paramlist) != 1: return "Error: 1 parameter expected"
+		if len(paramlist) != 1: return u"Error: 1 parameter expected"
 		return _flag_attributes(db, paramlist[0])
 	if funcname == 'string_attribute':
-		if len(paramlist) != 2: return "Error: 2 parameters expected"
+		if len(paramlist) != 2: return u"Error: 2 parameters expected"
 		return _string_attribute(db, paramlist[0], paramlist[1])
-	return "Error: unknown function"
+	return u"Error: unknown function"

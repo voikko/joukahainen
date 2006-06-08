@@ -27,10 +27,10 @@ def _call_handler(db, module, funcname, paramlist):
 	if module == 'joeditors':
 		import joeditors
 		return joeditors.call(db, funcname, paramlist)
-	return "Error: unknown module"
+	return u"Error: unknown module"
 
 def write(req, string):
-	req.write(unicode(string).encode("UTF-8"))
+	req.write(string.encode("UTF-8"))
 
 def process_template(req, db, static_vars, template_name, lang, module):
 	tmplfilename = _config.TEMPLATE_PATH + '/' + template_name + '_' + lang + '.txt'
@@ -44,10 +44,10 @@ def process_template(req, db, static_vars, template_name, lang, module):
 		file_cont = line.endswith('\n')
 		var_match = var_re.match(line)
 		if var_match != None:
-			req.write(var_match.group(1))
+			write(req, var_match.group(1))
 			func_match = func_re.match(var_match.group(2))
 			if func_match == None:
-				req.write(static_vars[var_match.group(2)])
+				write(req, unicode(static_vars[var_match.group(2)]))
 			else:
 				paramlist = []
 				for param in func_match.group(2).split(','):
@@ -58,7 +58,8 @@ def process_template(req, db, static_vars, template_name, lang, module):
 						paramlist.append(int(param))
 					else:
 						paramlist.append(static_vars[param])
-				req.write(_call_handler(db, module, func_match.group(1), paramlist))
+				retstr = _call_handler(db, module, func_match.group(1), paramlist)
+				write(req, retstr)
 			req.write(var_match.group(3) + u'\n')
 		else:
 			req.write(line)
