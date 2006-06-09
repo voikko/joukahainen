@@ -50,19 +50,33 @@ def _noun_inflection(db, wid, word):
 	else: return u"(virheellinen taivutusluokka)"
 	
 	noun_classes = hfaffix.read_noun_classes(_config.HF_DATA + "/subst.aff")
-	retdata = u"<table class=\"inflection\">\n<tr><th colspan=\"2\">Taivutus</th></tr>\n"
+	tableid = u"inftable%i" % wid
+
+	retdata = (u'<table class="inflection" id="%s">\n<tr><th colspan="2">' +
+	           u'<span onclick="switchDetailedDisplay(\'%s\');" id="%s">Taivutus</span></th></tr>\n') \
+		% (tableid, tableid, tableid + u'span')
 	for noun_class in noun_classes:
 		if not infclass_main in noun_class['smcnames']: continue
 		inflected_words = hfaffix.inflect_noun(word, grad_type, noun_class)
 		if inflected_words == None: continue
+		form = None
+		inflist = []
+		inflected_words.append((u'', u'', u''))
 		for inflected_word in inflected_words:
-			if hfutils.read_option(inflected_word[2], 'ps', '-') != 'r':
-				if inflected_word[0] in CHARACTERISTIC_NOUN_FORMS:
-					htmlclass = u' class="characteristic"'
-				else:
-					htmlclass = ''
-				retdata = retdata + (u"<tr%s><td>%s</td><td>%s</td></tr>\n" %
-				          (htmlclass, inflected_word[0], inflected_word[1]))
+			if form != inflected_word[0]:
+				if form != None and len(inflist) > 0:
+					if form in CHARACTERISTIC_NOUN_FORMS:
+						htmlclass = u' class="characteristic"'
+					else:
+						htmlclass = ''
+					infs = reduce(lambda x, y: u"%s, %s" % (x, y), inflist)
+					retdata = retdata + (u"<tr%s><td>%s</td><td>%s</td></tr>\n" %
+					          (htmlclass, form, infs))
+				inflist = []
+				form = inflected_word[0]
+			if hfutils.read_option(inflected_word[2], 'ps', '-') != 'r' \
+			   and not inflected_word[1] in inflist:
+				inflist.append(inflected_word[1])
 	return retdata + u"</table>\n"
 
 def _flag_attributes(db, wid):

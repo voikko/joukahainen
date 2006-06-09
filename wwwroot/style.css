@@ -7,18 +7,22 @@ span.fsvalue {
 }
 
 table.inflection {
+	color: black;
+	background-color: #00CC00;
 	position: absolute;
 	top: 0;
-	right: 0;
-	background-color: green; 
+	right: 0; 
+	border-collapse: collapse;
 }
 
 table.inflection tr > td {
-	color: gray;
-	display: none;
+	color: black;
+	background-color: #44EE44;
+	/*display: none;*/
 }
 
 table.inflection tr.characteristic > td {
 	color: black;
+	background-color: #00CC00;
 	display: table-cell;
 }

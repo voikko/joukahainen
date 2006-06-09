@@ -27,9 +27,10 @@ def page_header(req):
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="../style.css">
+<link rel="stylesheet" type="text/css" href="../style.css" />
+<script type="text/javascript" src="../jscripts.js" />
 </head>
-<body>
+<body onload="initPage()">
 """)
 
 
