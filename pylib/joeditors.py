@@ -53,8 +53,8 @@ def _noun_inflection(db, wid, word):
 	tableid = u"inftable%i" % wid
 
 	retdata = (u'<table class="inflection" id="%s">\n<tr><th colspan="2">' +
-	           u'<span onclick="switchDetailedDisplay(\'%s\');" id="%s">Taivutus</span></th></tr>\n') \
-		% (tableid, tableid, tableid + u'span')
+	           u'<a onclick="switchDetailedDisplay(\'%s\');" id="%s"></a> Taivutus</th></tr>\n') \
+		% (tableid, tableid, tableid + u'a')
 	for noun_class in noun_classes:
 		if not infclass_main in noun_class['smcnames']: continue
 		inflected_words = hfaffix.inflect_noun(word, grad_type, noun_class)

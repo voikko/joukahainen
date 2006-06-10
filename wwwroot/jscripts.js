@@ -14,19 +14,19 @@ function setRowDisplay(table, display) {
 
 function switchDetailedDisplay(tableid) {
 
-	var toggle = document.getElementById(tableid + "span");
+	var toggle = document.getElementById(tableid + "a");
 	var table = document.getElementById(tableid);
 	
-	if (toggle.innerHTML == "Taivutus" || toggle.innerHTML == "[-] Taivutus") {
-		toggle.innerHTML = "[+] Taivutus";
+	if (toggle.innerHTML == "" || toggle.innerHTML == "[-]") {
+		toggle.innerHTML = "[+]";
+		toggle.title = "Näytä kaikki taivutusmuodot";
 		setRowDisplay(table, "none");
-		/*table.style.display = 'none';*/
 	}
 	else {
-		toggle.innerHTML = "[-] Taivutus";
+		toggle.innerHTML = "[-]";
+		toggle.title = "Piilota ylimääräiset taivutusmuodot";
 		setRowDisplay(table, "table-cell");
 	}
-	/*alert(toggle.innerHTML);	*/
 
 }
 

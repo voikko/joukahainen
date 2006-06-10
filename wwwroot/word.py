@@ -27,10 +27,11 @@ import joheaders
 import jotools
 import jodb
 
-def edit(req, wid):
+def edit(req, wid = None):
 	joheaders.page_header(req)
+	if (wid == None): return "Parametri wid on pakollinen\n"
+	wid_n = jotools.toint(wid)
 	db = jodb.connect()
-	wid_n = int(wid)
 	results = db.query("select word, class from word where wid = %i" % wid_n)
 	if results.ntuples() == 0:
 		jotools.write(req, u"Sanaa %i ei ole\n" % wid_n)

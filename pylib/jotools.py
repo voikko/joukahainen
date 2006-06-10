@@ -29,6 +29,10 @@ def _call_handler(db, module, funcname, paramlist):
 		return joeditors.call(db, funcname, paramlist)
 	return u"Error: unknown module"
 
+def toint(string):
+	if string.isdigit(): return int(string)
+	else: return 0
+
 def write(req, string):
 	req.write(string.encode("UTF-8"))
 

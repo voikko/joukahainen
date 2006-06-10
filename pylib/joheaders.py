@@ -28,7 +28,7 @@ def page_header(req):
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="../style.css" />
-<script type="text/javascript" src="../jscripts.js" />
+<script type="text/javascript" src="../jscripts.js"></script>
 </head>
 <body onload="initPage()">
 """)

@@ -27,15 +27,30 @@ import joheaders
 import jotools
 import jodb
 
-def listwords(req):
+def listwords(req, offset = None, limit = None):
 	joheaders.page_header(req)
 	jotools.write(req, u"<h1>Kaikki sanat</h1>\n")
 	db = jodb.connect()
-	results = db.query("select wid, word from word")
-	jotools.write(req, "<table><tr><th>Sana</th></tr>\n")
-	for result in results.getresult():
-		jotools.write(req, "<tr><td><a href=\"../word/edit?wid=%i\">%s</a></td></tr>\n" %
-		              (result[0], unicode(result[1].decode('UTF-8'))))
-	jotools.write(req, "</table>\n")
+	
+	if offset == None: offset_s = u'0'
+	else: offset_s = `jotools.toint(offset)`
+	
+	if limit == None: limit_s = u'200'
+	elif jotools.toint(limit) == 0: limit_s = u'ALL'
+	else: limit_s = `jotools.toint(limit)`
+	
+	results = db.query("SELECT w.wid, w.word, c.name FROM word w, wordclass c " +
+	                   "WHERE w.class = c.classid LIMIT %s OFFSET %s" % (limit_s, offset_s))
+	if results.ntuples() == 0:
+		jotools.write(u"<p>Hakuehdon mukaisia sanoja ei löydy</p>\n")
+	else:
+		jotools.write(req, "<table><tr><th>Sana</th><th>Sanaluokka</th></tr>\n")
+		for result in results.getresult():
+			jotools.write(req, "<tr><td><a href=\"../word/edit?wid=%i\">%s</a></td><td>%s</td></tr>\n" %
+			              (result[0], unicode(result[1], 'UTF-8'), unicode(result[2], 'UTF-8')))
+		jotools.write(req, "</table>\n")
+		if not limit_s == u'ALL' and results.ntuples() == jotools.toint(limit_s):
+			jotools.write(req, (u'<p><a href="listwords?offset=%i&limit=%s">' +
+			              u"Lisää tuloksia ...</a></p>\n") % (int(offset_s)+int(limit_s), limit_s))
 	joheaders.page_footer(req)
 	return "</html>"
