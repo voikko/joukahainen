@@ -33,8 +33,18 @@ def toint(string):
 	if string.isdigit(): return int(string)
 	else: return 0
 
+WCHARS = u"abcdefghijklmnopqrstuvwxyzåäöszèéABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖŠŽÈÉ-'|"
+# Checks if string looks like a valid word
+def checkword(string):
+	for c in string:
+		if not c in WCHARS: return False
+	return True
+
 def write(req, string):
 	req.write(string.encode("UTF-8"))
+
+def errormsg(req, error):
+	write(req, error)
 
 def process_template(req, db, static_vars, template_name, lang, module):
 	tmplfilename = _config.TEMPLATE_PATH + '/' + template_name + '_' + lang + '.txt'

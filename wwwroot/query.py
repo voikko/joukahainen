@@ -40,7 +40,8 @@ def listwords(req, offset = None, limit = None):
 	else: limit_s = `jotools.toint(limit)`
 	
 	results = db.query("SELECT w.wid, w.word, c.name FROM word w, wordclass c " +
-	                   "WHERE w.class = c.classid LIMIT %s OFFSET %s" % (limit_s, offset_s))
+	                   "WHERE w.class = c.classid ORDER BY w.word, c.name, w.wid LIMIT %s OFFSET %s" \
+		         % (limit_s, offset_s))
 	if results.ntuples() == 0:
 		jotools.write(u"<p>Hakuehdon mukaisia sanoja ei löydy</p>\n")
 	else:
@@ -52,5 +53,34 @@ def listwords(req, offset = None, limit = None):
 		if not limit_s == u'ALL' and results.ntuples() == jotools.toint(limit_s):
 			jotools.write(req, (u'<p><a href="listwords?offset=%i&limit=%s">' +
 			              u"Lisää tuloksia ...</a></p>\n") % (int(offset_s)+int(limit_s), limit_s))
+	joheaders.page_footer(req)
+	return "</html>"
+
+def findword(req, word = None):
+	if word == None: 
+		joheaders.page_header(req)
+		jotools.errormsg(req, u"Parametri word on pakollinen")
+		return "\n"
+	if not jotools.checkword(unicode(word, 'UTF-8')):
+		joheaders.page_header(req)
+		jotools.errormsg(req, u"Annetussa sanassa on kielletyjä merkkejä")
+		return "\n"
+	word_s = unicode(word, 'UTF-8').replace(u"'", u"''")
+	
+	db = jodb.connect()
+	results = db.query(("SELECT w.wid, w.word, c.name FROM word w, wordclass c WHERE w.class = c.classid " +
+	                   "AND w.word = '%s' ORDER BY w.word, c.name, w.wid") % word_s.encode('UTF-8'))
+	if results.ntuples() == 0:
+		joheaders.page_header(req)
+		jotools.write(req, u"<p>Annettua sanaa ei löytynyt</p>\n")
+	elif results.ntuples() == 1:
+		joheaders.redirect_header(req, u"../word/edit?wid=%i" % results.getresult()[0][0])
+		return "\n"
+	else:
+		jotools.write(req, "<table><tr><th>Sana</th><th>Sanaluokka</th></tr>\n")
+		for result in results.getresult():
+			jotools.write(req, "<tr><td><a href=\"../word/edit?wid=%i\">%s</a></td><td>%s</td></tr>\n" %
+			              (result[0], unicode(result[1], 'UTF-8'), unicode(result[2], 'UTF-8')))
+		jotools.write(req, "</table>\n")
 	joheaders.page_footer(req)
 	return "</html>"

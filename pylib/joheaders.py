@@ -19,6 +19,8 @@
 
 # This file contains html headers, footers and related functions
 
+import mod_python.apache
+
 def page_header(req):
 	req.content_type = "text/html; charset=UTF-8"
 	req.send_http_header()
@@ -38,3 +40,10 @@ def page_footer(req):
 	req.write("""
 </body>
 """)
+
+def redirect_header(req, location):
+	location_s = location.encode('UTF-8')
+	req.headers_out['location'] = location_s
+	req.status = mod_python.apache.HTTP_MOVED_TEMPORARILY
+	req.send_http_header()
+	req.write("Redirecting to %s" % location_s)
