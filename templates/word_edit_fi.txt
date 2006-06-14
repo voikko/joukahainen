@@ -1,4 +1,8 @@
 <h1>$$WORD$$</h1>
+<h2>Kirjoitusasut</h2>
+<p>
+$$related_words(WID)$$
+</p>
 <p>
 $$word_class(CLASSID)$$
 </p>

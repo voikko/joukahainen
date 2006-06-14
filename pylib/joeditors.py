@@ -94,6 +94,14 @@ def _string_attribute(db, wid, aid):
 	if results.ntuples() == 0: return u"(ei asetettu)"
 	return results.getresult()[0][0]
 
+def _related_words(db, wid):
+	results = db.query("SELECT related_word FROM related_word WHERE wid = %i" % wid)
+	if results.ntuples() == 0: return u"(ei asetettu)"
+	retdata = "<ul>\n"
+	for result in results.getresult():
+		retdata = retdata + ("<li>%s</li>\n" % unicode(result[0], 'UTF-8'))
+	return retdata + "</ul>\n"
+
 def call(db, funcname, paramlist):
 	if funcname == 'word_class':
 		if len(paramlist) != 1: return u"Error: 1 parameter expected"
@@ -107,4 +115,7 @@ def call(db, funcname, paramlist):
 	if funcname == 'string_attribute':
 		if len(paramlist) != 2: return u"Error: 2 parameters expected"
 		return _string_attribute(db, paramlist[0], paramlist[1])
+	if funcname == 'related_words':
+		if len(paramlist) != 1: return u"Error: 1 parameter expected"
+		return _related_words(db, paramlist[0])
 	return u"Error: unknown function"

@@ -51,7 +51,7 @@ CREATE TABLE word (
 CREATE TABLE string_attribute_value (
   wid integer NOT NULL REFERENCES word, -- word
   aid integer NOT NULL REFERENCES attribute, -- attribute
-  value varchar, -- value
+  value varchar NOT NULL, -- value
   PRIMARY KEY (wid, aid)
 );
 
@@ -62,8 +62,16 @@ CREATE TABLE flag_attribute_value (
   PRIMARY KEY (wid, aid)
 );
 
+-- Related word form or compound word. Dynamic.
+CREATE TABLE related_word (
+  rwid SERIAL PRIMARY KEY, -- related word form identifier
+  wid integer NOT NULL REFERENCES word, -- base word
+  related_word varchar NOT NULL -- the related word form
+);
+
 -- Grant privileges
 GRANT SELECT ON language, wordclass, attribute, attribute_class TO joukahainen;
-GRANT SELECT, UPDATE on word_wid_seq TO joukahainen;
-GRANT ALL ON word, string_attribute_value, flag_attribute_value TO joukahainen;
+GRANT SELECT, UPDATE on word_wid_seq, related_word_rwid_seq TO joukahainen;
+GRANT ALL ON word, string_attribute_value, flag_attribute_value,
+  related_word TO joukahainen;
 
