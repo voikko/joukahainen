@@ -82,11 +82,11 @@ def _noun_inflection(db, wid, word):
 def _flag_attributes(db, wid):
 	results = db.query(("SELECT a.descr FROM attribute a, flag_attribute_value f " +
 	                    "WHERE a.aid = f.aid AND a.type = 2 AND f.wid = %i") % wid)
-	if results.ntuples() == 0: return "(ei asetettuja lippuja)"
-	retdata = "<ul>\n"
+	if results.ntuples() == 0: return u"(ei asetettuja lippuja)"
+	retdata = u"<ul>\n"
 	for result in results.getresult():
-		retdata = retdata + ("<li>%s</li>\n" % result[0])
-	return retdata + "</ul>\n"
+		retdata = retdata + (u"<li>%s</li>\n" % unicode(result[0], 'UTF-8'))
+	return retdata + u"</ul>\n"
 
 def _string_attribute(db, wid, aid):
 	results = db.query(("SELECT s.value FROM string_attribute_value s " +
