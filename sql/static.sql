@@ -26,5 +26,11 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(6, 'ei kuulu indeksoint
 INSERT INTO attribute(aid, descr, type, editable) VALUES(7, 'ei sallittu yhdyssanan osana', 2, TRUE);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(8, 'ei sallittu yhdyssanan alkuosana', 2, TRUE);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(9, 'ei sallittu yhdyssanan jälkiosana', 2, TRUE);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(10, 'sana on myös substantiivi', 2, TRUE);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(11, 'etunimi', 2, TRUE);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(12, 'sukunimi', 2, TRUE);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(13, 'paikannimi', 2, TRUE);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(14, 'luokittelematon erisnimi', 2, TRUE);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(15, 'ala: atk', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(1, 1);
 
