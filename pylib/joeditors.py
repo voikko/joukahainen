@@ -29,7 +29,7 @@ def _word_class(db, classid):
 	if results.ntuples() == 0:
 		return "Error: word class %i does not exist" % classid
 	return ("<span class=\"fheader\">Sanaluokka:</span>" +
-	        " <span class=\"fsvalue\">%s</span>") % results.getresult()[0][0]
+	        " <span class=\"fsvalue\">%s</span>") % unicode(results.getresult()[0][0], 'UTF-8')
 
 CHARACTERISTIC_NOUN_FORMS = ['nominatiivi', 'genetiivi', 'partitiivi', 'illatiivi',
                              'genetiivi_mon', 'partitiivi_mon', 'illatiivi_mon']
@@ -40,9 +40,9 @@ def _noun_inflection(db, wid, word):
 	if results.ntuples() != 1: return "(taivutuksia ei ole saatavilla)"
 	result = results.getresult()[0]
 	
-	infclass_parts = result[0].split('-')
+	infclass_parts = unicode(result[0], 'UTF-8').split('-')
 	if len(infclass_parts) == 1:
-		infclass_main = result[0]
+		infclass_main = unicode(result[0], 'UTF-8')
 		grad_type = '-'
 	elif len(infclass_parts) == 2:
 		infclass_main = infclass_parts[0]
@@ -92,7 +92,7 @@ def _string_attribute(db, wid, aid):
 	results = db.query(("SELECT s.value FROM string_attribute_value s " +
 	                    "WHERE s.wid = %i AND s.aid = %i") % (wid, aid))
 	if results.ntuples() == 0: return u"(ei asetettu)"
-	return results.getresult()[0][0]
+	return unicode(results.getresult()[0][0], 'UTF-8')
 
 def _related_words(db, wid):
 	results = db.query("SELECT related_word FROM related_word WHERE wid = %i" % wid)
