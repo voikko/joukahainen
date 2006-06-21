@@ -7,11 +7,30 @@
 <title>Joukahainen</title>
 </head>
 <body>
-<h1>Joukahainen</h1>
+<h1>Sanastonhallintasovellus Joukahainen</h1>
+<p>Tervetuloa käyttämään Joukahaista! Tämä on testiasennus, dokumentaatiota ja ominaisuuksia
+lisätään vähitellen aina elokuun loppuun saakka. Sovelluksen kautta voi kuka tahansa selata siihen tallennettua
+sanastoa vapaasti ilman käyttäjätunnuksia. Sanaston muokkaaminen on mahdollista myöhemmin, ja se tulee
+vaatimaan jonkinlaiset käyttäjätunnukset. Tämä testiasennus siirtyy tuotantokäyttöön kesän aikana.</p>
+<p>Tämä testiasennus sisältää Hannu Väisäsen Suomi-Malagan versiosta 0.7beta10 otetun noin 12000 sanan
+otoksen. Aineiston tekijänoikeudet kuuluvat Hannu Väisäselle ja sitä voi käyttää ja levittää
+<a href="http://www.gnu.org/licenses/gpl.html">GPL-lisenssin</a> ehdoilla. Sovelluksen sellainen käyttö,
+johon ei liity aineiston kopioimista, on sallittu ilman rajoituksia. Tietokannan sisältö on ladattavissa
+<a href="pgdumps">tästä hakemistosta</a>.</p>
+<p>Myös Joukahaista itseään voi käyttää ja levittää GPL-lisenssillä. Sovelluksen lähdekoodi ja aineiston
+muuntamisessa käytetyt apuohjelmat löytyvät Hunspell-fi -projektin
+<a href="http://svn.sourceforge.net/viewcvs.cgi/hunspell-fi/trunk/">versionhallintajärjestelmästä</a>
+(alihakemistot joukahainen, tools ja data).</p>
+<p>Bugeista ja muista ongelmista voi raportoida joko Joukahaisen kehittäjälle ja tämän testiasennuksen
+ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki.fi</a>) tai Hunspell-fi -projektin
+<a href="http://hunspell-fi.org/mailman/listinfo/devel_hunspell-fi.org">postituslistalle</a>.</p>
+<h2>Tutki sanastoa</h2>
 <ul>
-<li><a href="query/listwords">Kaikki sanat</a></li>
+<li><a href="query/listwords">Kaikki sanat (200 sanaa kerrallaan)</a></li>
 <li><form method="get" action="query/findword">Hae sana <input type="text" name="word">
     <input type="submit" value="Hae"></form></li>
 </ul>
+<h2>Muutoshistoria</h2>
+<p>2006-06-21: ensimmäinen testiasennus</p>
 </body>
 </html>
