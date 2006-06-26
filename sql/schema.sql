@@ -40,6 +40,20 @@ CREATE TABLE attribute_class (
   PRIMARY KEY (aid, classid)
 );
 
+-- Application user. Dynamic.
+CREATE TABLE appuser (
+  uid integer PRIMARY KEY, -- user identifier
+  uname varchar UNIQUE NOT NULL, -- username
+  firstname varchar, -- first name
+  lastname varchar, -- last name
+  email varchar, -- email address
+  pwhash char(40), -- password hash
+  regtime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, -- user registration time
+  disabled boolean NOT NULL DEFAULT FALSE, -- login disabled
+  session_key char(40), -- session key
+  session_exp timestamp -- session expiration time
+);
+
 -- A word. Dynamic.
 CREATE TABLE word (
   wid SERIAL PRIMARY KEY, -- word identifier
@@ -71,7 +85,7 @@ CREATE TABLE related_word (
 
 -- Grant privileges
 GRANT SELECT ON language, wordclass, attribute, attribute_class TO joukahainen;
-GRANT SELECT, UPDATE on word_wid_seq, related_word_rwid_seq TO joukahainen;
+GRANT SELECT, UPDATE on word_wid_seq, related_word_rwid_seq, appuser TO joukahainen;
 GRANT ALL ON word, string_attribute_value, flag_attribute_value,
   related_word TO joukahainen;
 

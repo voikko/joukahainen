@@ -40,6 +40,13 @@ def checkword(string):
 		if not c in WCHARS: return False
 	return True
 
+UNAMECHARS = u'abcdefghijklmnopqrstuvwxyz'
+# Checks if string looks like a valid user name
+def checkuname(string):
+	for c in string:
+		if not c in UNAMECHARS: return False
+	return True
+
 def write(req, string):
 	req.write(string.encode("UTF-8"))
 
