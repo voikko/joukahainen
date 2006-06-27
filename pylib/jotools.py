@@ -21,12 +21,17 @@
 
 import codecs
 import re
+import Cookie
+import time
 import _config
 
 def _call_handler(db, module, funcname, paramlist):
 	if module == 'joeditors':
 		import joeditors
 		return joeditors.call(db, funcname, paramlist)
+	if module == 'joindex':
+		import joindex
+		return joindex.call(db, funcname, paramlist)
 	return u"Error: unknown module"
 
 def toint(string):
@@ -81,7 +86,33 @@ def process_template(req, db, static_vars, template_name, lang, module):
 						paramlist.append(static_vars[param])
 				retstr = _call_handler(db, module, func_match.group(1), paramlist)
 				write(req, retstr)
-			req.write(var_match.group(3) + u'\n')
+			write(req, var_match.group(3) + u'\n')
 		else:
-			req.write(line)
+			write(req, line)
 	tmplfile.close()
+
+# Returns the session key of the request or '' if the key was not set or it is malformed
+def get_session(req):
+	if req.headers_in.has_key('Cookie'):
+		c = Cookie.SimpleCookie()
+		c.load(req.headers_in['Cookie'])
+		if c.has_key('session'):
+			sess = c['session'].value
+			if len(sess) != 40: return ''
+			for ch in sess:
+				if not ch in '0123456789abcdef': return ''
+			return sess
+	return ''
+
+# Returns (uid, uname) or (None, None), if user is not properly logged in. Calling this function also
+# refreshes the current session.
+def get_login_user(req, db):
+	session = get_session(req)
+	if session == '': return (None, None)
+	results = db.query("select uid, uname, session_exp from appuser where session_key = '%s'" % session)
+	if results.ntuples() != 1: return (None, None)
+	result = results.getresult()[0]
+	if result[2] < time.time(): return (None, None)
+	db.query("update appuser set session_exp = CURRENT_TIMESTAMP + interval '%i seconds' where uid = %i" \
+	         % (_config.SESSION_TIMEOUT, result[0]))
+	return (result[0], unicode(result[1], 'UTF-8'))

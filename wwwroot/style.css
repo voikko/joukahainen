@@ -1,3 +1,7 @@
+body {
+	margin: 0;
+}
+
 span.fheader {
 	font-weight: bold;
 }
@@ -7,22 +11,68 @@ span.fsvalue {
 }
 
 table.inflection {
-	color: black;
-	background-color: #00CC00;
-	position: absolute;
-	top: 0;
-	right: 0; 
 	border-collapse: collapse;
 }
 
 table.inflection tr > td {
 	color: black;
 	background-color: #44EE44;
-	/*display: none;*/
 }
 
 table.inflection tr.characteristic > td {
 	color: black;
 	background-color: #00CC00;
 	display: table-cell;
+}
+
+div.topbar {
+	color: black;
+	background-color: #005555;
+	padding: 0.5em;
+}
+
+div.main {
+	color: black;
+	background-color: #9999FF;
+	padding: 0.5em;
+}
+
+div.editor {
+	color: black;
+	background-color: #9999FF;
+	top: 0;
+	left: 0;
+}
+
+div.rightinfo {
+	color: black;
+	background-color: #00CC00;
+	position: relative;
+	float: right;
+	width: 40%;
+	padding: 0.5em;
+}
+
+div.bottominfo {
+	color: black;
+	background-color: #00CC00;
+	clear: both;
+	width: 100%;
+	padding: 0.5em;
+}
+
+div.clear {
+	clear: both;
+}
+
+div.login {
+	font-size: 0.8em;
+	float: right;
+}
+
+h1 {
+	font-size: 1.5em;
+	float: left;
+	margin-top: 0.0em;
+	margin-bottom: 0.0em;
 }

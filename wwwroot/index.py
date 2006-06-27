@@ -17,34 +17,20 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# This file contains html headers, footers and related functions
+# This file contains the index pages
 
-import mod_python.apache
-import _config
+from mod_python import apache
 
-def page_header(req):
-	req.content_type = "text/html; charset=UTF-8"
-	req.send_http_header()
-	req.write("""
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
- "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="%s/style.css" />
-<script type="text/javascript" src="%s/jscripts.js"></script>
-</head>
-<body onload="initPage()">
-""" % (_config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR))
+import _apply_config
+import joheaders
+import jotools
+import jodb
 
-
-def page_footer(req):
-	req.write("""
-</body>
-""")
-
-def redirect_header(req, location):
-	location_s = location.encode('UTF-8')
-	req.headers_out['location'] = location_s
-	req.status = mod_python.apache.HTTP_MOVED_TEMPORARILY
-	req.send_http_header()
-	req.write("Redirecting to %s" % location_s)
+def index(req):
+	joheaders.page_header(req)
+	db = jodb.connect()
+	(uid, uname) = jotools.get_login_user(req, db)
+	static_vars = {'UID': uid, 'UNAME': uname}
+	jotools.process_template(req, db, static_vars, 'index_index', 'fi', 'joindex')
+	joheaders.page_footer(req)
+	return "</html>"

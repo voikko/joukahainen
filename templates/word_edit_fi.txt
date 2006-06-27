@@ -1,4 +1,8 @@
-<h1>$$WORD$$</h1>
+<div class="topbar"><h1>Sana: $$WORD$$</h1> login</div>
+<div class="main">
+<div class="rightinfo">
+$$noun_inflection(WID,WORD)$$
+</div>
 <h2>Kirjoitusasut</h2>
 <p>
 $$related_words(WID)$$
@@ -10,10 +14,9 @@ $$word_class(CLASSID)$$
 <p>
 $$flag_attributes(WID)$$
 </p>
-<h2>Taivutus</h2>
 <p>
 <span class="fheader">Taivutusluokka:</span> <span class="fsvalue">$$string_attribute(WID,1)$$</span>
 <p>
-$$noun_inflection(WID,WORD)$$
-</p>
 
+</p>
+</div>

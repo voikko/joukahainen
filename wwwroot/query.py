@@ -43,13 +43,13 @@ def listwords(req, offset = None, limit = None):
 	                   "WHERE w.class = c.classid ORDER BY w.word, c.name, w.wid LIMIT %s OFFSET %s" \
 		         % (limit_s, offset_s))
 	if results.ntuples() == 0:
-		jotools.write(u"<p>Hakuehdon mukaisia sanoja ei löydy</p>\n")
+		jotools.write(req, u"<p>Hakuehdon mukaisia sanoja ei löydy</p>\n")
 	else:
-		jotools.write(req, "<table><tr><th>Sana</th><th>Sanaluokka</th></tr>\n")
+		jotools.write(req, u"<table><tr><th>Sana</th><th>Sanaluokka</th></tr>\n")
 		for result in results.getresult():
-			jotools.write(req, "<tr><td><a href=\"../word/edit?wid=%i\">%s</a></td><td>%s</td></tr>\n" %
+			jotools.write(req, u"<tr><td><a href=\"../word/edit?wid=%i\">%s</a></td><td>%s</td></tr>\n" %
 			              (result[0], unicode(result[1], 'UTF-8'), unicode(result[2], 'UTF-8')))
-		jotools.write(req, "</table>\n")
+		jotools.write(req, u"</table>\n")
 		if not limit_s == u'ALL' and results.ntuples() == jotools.toint(limit_s):
 			jotools.write(req, (u'<p><a href="listwords?offset=%i&limit=%s">' +
 			              u"Lisää tuloksia ...</a></p>\n") % (int(offset_s)+int(limit_s), limit_s))

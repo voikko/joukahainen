@@ -17,34 +17,30 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# This file contains html headers, footers and related functions
+# This file contains index page components
 
-import mod_python.apache
+import hfaffix
+import hfutils
+import types
 import _config
 
-def page_header(req):
-	req.content_type = "text/html; charset=UTF-8"
-	req.send_http_header()
-	req.write("""
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
- "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="%s/style.css" />
-<script type="text/javascript" src="%s/jscripts.js"></script>
-</head>
-<body onload="initPage()">
-""" % (_config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR))
+def _login_logout(db, uid, uname):
+	if uid == None:
+		return u"""
+<form method="post" action="user/login">
+Käyttäjätunnus: <input type="text" name="username">&nbsp;
+Salasana: <input type="password" name="password">&nbsp;
+<input type="submit" value="Kirjaudu sisään">
+</form>
+"""
+	return u"""
+<form method="post" action="user/logout">
+<input type="submit" value="Kirjaa ulos käyttäjä %s">
+</form>
+""" % uname
 
-
-def page_footer(req):
-	req.write("""
-</body>
-""")
-
-def redirect_header(req, location):
-	location_s = location.encode('UTF-8')
-	req.headers_out['location'] = location_s
-	req.status = mod_python.apache.HTTP_MOVED_TEMPORARILY
-	req.send_http_header()
-	req.write("Redirecting to %s" % location_s)
+def call(db, funcname, paramlist):
+	if funcname == 'login_logout':
+		if len(paramlist) != 2: return u"Error: 2 parameter expected"
+		return _login_logout(db, paramlist[0], paramlist[1])
+	return u"Error: unknown function"

@@ -52,7 +52,6 @@ def login(req, username = None, password = None):
 	if results.ntuples() == 0:
 		joheaders.page_header(req)
 		jotools.write(req, u"Käyttäjätunnus tai salasana on väärin")
-		jotools.write(req, pwhash)
 		joheaders.page_footer(req)
 		return "</html>"
 	
@@ -76,3 +75,18 @@ def login(req, username = None, password = None):
 	joheaders.redirect_header(req, u"..")
 	return "</html>"
 
+def logout(req):
+	if req.method != 'POST':
+		joheaders.page_header(req)
+		jotools.write(req, u"Vain POST-pyynnöt ovat sallittuja")
+		joheaders.page_footer(req)
+		return "</html>"
+	session = jotools.get_session(req)
+	if session != '':
+		db = jodb.connect()
+		db.query(("update appuser set session_key = NULL, session_exp = NULL " +
+		          "where session_key = '%s'") % session)
+	req.headers_out['Set-Cookie'] = 'session=; path=%s; expires=Thu, 01-Jan-1970 00:00:01 GMT' \
+	                                % _config.WWW_ROOT_DIR
+	joheaders.redirect_header(req, u"..")
+	return "</html>"
