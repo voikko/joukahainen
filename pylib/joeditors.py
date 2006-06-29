@@ -22,14 +22,16 @@
 import hfaffix
 import hfutils
 import types
+import joindex
+import jotools
 import _config
 
 def _word_class(db, classid):
 	results = db.query("SELECT name FROM wordclass WHERE classid = %i" % classid)
 	if results.ntuples() == 0:
-		return "Error: word class %i does not exist" % classid
-	return ("<span class=\"fheader\">Sanaluokka:</span>" +
-	        " <span class=\"fsvalue\">%s</span>") % unicode(results.getresult()[0][0], 'UTF-8')
+		return u"Error: word class %i does not exist" % classid
+	return (u"<span class=\"fheader\">Sanaluokka:</span>" +
+	        u" <span class=\"fsvalue\">%s</span>") % unicode(results.getresult()[0][0], 'UTF-8')
 
 CHARACTERISTIC_NOUN_FORMS = ['nominatiivi', 'genetiivi', 'partitiivi', 'illatiivi',
                              'genetiivi_mon', 'partitiivi_mon', 'illatiivi_mon']
@@ -88,11 +90,16 @@ def _flag_attributes(db, wid):
 		retdata = retdata + (u"<li>%s</li>\n" % unicode(result[0], 'UTF-8'))
 	return retdata + u"</ul>\n"
 
-def _string_attribute(db, wid, aid):
+def _string_attribute(db, wid, aid, editable):
 	results = db.query(("SELECT s.value FROM string_attribute_value s " +
 	                    "WHERE s.wid = %i AND s.aid = %i") % (wid, aid))
-	if results.ntuples() == 0: return u"(ei asetettu)"
-	return unicode(results.getresult()[0][0], 'UTF-8')
+	if editable:
+		if results.ntuples() == 0: oldval = u""
+		else: oldval = jotools.escape_form_value(unicode(results.getresult()[0][0], 'UTF-8'))
+		return u'<input type="text" value="%s" id="string%i">' % (oldval, aid)
+	else:
+		if results.ntuples() == 0 : return u"(ei asetettu)"
+		return unicode(results.getresult()[0][0], 'UTF-8')
 
 def _related_words(db, wid):
 	results = db.query("SELECT related_word FROM related_word WHERE wid = %i" % wid)
@@ -101,6 +108,7 @@ def _related_words(db, wid):
 	for result in results.getresult():
 		retdata = retdata + ("<li>%s</li>\n" % unicode(result[0], 'UTF-8'))
 	return retdata + "</ul>\n"
+
 
 def call(db, funcname, paramlist):
 	if funcname == 'word_class':
@@ -113,9 +121,12 @@ def call(db, funcname, paramlist):
 		if len(paramlist) != 1: return u"Error: 1 parameter expected"
 		return _flag_attributes(db, paramlist[0])
 	if funcname == 'string_attribute':
-		if len(paramlist) != 2: return u"Error: 2 parameters expected"
-		return _string_attribute(db, paramlist[0], paramlist[1])
+		if len(paramlist) != 3: return u"Error: 3 parameters expected"
+		return _string_attribute(db, paramlist[0], paramlist[1], paramlist[2])
 	if funcname == 'related_words':
 		if len(paramlist) != 1: return u"Error: 1 parameter expected"
 		return _related_words(db, paramlist[0])
+	if funcname == 'login_logout':
+		if len(paramlist) != 2: return u"Error: 2 parameters expected"
+		return joindex.login_logout(db, paramlist[0], paramlist[1])
 	return u"Error: unknown function"

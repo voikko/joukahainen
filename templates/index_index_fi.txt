@@ -5,8 +5,9 @@
 </div>
 <div class="main">
 <div class="rightinfo">
-<p>Tämä testiasennus sisältää Hannu Väisäsen Suomi-Malagan versiosta 0.7beta10 otetun noin 12000 sanan
-otoksen. Aineiston tekijänoikeudet kuuluvat Hannu Väisäselle ja sitä voi käyttää ja levittää
+<p>Tämä testiasennus sisältää Suomi-malagan oikolukuversiosta ("Voikko edition") otetun noin 12000 sanan
+otoksen. Aineiston tekijänoikeudet kuuluvat Hannu Väisäselle ja muille Hunspell-fi -projektiin osallistuneille,
+ja sitä voi käyttää ja levittää
 <a href="http://www.gnu.org/licenses/gpl.html">GPL-lisenssin</a> ehdoilla. Sovelluksen sellainen käyttö,
 johon ei liity aineiston kopioimista, on sallittu ilman rajoituksia. Tietokannan sisältö on ladattavissa
 <a href="pgdumps">tästä hakemistosta</a>.</p>
@@ -18,12 +19,7 @@ muuntamisessa käytetyt apuohjelmat löytyvät Hunspell-fi -projektin
 ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki.fi</a>) tai Hunspell-fi -projektin
 <a href="http://hunspell-fi.org/mailman/listinfo/devel_hunspell-fi.org">postituslistalle</a>.</p>
 </div>
-<p>Tervetuloa käyttämään sanastonhallintasovellus Joukahaista! Tämä on testiasennus, dokumentaatiota ja
-ominaisuuksia
-lisätään vähitellen aina elokuun loppuun saakka. Sovelluksen kautta voi kuka tahansa selata siihen tallennettua
-sanastoa vapaasti ilman käyttäjätunnuksia. Sanaston muokkaaminen on mahdollista myöhemmin, ja se tulee
-vaatimaan jonkinlaiset käyttäjätunnukset. Tämä testiasennus siirtyy tuotantokäyttöön kesän aikana.</p>
-<h2>Tutki sanastoa</h2>
+<h2>Etsi sanastosta</h2>
 <ul>
 <li><a href="query/listwords">Kaikki sanat (200 sanaa kerrallaan)</a></li>
 <li><form method="get" action="query/findword">Hae sana <input type="text" name="word">
@@ -33,6 +29,11 @@ vaatimaan jonkinlaiset käyttäjätunnukset. Tämä testiasennus siirtyy tuotant
 </div>
 
 <div class="bottominfo">
+<p>Tervetuloa käyttämään sanastonhallintasovellus Joukahaista! <strong>Tämä on testiasennus</strong>,
+dokumentaatiota ja
+ominaisuuksia lisätään vähitellen aina elokuun loppuun saakka. Sovelluksen kautta voi kuka tahansa selata
+siihen tallennettua sanastoa vapaasti, mutta muutosten tekeminen vaatii käyttäjätunnuksen.
+Tämä testiasennus siirtyy tuotantokäyttöön kesän aikana.</p>
 <h2>Muutoshistoria</h2>
 <p>2006-06-21: ensimmäinen testiasennus</p>
 </div>

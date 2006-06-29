@@ -77,6 +77,7 @@ def findword(req, word = None):
 		joheaders.redirect_header(req, u"../word/edit?wid=%i" % results.getresult()[0][0])
 		return "\n"
 	else:
+		joheaders.page_header(req)
 		jotools.write(req, "<table><tr><th>Sana</th><th>Sanaluokka</th></tr>\n")
 		for result in results.getresult():
 			jotools.write(req, "<tr><td><a href=\"../word/edit?wid=%i\">%s</a></td><td>%s</td></tr>\n" %

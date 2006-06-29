@@ -37,7 +37,9 @@ def edit(req, wid = None):
 		jotools.write(req, u"Sanaa %i ei ole\n" % wid_n)
 	else:
 		wordinfo = results.getresult()[0]
-		static_vars = {'WID': wid_n, 'WORD': unicode(wordinfo[0], 'UTF-8'), 'CLASSID': wordinfo[1]}
+		(uid, uname, editable) = jotools.get_login_user(req, db)
+		static_vars = {'WID': wid_n, 'WORD': unicode(wordinfo[0], 'UTF-8'), 'CLASSID': wordinfo[1],
+		               'UID': uid, 'UNAME': uname, 'EDITABLE': editable}
 		jotools.process_template(req, db, static_vars, 'word_edit', 'fi', 'joeditors')
 	joheaders.page_footer(req)
 	return "</html>"

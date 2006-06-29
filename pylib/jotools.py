@@ -23,6 +23,7 @@ import codecs
 import re
 import Cookie
 import time
+import urllib
 import _config
 
 def _call_handler(db, module, funcname, paramlist):
@@ -104,15 +105,19 @@ def get_session(req):
 			return sess
 	return ''
 
-# Returns (uid, uname) or (None, None), if user is not properly logged in. Calling this function also
-# refreshes the current session.
+# Returns (uid, uname, can_edit) or (None, None, False) if user is not properly logged in.
+# Calling this function also refreshes the current session.
 def get_login_user(req, db):
 	session = get_session(req)
-	if session == '': return (None, None)
+	if session == '': return (None, None, False)
 	results = db.query("select uid, uname, session_exp from appuser where session_key = '%s'" % session)
-	if results.ntuples() != 1: return (None, None)
+	if results.ntuples() != 1: return (None, None, False)
 	result = results.getresult()[0]
-	if result[2] < time.time(): return (None, None)
+	if result[2] < time.time(): return (None, None, False)
 	db.query("update appuser set session_exp = CURRENT_TIMESTAMP + interval '%i seconds' where uid = %i" \
 	         % (_config.SESSION_TIMEOUT, result[0]))
-	return (result[0], unicode(result[1], 'UTF-8'))
+	return (result[0], unicode(result[1], 'UTF-8'), True)
+
+# Converts a string to a form that is suitable for use as a value of the value attribute in html form elements
+def escape_form_value(string):
+	return urllib.quote_plus(string)

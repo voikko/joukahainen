@@ -24,23 +24,23 @@ import hfutils
 import types
 import _config
 
-def _login_logout(db, uid, uname):
+def login_logout(db, uid, uname):
 	if uid == None:
 		return u"""
-<form method="post" action="user/login">
+<form method="post" action="%s/user/login">
 Käyttäjätunnus: <input type="text" name="username">&nbsp;
 Salasana: <input type="password" name="password">&nbsp;
 <input type="submit" value="Kirjaudu sisään">
 </form>
-"""
+""" % _config.WWW_ROOT_DIR
 	return u"""
-<form method="post" action="user/logout">
+<form method="post" action="%s/user/logout">
 <input type="submit" value="Kirjaa ulos käyttäjä %s">
 </form>
-""" % uname
+""" % (_config.WWW_ROOT_DIR, uname)
 
 def call(db, funcname, paramlist):
 	if funcname == 'login_logout':
 		if len(paramlist) != 2: return u"Error: 2 parameter expected"
-		return _login_logout(db, paramlist[0], paramlist[1])
+		return login_logout(db, paramlist[0], paramlist[1])
 	return u"Error: unknown function"
