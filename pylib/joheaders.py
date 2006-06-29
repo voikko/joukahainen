@@ -38,9 +38,7 @@ def page_header(req):
 
 
 def page_footer(req):
-	req.write("""
-</body>
-""")
+	req.write('\n</body>')
 
 def redirect_header(req, location):
 	location_s = location.encode('UTF-8')
@@ -48,3 +46,8 @@ def redirect_header(req, location):
 	req.status = mod_python.apache.HTTP_MOVED_TEMPORARILY
 	req.send_http_header()
 	req.write("Redirecting to %s" % location_s)
+
+def error_page(req, errortext):
+	page_header(req)
+	req.write((u'<h1>Virhe</h1><p>%s</p>\n' % errortext).encode('UTF-8'))
+	page_footer(req)

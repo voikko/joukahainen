@@ -26,6 +26,7 @@ SESSION_TIMEOUT = 7200
 # Database connection parameters
 DBHOST = 'localhost'
 DB_PORT = 5432
-DB_DATABASE = 'joukahainen'
+DB_PUBLIC_DATABASE = 'joukahainen'
+DB_PRIVATE_DATABASE = 'joukahainen_private'
 DB_USER = 'joukahainen'
 DB_PASSWORD = 'write_password_here'

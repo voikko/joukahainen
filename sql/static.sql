@@ -1,4 +1,6 @@
--- Static database data for Joukahainen/Hunspell-fi
+-- Static database data for Joukahainen/Hunspell-fi (public data)
+
+\c joukahainen
 
 -- Delete old data
 DELETE FROM related_word;
@@ -10,6 +12,7 @@ DELETE FROM attribute;
 DELETE FROM attribute_type;
 DELETE FROM wordclass;
 DELETE FROM language;
+DELETE FROM appuser;
 
 -- Insert new data
 INSERT INTO language(langid, name) VALUES(1, 'suomi');
@@ -59,5 +62,9 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(16, 'historiallinen tai
 INSERT INTO attribute_class(aid, classid) VALUES(16, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(16, 2);
 
--- Test user, password 'test'
-INSERT INTO appuser(uid, uname, pwhash) VALUES(1, 'testi', 'f4f1017a0a37f7772e50d98d2ca58fc9533c03b0')
+-- Test user, password 'testi'
+INSERT INTO appuser(uid, uname) VALUES(1, 'testi');
+
+\c joukahainen_private
+DELETE FROM appuser;
+INSERT INTO appuser(uid, uname, pwhash) VALUES(1, 'testi', 'f4f1017a0a37f7772e50d98d2ca58fc9533c03b0');

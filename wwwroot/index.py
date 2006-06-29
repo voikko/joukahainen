@@ -29,7 +29,7 @@ import jodb
 def index(req):
 	joheaders.page_header(req)
 	db = jodb.connect()
-	(uid, uname, editable) = jotools.get_login_user(req, db)
+	(uid, uname, editable) = jotools.get_login_user(req)
 	static_vars = {'UID': uid, 'UNAME': uname, 'EDITABLE': editable}
 	jotools.process_template(req, db, static_vars, 'index_index', 'fi', 'joindex')
 	joheaders.page_footer(req)

@@ -96,7 +96,7 @@ def _string_attribute(db, wid, aid, editable):
 	if editable:
 		if results.ntuples() == 0: oldval = u""
 		else: oldval = jotools.escape_form_value(unicode(results.getresult()[0][0], 'UTF-8'))
-		return u'<input type="text" value="%s" id="string%i">' % (oldval, aid)
+		return u'<input type="text" value="%s" name="string%i">' % (oldval, aid)
 	else:
 		if results.ntuples() == 0 : return u"(ei asetettu)"
 		return unicode(results.getresult()[0][0], 'UTF-8')
@@ -109,6 +109,20 @@ def _related_words(db, wid):
 		retdata = retdata + ("<li>%s</li>\n" % unicode(result[0], 'UTF-8'))
 	return retdata + "</ul>\n"
 
+def _main_form_start(db, editable):
+	if editable:
+		return u'<form method="POST" action="change" class="subform">'
+	else:
+		return u''
+
+def _main_form_end(db, wid, editable):
+	if editable:
+		return u'''<p><input type="submit" value="Tallenna muutokset">
+<input type="reset" value="Peruuta muutokset">
+<input type="hidden" name="wid" value="%i"></p>
+</form>''' % wid
+	else:
+		return u''
 
 def call(db, funcname, paramlist):
 	if funcname == 'word_class':
@@ -129,4 +143,10 @@ def call(db, funcname, paramlist):
 	if funcname == 'login_logout':
 		if len(paramlist) != 2: return u"Error: 2 parameters expected"
 		return joindex.login_logout(db, paramlist[0], paramlist[1])
+	if funcname == 'main_form_start':
+		if len(paramlist) != 1: return u"Error: 1 parameter expected"
+		return _main_form_start(db, paramlist[0])
+	if funcname == 'main_form_end':
+		if len(paramlist) != 2: return u"Error: 2 parameters expected"
+		return _main_form_end(db, paramlist[0], paramlist[1])
 	return u"Error: unknown function"

@@ -46,7 +46,7 @@ def login(req, username = None, password = None):
 		return "</html>"
 	
 	pwhash = sha.new(_config.PW_SALT + unicode(password, 'UTF-8')).hexdigest()
-	db = jodb.connect()
+	db = jodb.connect_private()
 	results = db.query(("select uid from appuser where uname = '%s' and pwhash = '%s' " +
 	                    "and disabled = FALSE") % (username, pwhash))
 	if results.ntuples() == 0:
@@ -83,7 +83,7 @@ def logout(req):
 		return "</html>"
 	session = jotools.get_session(req)
 	if session != '':
-		db = jodb.connect()
+		db = jodb.connect_private()
 		db.query(("update appuser set session_key = NULL, session_exp = NULL " +
 		          "where session_key = '%s'") % session)
 	req.headers_out['Set-Cookie'] = 'session=; path=%s; expires=Thu, 01-Jan-1970 00:00:01 GMT' \

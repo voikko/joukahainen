@@ -24,9 +24,16 @@ import _config
 
 def connect():
 	return _pg.connect(
-		   host=_config.DBHOST,
-		   dbname=_config.DB_DATABASE,
-		   port=_config.DB_PORT,
-		   user=_config.DB_USER,
-		   passwd=_config.DB_PASSWORD)
+		host=_config.DBHOST,
+		dbname=_config.DB_PUBLIC_DATABASE,
+		port=_config.DB_PORT,
+		user=_config.DB_USER,
+		passwd=_config.DB_PASSWORD)
 
+def connect_private():
+	return _pg.connect(
+		host=_config.DBHOST,
+		dbname=_config.DB_PRIVATE_DATABASE,
+		port=_config.DB_PORT,
+		user=_config.DB_USER,
+		passwd=_config.DB_PASSWORD)

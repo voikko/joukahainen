@@ -69,9 +69,13 @@ div.login {
 	float: right;
 }
 
-h1 {
+div.topbar h1 {
 	font-size: 1.5em;
 	float: left;
 	margin-top: 0.0em;
 	margin-bottom: 0.0em;
+}
+
+form.subform {
+	border: 1px dotted black;
 }

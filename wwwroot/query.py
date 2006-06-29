@@ -58,14 +58,12 @@ def listwords(req, offset = None, limit = None):
 
 def findword(req, word = None):
 	if word == None: 
-		joheaders.page_header(req)
-		jotools.errormsg(req, u"Parametri word on pakollinen")
+		joheaders.error_page(req, u"Parametri word on pakollinen")
 		return "\n"
 	if not jotools.checkword(unicode(word, 'UTF-8')):
-		joheaders.page_header(req)
-		jotools.errormsg(req, u"Annetussa sanassa on kielletyjä merkkejä")
+		joheaders.error_page(req, u"Annetussa sanassa on kielletyjä merkkejä")
 		return "\n"
-	word_s = unicode(word, 'UTF-8').replace(u"'", u"''")
+	word_s = jotools.escape_sql_string(unicode(word, 'UTF-8'))
 	
 	db = jodb.connect()
 	results = db.query(("SELECT w.wid, w.word, c.name FROM word w, wordclass c WHERE w.class = c.classid " +
