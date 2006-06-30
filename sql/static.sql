@@ -61,6 +61,9 @@ INSERT INTO attribute_class(aid, classid) VALUES(15, 2);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(16, 'historiallinen taivutusluokka', 1, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(16, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(16, 2);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(17, 'ala: sivistyssana', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(17, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(17, 2);
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
 -- Test user, password 'testi'
 INSERT INTO appuser(uid, uname) VALUES(2, 'testi');
