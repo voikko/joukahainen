@@ -67,8 +67,11 @@ def change(req, wid = None):
 		db.query("rollback")
 		return '\n'
 	wclass = wclass_results.getresult()[0][0]
-	edfield_results = db.query(("select a.type, a.aid from attribute a, attribute_class ac " +
+	edfield_results = db.query(("select a.type, a.aid, a.descr from attribute a, attribute_class ac " +
 	                            "where a.aid = ac.aid and ac.classid = %i and a.editable = TRUE") % wclass)
+	eid = db.query("select nextval('event_eid_seq')").getresult()[0][0]
+	event_inserted = False
+	messages = []
 	
 	for attribute in edfield_results.getresult():
 		if attribute[0] == 1: # string attribute
@@ -76,7 +79,7 @@ def change(req, wid = None):
 			newval = None
 			for field in req.form.list:
 				if field.name == html_att:
-					newval = unicode(field.value, 'UTF-8')
+					newval = jotools.decode_form_value(field.value)
 					break
 			if newval == None: continue
 			vresults = db.query(("select s.value from string_attribute_value s where " +
@@ -84,17 +87,27 @@ def change(req, wid = None):
 			if vresults.ntuples() == 0: oldval = u""
 			else: oldval = unicode(vresults.getresult()[0][0], 'UTF-8')
 			if oldval == newval: continue
+			if not event_inserted:
+				db.query("insert into event(eid, eword, euser) values(%i, %i, %i)" % \
+				         (eid, wid_n, uid))
+				event_inserted = True
 			if newval == u'':
 				db.query(("delete from string_attribute_value where wid = %i " +
 				          "and aid = %i") % (wid_n, attribute[1]))
 			elif oldval == u'':
-				db.query(("insert into string_attribute_value(wid, aid, value) " +
-				          "values(%i, %i, '%s')") % (wid_n, attribute[1],
-					                        jotools.escape_sql_string(newval)))
+				db.query(("insert into string_attribute_value(wid, aid, value, eevent) " +
+				          "values(%i, %i, '%s', %i)") % (wid_n, attribute[1],
+					                        jotools.escape_sql_string(newval), eid))
 			else:
-				db.query(("update string_attribute_value set value='%s' " +
+				db.query(("update string_attribute_value set value='%s', eevent=%i " +
 				          "where wid=%i and aid=%i") %
-					(jotools.escape_sql_string(newval), wid_n, attribute[1]))
+					(jotools.escape_sql_string(newval), eid, wid_n, attribute[1]))
+			messages.append(u"%s: '%s' -> '%s'" % (unicode(attribute[2], 'UTF-8'),
+			                oldval, newval))
+	
+	if event_inserted:
+		mess_str = jotools.escape_sql_string(reduce(lambda x, y: x + u"\n" + y, messages, u""))
+		db.query("update event set message = '%s' where eid = %i" % (mess_str, eid))
 	db.query("commit")
 	joheaders.redirect_header(req, u'edit?wid=%i' % wid_n)
 	return '\n'

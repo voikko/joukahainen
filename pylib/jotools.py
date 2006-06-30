@@ -26,6 +26,7 @@ import time
 import urllib
 import jodb
 import _config
+from xml.sax import saxutils
 
 def _call_handler(db, module, funcname, paramlist):
 	if module == 'joeditors':
@@ -122,7 +123,15 @@ def get_login_user(req):
 
 # Converts a string to a form that is suitable for use as a value of the value attribute in html form elements
 def escape_form_value(string):
-	return urllib.quote_plus(string)
+	return saxutils.quoteattr(string)
+
+# Converts a string to a form that is suitable for use in html document text
+def escape_html(string):
+	return saxutils.escape(string)
+
+# Decodes a string from html form to unicode
+def decode_form_value(string):
+	return unicode(urllib.unquote_plus(string), 'UTF-8')
 
 # Converts an unicode string to a form that is suitable for use in a SQL statement
 def escape_sql_string(string):

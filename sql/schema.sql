@@ -53,7 +53,19 @@ CREATE TABLE appuser (
 CREATE TABLE word (
   wid SERIAL PRIMARY KEY, -- word identifier
   word varchar NOT NULL, -- word
-  class integer NOT NULL REFERENCES wordclass -- word class
+  class integer NOT NULL REFERENCES wordclass, -- word class
+  cuser integer REFERENCES appuser, -- user who created this word
+  ctime timestamp DEFAULT CURRENT_TIMESTAMP -- creation time
+);
+
+-- Edit event. Dynamic.
+CREATE TABLE event (
+  eid SERIAL PRIMARY KEY, -- event identifier
+  eword integer REFERENCES word, -- word related to this event
+  euser integer REFERENCES appuser, -- user who initiated the event
+  etime timestamp DEFAULT CURRENT_TIMESTAMP, -- time of the event
+  message varchar, -- message describing the event
+  comment varchar -- user comment about the event
 );
 
 -- Word attribute value (string). Dynamic.
@@ -61,6 +73,7 @@ CREATE TABLE string_attribute_value (
   wid integer NOT NULL REFERENCES word, -- word
   aid integer NOT NULL REFERENCES attribute, -- attribute
   value varchar NOT NULL, -- value
+  eevent integer REFERENCES event, -- last edit event
   PRIMARY KEY (wid, aid)
 );
 
@@ -68,6 +81,7 @@ CREATE TABLE string_attribute_value (
 CREATE TABLE flag_attribute_value (
   wid integer NOT NULL REFERENCES word, -- word
   aid integer NOT NULL REFERENCES attribute, -- attribute
+  eevent integer REFERENCES event, -- last edit event
   PRIMARY KEY (wid, aid)
 );
 
@@ -80,6 +94,6 @@ CREATE TABLE related_word (
 
 -- Grant privileges
 GRANT SELECT ON language, wordclass, attribute, attribute_class TO joukahainen;
-GRANT SELECT, UPDATE on word_wid_seq, related_word_rwid_seq, appuser TO joukahainen;
+GRANT SELECT, UPDATE on word_wid_seq, related_word_rwid_seq, event_eid_seq, appuser TO joukahainen;
 GRANT ALL ON word, string_attribute_value, flag_attribute_value,
-  related_word TO joukahainen;
+  related_word, event TO joukahainen;

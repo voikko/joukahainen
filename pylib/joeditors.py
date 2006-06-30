@@ -94,9 +94,9 @@ def _string_attribute(db, wid, aid, editable):
 	results = db.query(("SELECT s.value FROM string_attribute_value s " +
 	                    "WHERE s.wid = %i AND s.aid = %i") % (wid, aid))
 	if editable:
-		if results.ntuples() == 0: oldval = u""
+		if results.ntuples() == 0: oldval = u'""'
 		else: oldval = jotools.escape_form_value(unicode(results.getresult()[0][0], 'UTF-8'))
-		return u'<input type="text" value="%s" name="string%i">' % (oldval, aid)
+		return u'<input type="text" value=%s name="string%i">' % (oldval, aid)
 	else:
 		if results.ntuples() == 0 : return u"(ei asetettu)"
 		return unicode(results.getresult()[0][0], 'UTF-8')
@@ -124,6 +124,15 @@ def _main_form_end(db, wid, editable):
 	else:
 		return u''
 
+def _message_log(db, wid):
+	results = db.query(("SELECT u.uname, e.etime, e.message FROM appuser u, event e " +
+	                    "WHERE u.uid = e.euser AND e.eword = %i ORDER BY e.etime") % wid)
+	retstr = u""
+	for result in results.getresult():
+		retstr = retstr + (u"<p>%s %s: %s</p>\n" % (result[1], result[0],
+		         jotools.escape_html(result[2])))
+	return retstr
+
 def call(db, funcname, paramlist):
 	if funcname == 'word_class':
 		if len(paramlist) != 1: return u"Error: 1 parameter expected"
@@ -149,4 +158,7 @@ def call(db, funcname, paramlist):
 	if funcname == 'main_form_end':
 		if len(paramlist) != 2: return u"Error: 2 parameters expected"
 		return _main_form_end(db, paramlist[0], paramlist[1])
+	if funcname == 'message_log':
+		if len(paramlist) != 1: return u"Error: 1 parameter expected"
+		return _message_log(db, paramlist[0])
 	return u"Error: unknown function"
