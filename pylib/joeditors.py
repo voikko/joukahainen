@@ -130,7 +130,25 @@ def _message_log(db, wid):
 	retstr = u""
 	for result in results.getresult():
 		retstr = retstr + (u"<p>%s %s: %s</p>\n" % (result[1], result[0],
-		         jotools.escape_html(result[2])))
+		         jotools.escape_html(unicode(result[2], 'UTF-8'))))
+	return retstr
+
+def _flag_edit_form(db, wid, classid):
+	results = db.query(("SELECT a.aid, a.descr, CASE WHEN fav.wid IS NULL THEN 'f' ELSE 't' END " +
+	                    "FROM attribute_class ac, attribute a " +
+	                    "LEFT OUTER JOIN flag_attribute_value fav ON (a.aid = fav.aid and fav.wid = %i) " +
+	                    "WHERE a.aid = ac.aid AND ac.classid = %i AND a.type = 2" +
+			"ORDER BY a.descr") % (wid, classid))
+	if results.ntuples() == 0: return u"(ei asetettavissa olevia lippuja)"
+	retstr = u'<form method="POST" action="flags">\n'
+	for result in results.getresult():
+		retstr = retstr + u'<input type="checkbox" value="on" name="attr%i"' % result[0]
+		if result[2] == 't': retstr = retstr + u' checked="true"'
+		retstr = retstr + u'>' + jotools.escape_html(unicode(result[1], 'UTF-8')) + u'<br />\n'
+	retstr = retstr + u'<input type="hidden" name="wid" value="%i">\n' % wid + \
+	                  u'<input type="submit" value="Tallenna muutokset">\n' + \
+	                  u'<input type="reset" value="Peruuta muutokset">\n' + \
+	                  u'</form>'
 	return retstr
 
 def call(db, funcname, paramlist):
@@ -161,4 +179,7 @@ def call(db, funcname, paramlist):
 	if funcname == 'message_log':
 		if len(paramlist) != 1: return u"Error: 1 parameter expected"
 		return _message_log(db, paramlist[0])
+	if funcname == 'flag_edit_form':
+		if len(paramlist) != 2: return u"Error: 2 parameters expected"
+		return _flag_edit_form(db, paramlist[0], paramlist[1])
 	return u"Error: unknown function"

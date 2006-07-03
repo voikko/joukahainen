@@ -111,3 +111,71 @@ def change(req, wid = None):
 	db.query("commit")
 	joheaders.redirect_header(req, u'edit?wid=%i' % wid_n)
 	return '\n'
+
+def flags(req, wid = None):
+	(uid, uname, editable) = jotools.get_login_user(req)
+	if not editable:
+		joheaders.error_page(req, u'Muokkausoikeus puuttuu')
+		return '\n'
+	if wid == None:
+		joheaders.error_page(req, u'Parametri wid on pakollinen')
+		return '\n'
+	wid_n = jotools.toint(wid)
+	db = jodb.connect()
+	results = db.query("select word, class from word where wid = %i" % wid_n)
+	if results.ntuples() == 0:
+		joheaders.error_page(req, u'Sanaa %i ei ole\n' % wid_n)
+		return '\n'
+	wordinfo = results.getresult()[0]
+	if req.method == 'GET': # show editor
+		joheaders.page_header(req)
+		static_vars = {'WID': wid_n, 'WORD': unicode(wordinfo[0], 'UTF-8'), 'CLASSID': wordinfo[1],
+		               'UID': uid, 'UNAME': uname, 'EDITABLE': editable}
+		jotools.process_template(req, db, static_vars, 'word_flags', 'fi', 'joeditors')
+		joheaders.page_footer(req)
+		return "</html>"
+	if req.method != 'POST':
+		joheaders.error_page(req, u'Vain GET/POST-pyynnöt ovat sallittuja')
+		return '\n'
+	db.query("begin")
+	edfield_results = db.query(("SELECT a.aid, a.descr, CASE WHEN fav.wid IS NULL THEN 'f' ELSE 't' END " +
+	                    "FROM attribute_class ac, attribute a " +
+	                    "LEFT OUTER JOIN flag_attribute_value fav ON (a.aid = fav.aid and fav.wid = %i) " +
+	                    "WHERE a.aid = ac.aid AND ac.classid = %i AND a.type = 2" +
+	                    "ORDER BY a.descr") % (wid_n, wordinfo[1]))
+	eid = db.query("select nextval('event_eid_seq')").getresult()[0][0]
+	event_inserted = False
+	messages = []
+	
+	for attribute in edfield_results.getresult():
+		html_att = 'attr%i' % attribute[0]
+		
+		newval = False
+		for field in req.form.list:
+			if field.name == html_att:
+				if jotools.decode_form_value(field.value) == 'on': newval = True
+				break
+		
+		if attribute[2] == 't': oldval = True
+		else: oldval = False
+		
+		if oldval == newval: continue
+		if not event_inserted:
+			db.query("insert into event(eid, eword, euser) values(%i, %i, %i)" % \
+			         (eid, wid_n, uid))
+			event_inserted = True
+		if newval == False:
+			db.query(("delete from flag_attribute_value where wid = %i " +
+			          "and aid = %i") % (wid_n, attribute[0]))
+			messages.append(u"Lippu poistettu: '%s'" % unicode(attribute[1], 'UTF-8'))
+		if newval == True:
+			db.query(("insert into flag_attribute_value(wid, aid, eevent) " +
+			          "values(%i, %i, %i)") % (wid_n, attribute[0], eid))
+			messages.append(u"Lippu lisätty: '%s'" % unicode(attribute[1], 'UTF-8'))
+	
+	if event_inserted:
+		mess_str = jotools.escape_sql_string(reduce(lambda x, y: x + u"\n" + y, messages, u""))
+		db.query("update event set message = '%s' where eid = %i" % (mess_str, eid))
+	db.query("commit")
+	joheaders.redirect_header(req, u'edit?wid=%i' % wid_n)
+	return '\n'

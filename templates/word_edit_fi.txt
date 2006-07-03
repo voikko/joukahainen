@@ -18,6 +18,7 @@ $$word_class(CLASSID)$$
 <p>
 $$flag_attributes(WID)$$
 </p>
+<p><a href="flags?wid=$$WID$$">Muokkaa lippuja...</a></p>
 $$main_form_start(EDITABLE)$$
 <p>
 <span class="fheader">Taivutusluokka:</span> <span class="fsvalue">$$string_attribute(WID,1,EDITABLE)$$</span>
