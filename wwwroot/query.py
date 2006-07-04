@@ -67,7 +67,7 @@ def findword(req, word = None):
 	
 	db = jodb.connect()
 	results = db.query(("SELECT w.wid, w.word, c.name FROM word w, wordclass c WHERE w.class = c.classid " +
-	                   "AND w.word = '%s' ORDER BY w.word, c.name, w.wid") % word_s.encode('UTF-8'))
+	                   "AND w.word = '%s' ORDER BY w.word, c.name, w.wid") % word_s)
 	if results.ntuples() == 0:
 		joheaders.page_header(req)
 		jotools.write(req, u"<p>Annettua sanaa ei löytynyt</p>\n")

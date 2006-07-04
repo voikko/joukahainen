@@ -105,7 +105,20 @@ def change(req, wid = None):
 			messages.append(u"%s: '%s' -> '%s'" % (unicode(attribute[2], 'UTF-8'),
 			                oldval, newval))
 	
-	if event_inserted:
+	comment = u''
+	for field in req.form.list:
+		if field.name == 'comment':
+			comment = jotools.decode_form_value(field.value)
+			break
+	
+	if comment != u'':
+		if not event_inserted:
+			db.query("insert into event(eid, eword, euser) values(%i, %i, %i)" % \
+			         (eid, wid_n, uid))
+			event_inserted = True
+		db.query("update event set comment = '%s' where eid = %i" \
+		         % (jotools.escape_sql_string(comment), eid))
+	if event_inserted and len(messages) > 0:
 		mess_str = jotools.escape_sql_string(reduce(lambda x, y: x + u"\n" + y, messages, u""))
 		db.query("update event set message = '%s' where eid = %i" % (mess_str, eid))
 	db.query("commit")
@@ -173,7 +186,20 @@ def flags(req, wid = None):
 			          "values(%i, %i, %i)") % (wid_n, attribute[0], eid))
 			messages.append(u"Lippu lisätty: '%s'" % unicode(attribute[1], 'UTF-8'))
 	
-	if event_inserted:
+	comment = u''
+	for field in req.form.list:
+		if field.name == 'comment':
+			comment = jotools.decode_form_value(field.value)
+			break
+	
+	if comment != u'':
+		if not event_inserted:
+			db.query("insert into event(eid, eword, euser) values(%i, %i, %i)" % \
+			         (eid, wid_n, uid))
+			event_inserted = True
+		db.query("update event set comment = '%s' where eid = %i" \
+		         % (jotools.escape_sql_string(comment), eid))
+	if event_inserted and len(messages) > 0:
 		mess_str = jotools.escape_sql_string(reduce(lambda x, y: x + u"\n" + y, messages, u""))
 		db.query("update event set message = '%s' where eid = %i" % (mess_str, eid))
 	db.query("commit")

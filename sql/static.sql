@@ -74,6 +74,18 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(20, 'paikannimi: taipuu
 INSERT INTO attribute_class(aid, classid) VALUES(20, 1);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(21, 'paikannimi: taipuu ulkopaikallissijoissa', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(21, 1);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(22, 'vokaalisointu: etuvokaalipäätteet (yäö)', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(22, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(22, 2);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(23, 'vokaalisointu: takavokaalipäätteet (uao)', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(23, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(23, 2);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(24, 'virheellinen sana', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(24, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(24, 2);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(25, 'vaatii selvennystä', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(25, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(25, 2);
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
 -- Test user, password 'testi'
 INSERT INTO appuser(uid, uname) VALUES(2, 'testi');

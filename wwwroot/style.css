@@ -16,18 +16,18 @@ table.inflection {
 
 table.inflection tr > td {
 	color: black;
-	background-color: #44EE44;
+	background-color: #88EE88;
 }
 
 table.inflection tr.characteristic > td {
 	color: black;
-	background-color: #00CC00;
+	background-color: #44DD44;
 	display: table-cell;
 }
 
 div.topbar {
 	color: black;
-	background-color: #005555;
+	background-color: #227777;
 	padding: 0.5em;
 }
 
@@ -44,18 +44,22 @@ div.editor {
 	left: 0;
 }
 
+div.main a {
+	color: #0000FF;
+}
+
 div.rightinfo {
 	color: black;
-	background-color: #00CC00;
+	background-color: #44DD44;
 	position: relative;
 	float: right;
-	width: 40%;
+	max-width: 40%;
 	padding: 0.5em;
 }
 
 div.bottominfo {
 	color: black;
-	background-color: #00CC00;
+	background-color: #44DD44;
 	clear: both;
 	padding: 0.5em;
 }
@@ -78,4 +82,34 @@ div.topbar h1 {
 
 form.subform {
 	border: 1px dotted black;
+}
+
+div.logitem {
+	border: 1px dotted black;
+	margin-bottom: 0.5em;
+}
+
+p.date {
+	font-family: monospace;
+	font-size: 1.2em;
+	margin: 0;
+	padding: 0;
+}
+
+p.logmsg {
+	padding: 0;
+	margin-top: 0;
+	margin-bottom: 0;
+	margin-right: 0;
+	margin-left: 2em;
+	color: #444444;
+	font-style: italic;
+}
+
+p.comment {
+	padding: 0;
+	margin-top: 0;
+	margin-bottom: 0;
+	margin-right: 0;
+	margin-left: 2em;
 }

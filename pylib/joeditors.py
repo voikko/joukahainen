@@ -21,7 +21,6 @@
 
 import hfaffix
 import hfutils
-import types
 import joindex
 import jotools
 import _config
@@ -117,7 +116,9 @@ def _main_form_start(db, editable):
 
 def _main_form_end(db, wid, editable):
 	if editable:
-		return u'''<p><input type="submit" value="Tallenna muutokset">
+		return u'''<p><span class="fheader">Lisää kommentti:</span>
+<textarea name="comment" cols="80" rows="5"></textarea></p>
+<p><input type="submit" value="Tallenna muutokset">
 <input type="reset" value="Peruuta muutokset">
 <input type="hidden" name="wid" value="%i"></p>
 </form>''' % wid
@@ -125,12 +126,25 @@ def _main_form_end(db, wid, editable):
 		return u''
 
 def _message_log(db, wid):
-	results = db.query(("SELECT u.uname, e.etime, e.message FROM appuser u, event e " +
+	results = db.query(("SELECT u.uname, to_char(e.etime, 'YYYY-MM-DD HH24:MI:SS'), e.message, " +
+	                    "e.comment FROM appuser u, event e " +
 	                    "WHERE u.uid = e.euser AND e.eword = %i ORDER BY e.etime") % wid)
+	if results.ntuples() == 0:
+		return u'<p>(ei muutostietoja)</p>'
 	retstr = u""
 	for result in results.getresult():
-		retstr = retstr + (u"<p>%s %s: %s</p>\n" % (result[1], result[0],
-		         jotools.escape_html(unicode(result[2], 'UTF-8'))))
+		date = result[1]
+		retstr = retstr + (u'<div class="logitem"><p class="date">%s %s</p>\n' \
+		                   % (result[0], date))
+		if result[2] != None:
+			msg = jotools.escape_html(unicode(result[2], 'UTF-8')).strip()
+			msg = msg.replace(u'\n', u'<br />\n')
+			retstr = retstr + u'<p class="logmsg">%s</p>\n' % msg
+		if result[3] != None:
+			comment = jotools.escape_html(unicode(result[3], 'UTF-8')).strip()
+			comment = comment.replace(u'\n', u'<br />\n')
+			retstr = retstr + u'<p class="comment">%s</p>\n' % comment
+		retstr = retstr + u"</div>\n"
 	return retstr
 
 def _flag_edit_form(db, wid, classid):
@@ -142,10 +156,13 @@ def _flag_edit_form(db, wid, classid):
 	if results.ntuples() == 0: return u"(ei asetettavissa olevia lippuja)"
 	retstr = u'<form method="POST" action="flags">\n'
 	for result in results.getresult():
-		retstr = retstr + u'<input type="checkbox" value="on" name="attr%i"' % result[0]
+		retstr = retstr + u'<label><input type="checkbox" value="on" name="attr%i"' % result[0]
 		if result[2] == 't': retstr = retstr + u' checked="true"'
-		retstr = retstr + u'>' + jotools.escape_html(unicode(result[1], 'UTF-8')) + u'<br />\n'
+		retstr = retstr + u'>' + jotools.escape_html(unicode(result[1], 'UTF-8'))
+		retstr = retstr + u'</label><br />\n'
 	retstr = retstr + u'<input type="hidden" name="wid" value="%i">\n' % wid + \
+	                  u'<p><span class="fheader">Lisää kommentti:</span>\n' + \
+	                  u'<textarea name="comment" cols="80" rows="5"></textarea></p>\n' + \
 	                  u'<input type="submit" value="Tallenna muutokset">\n' + \
 	                  u'<input type="reset" value="Peruuta muutokset">\n' + \
 	                  u'</form>'
