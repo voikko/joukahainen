@@ -89,6 +89,7 @@ CREATE TABLE flag_attribute_value (
 CREATE TABLE related_word (
   rwid SERIAL PRIMARY KEY, -- related word form identifier
   wid integer NOT NULL REFERENCES word, -- base word
+  eevent integer REFERENCES event, -- last edit event
   related_word varchar NOT NULL -- the related word form
 );
 

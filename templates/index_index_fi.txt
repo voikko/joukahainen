@@ -1,5 +1,5 @@
 <div class="topbar">
-<h1>Joukahainen</h1>
+<h1>Joukahainen: aloitus</h1>
 <div class="login">$$login_logout(UID,UNAME)$$</div>
 <div class="clear"></div>
 </div>
@@ -22,8 +22,16 @@ ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki
 <h2>Etsi sanastosta</h2>
 <ul>
 <li><a href="query/listwords">Kaikki sanat (200 sanaa kerrallaan)</a></li>
-<li><form method="get" action="query/findword">Hae sana <input type="text" name="word">
+<li>Hae sana
+ <ul>
+ <li><form method="get" action="query/findword">Tarkka haku <input type="text" name="word">
     <input type="submit" value="Hae"></form></li>
+ <li><form method="get" action="query/findword">SQL-standardin säännöllinen lauseke
+    <input type="text" name="word">
+    <input type="hidden" name="regexp" value="on">
+    <input type="submit" value="Hae"></form></li>
+ </ul>
+</li>
 </ul>
 <div class="clear"></div>
 </div>

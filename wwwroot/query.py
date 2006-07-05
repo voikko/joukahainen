@@ -56,18 +56,20 @@ def listwords(req, offset = None, limit = None):
 	joheaders.page_footer(req)
 	return "</html>"
 
-def findword(req, word = None):
+def findword(req, word = None, regexp = None):
 	if word == None: 
 		joheaders.error_page(req, u"Parametri word on pakollinen")
 		return "\n"
-	if not jotools.checkword(unicode(word, 'UTF-8')):
+	if not jotools.checkre(unicode(word, 'UTF-8')):
 		joheaders.error_page(req, u"Annetussa sanassa on kielletyjä merkkejä")
 		return "\n"
 	word_s = jotools.escape_sql_string(unicode(word, 'UTF-8'))
 	
 	db = jodb.connect()
+	if regexp == 'on': compop = 'SIMILAR TO'
+	else: compop = '='
 	results = db.query(("SELECT w.wid, w.word, c.name FROM word w, wordclass c WHERE w.class = c.classid " +
-	                   "AND w.word = '%s' ORDER BY w.word, c.name, w.wid") % word_s)
+	                   "AND w.word %s '%s' ORDER BY w.word, c.name, w.wid") % (compop, word_s))
 	if results.ntuples() == 0:
 		joheaders.page_header(req)
 		jotools.write(req, u"<p>Annettua sanaa ei löytynyt</p>\n")

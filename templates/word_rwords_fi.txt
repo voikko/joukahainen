@@ -1,0 +1,14 @@
+<div class="topbar">
+<h1>Sana: $$WORD$$ &gt; kirjoitusasut</h1>
+<div class="login">$$login_logout(UID,UNAME)$$</div>
+<div class="clear"></div>
+</div>
+<div class="main">
+<p>
+$$word_class(CLASSID)$$
+</p>
+<p>
+$$rwords_edit_form(WID)$$
+</p>
+<p><a href="edit?wid=$$WID$$">Takaisin sanan muihin tietoihin...</a></p>
+</div>

@@ -19,6 +19,10 @@ table.inflection tr > td {
 	background-color: #88EE88;
 }
 
+table.inflection a {
+	text-decoration: none;
+}
+
 table.inflection tr.characteristic > td {
 	color: black;
 	background-color: #44DD44;

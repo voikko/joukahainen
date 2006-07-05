@@ -7,13 +7,14 @@
 <div class="rightinfo">
 $$noun_inflection(WID,WORD)$$
 </div>
+<p>
+$$word_class(CLASSID)$$
+</p>
 <h2>Kirjoitusasut</h2>
 <p>
 $$related_words(WID)$$
 </p>
-<p>
-$$word_class(CLASSID)$$
-</p>
+<p><a href="rwords?wid=$$WID$$">Muokkaa kirjoitusasuja...</a></p>
 <h2>Asetetut liput</h2>
 <p>
 $$flag_attributes(WID)$$
@@ -24,6 +25,8 @@ $$main_form_start(EDITABLE)$$
 <span class="fheader">Taivutusluokka:</span> <span class="fsvalue">$$string_attribute(WID,1,EDITABLE)$$</span>
 <br /><span class="fheader">Historiallinen taivutusluokka:</span>
 <span class="fsvalue">$$string_attribute(WID,16,EDITABLE)$$</span>
+<br /><span class="fheader">Lyhyt sanan selitys:</span>
+<span class="fsvalue">$$string_attribute(WID,18,EDITABLE)$$</span>
 </p>
 $$main_form_end(WID,EDITABLE)$$
 <div class="bottominfo">

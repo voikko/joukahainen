@@ -54,7 +54,7 @@ def _noun_inflection(db, wid, word):
 	tableid = u"inftable%i" % wid
 
 	retdata = (u'<table class="inflection" id="%s">\n<tr><th colspan="2">' +
-	           u'<a onclick="switchDetailedDisplay(\'%s\');" id="%s"></a> Taivutus</th></tr>\n') \
+	           u'<a href="javascript:switchDetailedDisplay(\'%s\');" id="%s"></a> Taivutus</th></tr>\n') \
 		% (tableid, tableid, tableid + u'a')
 	for noun_class in noun_classes:
 		if not infclass_main in noun_class['smcnames']: continue
@@ -95,7 +95,7 @@ def _string_attribute(db, wid, aid, editable):
 	if editable:
 		if results.ntuples() == 0: oldval = u'""'
 		else: oldval = jotools.escape_form_value(unicode(results.getresult()[0][0], 'UTF-8'))
-		return u'<input type="text" value=%s name="string%i">' % (oldval, aid)
+		return u'<input type="text" value=%s size="60" name="string%i">' % (oldval, aid)
 	else:
 		if results.ntuples() == 0 : return u"(ei asetettu)"
 		return unicode(results.getresult()[0][0], 'UTF-8')
@@ -127,15 +127,19 @@ def _main_form_end(db, wid, editable):
 
 def _message_log(db, wid):
 	results = db.query(("SELECT u.uname, to_char(e.etime, 'YYYY-MM-DD HH24:MI:SS'), e.message, " +
-	                    "e.comment FROM appuser u, event e " +
+	                    "e.comment, coalesce(u.firstname, ''), coalesce(u.lastname, '') " +
+	                    "FROM appuser u, event e " +
 	                    "WHERE u.uid = e.euser AND e.eword = %i ORDER BY e.etime") % wid)
 	if results.ntuples() == 0:
 		return u'<p>(ei muutostietoja)</p>'
 	retstr = u""
 	for result in results.getresult():
 		date = result[1]
+		user = jotools.escape_html(unicode(result[4], 'UTF-8')) + u" " + \
+		       jotools.escape_html(unicode(result[5], 'UTF-8')) + u" (" + \
+		       jotools.escape_html(unicode(result[0], 'UTF-8')) + u")"
 		retstr = retstr + (u'<div class="logitem"><p class="date">%s %s</p>\n' \
-		                   % (result[0], date))
+		                   % (user, date))
 		if result[2] != None:
 			msg = jotools.escape_html(unicode(result[2], 'UTF-8')).strip()
 			msg = msg.replace(u'\n', u'<br />\n')
@@ -161,6 +165,26 @@ def _flag_edit_form(db, wid, classid):
 		retstr = retstr + u'>' + jotools.escape_html(unicode(result[1], 'UTF-8'))
 		retstr = retstr + u'</label><br />\n'
 	retstr = retstr + u'<input type="hidden" name="wid" value="%i">\n' % wid + \
+	                  u'<p><span class="fheader">Lisää kommentti:</span>\n' + \
+	                  u'<textarea name="comment" cols="80" rows="5"></textarea></p>\n' + \
+	                  u'<input type="submit" value="Tallenna muutokset">\n' + \
+	                  u'<input type="reset" value="Peruuta muutokset">\n' + \
+	                  u'</form>'
+	return retstr
+
+def _rwords_edit_form(db, wid):
+	results = db.query(("SELECT r.rwid, r.related_word FROM related_word r " +
+	                    "WHERE r.wid = %i ORDER BY r.related_word") % wid)
+	retstr = u'<form method="POST" action="rwords">\n'
+	if results.ntuples() > 0:
+		retstr = retstr + u'<h2>Poista kirjoitusasuja</h2>\n'
+	for result in results.getresult():
+		retstr = retstr + u'<label><input type="checkbox" value="on" name="rword%i">' % result[0]
+		retstr = retstr + jotools.escape_html(unicode(result[1], 'UTF-8'))
+		retstr = retstr + u'</label><br />\n'
+	retstr = retstr + u'<p><span class="fheader">Lisää kirjoitusasuja</span>\n' + \
+	                  u'<input type="text" size="80" name="add"></p>\n' + \
+	                  u'<input type="hidden" name="wid" value="%i">\n' % wid + \
 	                  u'<p><span class="fheader">Lisää kommentti:</span>\n' + \
 	                  u'<textarea name="comment" cols="80" rows="5"></textarea></p>\n' + \
 	                  u'<input type="submit" value="Tallenna muutokset">\n' + \
@@ -199,4 +223,7 @@ def call(db, funcname, paramlist):
 	if funcname == 'flag_edit_form':
 		if len(paramlist) != 2: return u"Error: 2 parameters expected"
 		return _flag_edit_form(db, paramlist[0], paramlist[1])
+	if funcname == 'rwords_edit_form':
+		if len(paramlist) != 1: return u"Error: 1 parameter expected"
+		return _rwords_edit_form(db, paramlist[0])
 	return u"Error: unknown function"

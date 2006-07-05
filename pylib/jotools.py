@@ -48,6 +48,13 @@ def checkword(string):
 		if not c in WCHARS: return False
 	return True
 
+# Checks if string is safe to be used as a SQL standard regular expression
+RECHARS = WCHARS + u"_%*()[]+."
+def checkre(string):
+	for c in string:
+		if not c in RECHARS: return False
+	return True
+
 UNAMECHARS = u'abcdefghijklmnopqrstuvwxyz'
 # Checks if string looks like a valid user name
 def checkuname(string):
@@ -136,3 +143,16 @@ def decode_form_value(string):
 # Converts an unicode string to a form that is suitable for use in a SQL statement
 def escape_sql_string(string):
 	return string.replace(u"'", u"''").encode('UTF-8')
+
+# Returns a list that has all unique elements of the argument list. The returned list is sorted
+# according to element values. The original list must be sortable
+def unique(oldlist):
+	if len(oldlist) == 0: return []
+	oldlist.sort()
+	lastelem = oldlist[0]
+	newlist = [lastelem]
+	for elem in oldlist[1:]:
+		if elem != lastelem:
+			lastelem = elem
+			newlist.append(lastelem)
+	return newlist

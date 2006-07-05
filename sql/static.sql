@@ -86,10 +86,14 @@ INSERT INTO attribute_class(aid, classid) VALUES(24, 2);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(25, 'vaatii selvennystä', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(25, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(25, 2);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(26, 'siirretty', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(26, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(26, 2);
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
 -- Test user, password 'testi'
-INSERT INTO appuser(uid, uname) VALUES(2, 'testi');
+INSERT INTO appuser(uid, uname, firstname, lastname) VALUES(2, 'testi', 'Aku', 'Ankka');
 
 \c joukahainen_private
 DELETE FROM appuser;
-INSERT INTO appuser(uid, uname, pwhash) VALUES(2, 'testi', 'f4f1017a0a37f7772e50d98d2ca58fc9533c03b0');
+INSERT INTO appuser(uid, uname, firstname, lastname, pwhash)
+  VALUES(2, 'testi', 'Aku', 'Ankka', 'f4f1017a0a37f7772e50d98d2ca58fc9533c03b0');

@@ -205,3 +205,93 @@ def flags(req, wid = None):
 	db.query("commit")
 	joheaders.redirect_header(req, u'edit?wid=%i' % wid_n)
 	return '\n'
+
+def rwords(req, wid = None):
+	(uid, uname, editable) = jotools.get_login_user(req)
+	if not editable:
+		joheaders.error_page(req, u'Muokkausoikeus puuttuu')
+		return '\n'
+	if wid == None:
+		joheaders.error_page(req, u'Parametri wid on pakollinen')
+		return '\n'
+	wid_n = jotools.toint(wid)
+	db = jodb.connect()
+	results = db.query("select word, class from word where wid = %i" % wid_n)
+	if results.ntuples() == 0:
+		joheaders.error_page(req, u'Sanaa %i ei ole\n' % wid_n)
+		return '\n'
+	wordinfo = results.getresult()[0]
+	if req.method == 'GET': # show editor
+		joheaders.page_header(req)
+		static_vars = {'WID': wid_n, 'WORD': unicode(wordinfo[0], 'UTF-8'), 'CLASSID': wordinfo[1],
+		               'UID': uid, 'UNAME': uname, 'EDITABLE': editable}
+		jotools.process_template(req, db, static_vars, 'word_rwords', 'fi', 'joeditors')
+		joheaders.page_footer(req)
+		return "</html>"
+	if req.method != 'POST':
+		joheaders.error_page(req, u'Vain GET/POST-pyynnöt ovat sallittuja')
+		return '\n'
+	db.query("begin")
+	rword_results = db.query("SELECT rwid, related_word FROM related_word WHERE wid = %i" % wid_n)
+	rword_res = rword_results.getresult()
+	eid = db.query("select nextval('event_eid_seq')").getresult()[0][0]
+	event_inserted = False
+	messages = []
+	
+	for attribute in rword_res:
+		html_att = 'rword%i' % attribute[0]
+		
+		remove = False
+		for field in req.form.list:
+			if field.name == html_att:
+				if jotools.decode_form_value(field.value) == 'on': remove = True
+				break
+		
+		if not remove: continue
+		if not event_inserted:
+			db.query("insert into event(eid, eword, euser) values(%i, %i, %i)" % \
+			         (eid, wid_n, uid))
+			event_inserted = True
+		db.query(("delete from related_word where wid = %i and rwid = %i") % (wid_n, attribute[0]))
+		messages.append(u"Kirjoitusasu poistettu: '%s'" % unicode(attribute[1], 'UTF-8'))
+	
+	newwords = u''
+	for field in req.form.list:
+		if field.name == 'add':
+			newwords = jotools.decode_form_value(field.value)
+			break
+	for word in jotools.unique(newwords.split()):
+		if not jotools.checkword(word): continue
+		already_listed = False
+		for attribute in rword_res:
+			if word == unicode(attribute[1], 'UTF-8'): 
+				already_listed = True
+				break
+		if already_listed: continue
+		if not event_inserted:
+			db.query("insert into event(eid, eword, euser) values(%i, %i, %i)" % \
+			         (eid, wid_n, uid))
+			event_inserted = True
+		db.query("insert into related_word(wid, eevent, related_word) values(%i, %i, '%s')" \
+		         % (wid_n, eid, jotools.escape_sql_string(word)))
+		messages.append(u"Kirjoitusasu lisätty: '%s'" % word)
+	
+	comment = u''
+	for field in req.form.list:
+		if field.name == 'comment':
+			comment = jotools.decode_form_value(field.value)
+			break
+	
+	if comment != u'':
+		if not event_inserted:
+			db.query("insert into event(eid, eword, euser) values(%i, %i, %i)" % \
+			         (eid, wid_n, uid))
+			event_inserted = True
+		db.query("update event set comment = '%s' where eid = %i" \
+		         % (jotools.escape_sql_string(comment), eid))
+	if event_inserted and len(messages) > 0:
+		mess_str = jotools.escape_sql_string(reduce(lambda x, y: x + u"\n" + y, messages, u""))
+		db.query("update event set message = '%s' where eid = %i" % (mess_str, eid))
+	db.query("commit")
+	joheaders.redirect_header(req, u'edit?wid=%i' % wid_n)
+	return '\n'
