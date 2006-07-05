@@ -27,7 +27,6 @@ import jotools
 import jodb
 
 def index(req):
-	joheaders.page_header(req)
 	db = jodb.connect()
 	(uid, uname, editable) = jotools.get_login_user(req)
 	static_vars = {'UID': uid, 'UNAME': uname, 'EDITABLE': editable}

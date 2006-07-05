@@ -24,23 +24,25 @@ import hfutils
 import types
 import _config
 
-def login_logout(db, uid, uname):
+def login_logout(db, uid, uname, wid):
 	if uid == None:
 		return u"""
-<form method="post" action="%s/user/login">
-Käyttäjätunnus: <input type="text" name="username">&nbsp;
-Salasana: <input type="password" name="password">&nbsp;
-<input type="submit" value="Kirjaudu sisään">
-</form>
-""" % _config.WWW_ROOT_DIR
+<form method="post" action="%s/user/login"><p>
+<label>Käyttäjätunnus: <input type="text" name="username" /></label>&nbsp;
+<label>Salasana: <input type="password" name="password" /></label>&nbsp;
+<input type="hidden" name="wid" value="%i" />
+<input type="submit" value="Kirjaudu sisään" />
+</p></form>
+""" % (_config.WWW_ROOT_DIR, wid)
 	return u"""
-<form method="post" action="%s/user/logout">
-<input type="submit" value="Kirjaa ulos käyttäjä %s">
-</form>
-""" % (_config.WWW_ROOT_DIR, uname)
+<form method="post" action="%s/user/logout"><p>
+<input type="hidden" name="wid" value="%i" />
+<input type="submit" value="Kirjaa ulos käyttäjä %s" />
+</p></form>
+""" % (_config.WWW_ROOT_DIR, wid, uname)
 
 def call(db, funcname, paramlist):
 	if funcname == 'login_logout':
-		if len(paramlist) != 2: return u"Error: 2 parameter expected"
-		return login_logout(db, paramlist[0], paramlist[1])
+		if len(paramlist) != 3: return u"Error: 3 parameter expected"
+		return login_logout(db, paramlist[0], paramlist[1], paramlist[2])
 	return u"Error: unknown function"

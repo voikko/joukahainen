@@ -25,6 +25,7 @@ import Cookie
 import time
 import urllib
 import jodb
+import joheaders
 import _config
 from xml.sax import saxutils
 
@@ -74,16 +75,18 @@ def process_template(req, db, static_vars, template_name, lang, module):
 	var_re = re.compile("^(.*)\\$\\$(.*)\\$\\$(.*)$")
 	func_re = re.compile("^(.*)\\((.*)\\)$")
 	file_cont = True
+	first_line = True
 	while file_cont:
 		# FIXME: only one variable/function allowed on one line
 		line = tmplfile.readline()
 		file_cont = line.endswith('\n')
 		var_match = var_re.match(line)
+		line_str = u''
 		if var_match != None:
-			write(req, var_match.group(1))
+			line_str = line_str + var_match.group(1)
 			func_match = func_re.match(var_match.group(2))
 			if func_match == None:
-				write(req, unicode(static_vars[var_match.group(2)]))
+				line_str = line_str + unicode(static_vars[var_match.group(2)])
 			else:
 				paramlist = []
 				for param in func_match.group(2).split(','):
@@ -95,10 +98,14 @@ def process_template(req, db, static_vars, template_name, lang, module):
 					else:
 						paramlist.append(static_vars[param])
 				retstr = _call_handler(db, module, func_match.group(1), paramlist)
-				write(req, retstr)
-			write(req, var_match.group(3) + u'\n')
+				line_str = line_str + retstr
+			line_str = line_str + var_match.group(3) + u'\n'
 		else:
-			write(req, line)
+			line_str = line_str + line
+		if first_line:
+			joheaders.page_header(req, line_str.strip())
+			first_line = False
+		else: write(req, line_str)
 	tmplfile.close()
 
 # Returns the session key of the request or '' if the key was not set or it is malformed

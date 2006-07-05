@@ -37,7 +37,6 @@ def edit(req, wid = None):
 	if results.ntuples() == 0:
 		joheaders.error_page(req, u'Sanaa %i ei ole\n' % wid_n)
 		return '\n'
-	joheaders.page_header(req)
 	wordinfo = results.getresult()[0]
 	(uid, uname, editable) = jotools.get_login_user(req)
 	static_vars = {'WID': wid_n, 'WORD': unicode(wordinfo[0], 'UTF-8'), 'CLASSID': wordinfo[1],
@@ -141,7 +140,6 @@ def flags(req, wid = None):
 		return '\n'
 	wordinfo = results.getresult()[0]
 	if req.method == 'GET': # show editor
-		joheaders.page_header(req)
 		static_vars = {'WID': wid_n, 'WORD': unicode(wordinfo[0], 'UTF-8'), 'CLASSID': wordinfo[1],
 		               'UID': uid, 'UNAME': uname, 'EDITABLE': editable}
 		jotools.process_template(req, db, static_vars, 'word_flags', 'fi', 'joeditors')
@@ -222,7 +220,6 @@ def rwords(req, wid = None):
 		return '\n'
 	wordinfo = results.getresult()[0]
 	if req.method == 'GET': # show editor
-		joheaders.page_header(req)
 		static_vars = {'WID': wid_n, 'WORD': unicode(wordinfo[0], 'UTF-8'), 'CLASSID': wordinfo[1],
 		               'UID': uid, 'UNAME': uname, 'EDITABLE': editable}
 		jotools.process_template(req, db, static_vars, 'word_rwords', 'fi', 'joeditors')

@@ -28,7 +28,7 @@ import jotools
 import jodb
 
 def listwords(req, offset = None, limit = None):
-	joheaders.page_header(req)
+	joheaders.page_header(req, u'Kaikki sanat')
 	jotools.write(req, u"<h1>Kaikki sanat</h1>\n")
 	db = jodb.connect()
 	
@@ -71,13 +71,13 @@ def findword(req, word = None, regexp = None):
 	results = db.query(("SELECT w.wid, w.word, c.name FROM word w, wordclass c WHERE w.class = c.classid " +
 	                   "AND w.word %s '%s' ORDER BY w.word, c.name, w.wid") % (compop, word_s))
 	if results.ntuples() == 0:
-		joheaders.page_header(req)
-		jotools.write(req, u"<p>Annettua sanaa ei löytynyt</p>\n")
+		joheaders.error_page(req, u"Annettua sanaa ei löytynyt")
+		return "\n"
 	elif results.ntuples() == 1:
 		joheaders.redirect_header(req, u"../word/edit?wid=%i" % results.getresult()[0][0])
 		return "\n"
 	else:
-		joheaders.page_header(req)
+		joheaders.page_header(req, u"Hakutulokset")
 		jotools.write(req, "<table><tr><th>Sana</th><th>Sanaluokka</th></tr>\n")
 		for result in results.getresult():
 			jotools.write(req, "<tr><td><a href=\"../word/edit?wid=%i\">%s</a></td><td>%s</td></tr>\n" %

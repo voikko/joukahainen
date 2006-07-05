@@ -83,7 +83,7 @@ def _noun_inflection(db, wid, word):
 def _flag_attributes(db, wid):
 	results = db.query(("SELECT a.descr FROM attribute a, flag_attribute_value f " +
 	                    "WHERE a.aid = f.aid AND a.type = 2 AND f.wid = %i") % wid)
-	if results.ntuples() == 0: return u"(ei asetettuja lippuja)"
+	if results.ntuples() == 0: return u"<p>(ei asetettuja lippuja)</p>"
 	retdata = u"<ul>\n"
 	for result in results.getresult():
 		retdata = retdata + (u"<li>%s</li>\n" % unicode(result[0], 'UTF-8'))
@@ -95,14 +95,14 @@ def _string_attribute(db, wid, aid, editable):
 	if editable:
 		if results.ntuples() == 0: oldval = u'""'
 		else: oldval = jotools.escape_form_value(unicode(results.getresult()[0][0], 'UTF-8'))
-		return u'<input type="text" value=%s size="60" name="string%i">' % (oldval, aid)
+		return u'<input type="text" value=%s size="60" name="string%i" />' % (oldval, aid)
 	else:
 		if results.ntuples() == 0 : return u"(ei asetettu)"
 		return unicode(results.getresult()[0][0], 'UTF-8')
 
 def _related_words(db, wid):
 	results = db.query("SELECT related_word FROM related_word WHERE wid = %i" % wid)
-	if results.ntuples() == 0: return u"(ei asetettu)"
+	if results.ntuples() == 0: return u"<p>(ei asetettu)</p>"
 	retdata = "<ul>\n"
 	for result in results.getresult():
 		retdata = retdata + ("<li>%s</li>\n" % unicode(result[0], 'UTF-8'))
@@ -110,7 +110,7 @@ def _related_words(db, wid):
 
 def _main_form_start(db, editable):
 	if editable:
-		return u'<form method="POST" action="change" class="subform">'
+		return u'<form method="post" action="change" class="subform">'
 	else:
 		return u''
 
@@ -118,9 +118,9 @@ def _main_form_end(db, wid, editable):
 	if editable:
 		return u'''<p><span class="fheader">Lisää kommentti:</span>
 <textarea name="comment" cols="80" rows="5"></textarea></p>
-<p><input type="submit" value="Tallenna muutokset">
-<input type="reset" value="Peruuta muutokset">
-<input type="hidden" name="wid" value="%i"></p>
+<p><input type="submit" value="Tallenna muutokset" />
+<input type="reset" value="Peruuta muutokset" />
+<input type="hidden" name="wid" value="%i" /></p>
 </form>''' % wid
 	else:
 		return u''
@@ -158,37 +158,39 @@ def _flag_edit_form(db, wid, classid):
 	                    "WHERE a.aid = ac.aid AND ac.classid = %i AND a.type = 2" +
 			"ORDER BY a.descr") % (wid, classid))
 	if results.ntuples() == 0: return u"(ei asetettavissa olevia lippuja)"
-	retstr = u'<form method="POST" action="flags">\n'
+	retstr = u'<form method="post" action="flags"><p>\n'
 	for result in results.getresult():
 		retstr = retstr + u'<label><input type="checkbox" value="on" name="attr%i"' % result[0]
-		if result[2] == 't': retstr = retstr + u' checked="true"'
-		retstr = retstr + u'>' + jotools.escape_html(unicode(result[1], 'UTF-8'))
+		if result[2] == 't': retstr = retstr + u' checked="checked"'
+		retstr = retstr + u' />' + jotools.escape_html(unicode(result[1], 'UTF-8'))
 		retstr = retstr + u'</label><br />\n'
-	retstr = retstr + u'<input type="hidden" name="wid" value="%i">\n' % wid + \
+	retstr = retstr + u'<input type="hidden" name="wid" value="%i" /></p>\n' % wid + \
 	                  u'<p><span class="fheader">Lisää kommentti:</span>\n' + \
 	                  u'<textarea name="comment" cols="80" rows="5"></textarea></p>\n' + \
-	                  u'<input type="submit" value="Tallenna muutokset">\n' + \
-	                  u'<input type="reset" value="Peruuta muutokset">\n' + \
-	                  u'</form>'
+	                  u'<p><input type="submit" value="Tallenna muutokset" />\n' + \
+	                  u'<input type="reset" value="Peruuta muutokset" />\n' + \
+	                  u'</p></form>'
 	return retstr
 
 def _rwords_edit_form(db, wid):
 	results = db.query(("SELECT r.rwid, r.related_word FROM related_word r " +
 	                    "WHERE r.wid = %i ORDER BY r.related_word") % wid)
-	retstr = u'<form method="POST" action="rwords">\n'
+	retstr = u'<form method="post" action="rwords">\n'
 	if results.ntuples() > 0:
-		retstr = retstr + u'<h2>Poista kirjoitusasuja</h2>\n'
+		retstr = retstr + u'<h2>Poista kirjoitusasuja</h2>\n<p>\n'
 	for result in results.getresult():
-		retstr = retstr + u'<label><input type="checkbox" value="on" name="rword%i">' % result[0]
+		retstr = retstr + u'<label><input type="checkbox" value="on" name="rword%i" />' % result[0]
 		retstr = retstr + jotools.escape_html(unicode(result[1], 'UTF-8'))
 		retstr = retstr + u'</label><br />\n'
+	if results.ntuples() > 0:
+		retstr = retstr + u'</p>\n'
 	retstr = retstr + u'<p><span class="fheader">Lisää kirjoitusasuja</span>\n' + \
-	                  u'<input type="text" size="80" name="add"></p>\n' + \
-	                  u'<input type="hidden" name="wid" value="%i">\n' % wid + \
+	                  u'<input type="text" size="80" name="add" /></p>\n' + \
 	                  u'<p><span class="fheader">Lisää kommentti:</span>\n' + \
 	                  u'<textarea name="comment" cols="80" rows="5"></textarea></p>\n' + \
-	                  u'<input type="submit" value="Tallenna muutokset">\n' + \
-	                  u'<input type="reset" value="Peruuta muutokset">\n' + \
+	                  u'<p><input type="hidden" name="wid" value="%i" />\n' % wid + \
+	                  u'<input type="submit" value="Tallenna muutokset" />\n' + \
+	                  u'<input type="reset" value="Peruuta muutokset" /></p>\n' + \
 	                  u'</form>'
 	return retstr
 
@@ -209,8 +211,8 @@ def call(db, funcname, paramlist):
 		if len(paramlist) != 1: return u"Error: 1 parameter expected"
 		return _related_words(db, paramlist[0])
 	if funcname == 'login_logout':
-		if len(paramlist) != 2: return u"Error: 2 parameters expected"
-		return joindex.login_logout(db, paramlist[0], paramlist[1])
+		if len(paramlist) != 3: return u"Error: 3 parameters expected"
+		return joindex.login_logout(db, paramlist[0], paramlist[1], paramlist[2])
 	if funcname == 'main_form_start':
 		if len(paramlist) != 1: return u"Error: 1 parameter expected"
 		return _main_form_start(db, paramlist[0])

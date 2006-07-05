@@ -84,6 +84,11 @@ div.topbar h1 {
 	margin-bottom: 0.0em;
 }
 
+div.topbar p {
+	margin: 0;
+	padding: 0;
+}
+
 form.subform {
 	border: 1px dotted black;
 }
@@ -116,4 +121,9 @@ p.comment {
 	margin-bottom: 0;
 	margin-right: 0;
 	margin-left: 2em;
+}
+
+li p {
+	margin: 0;
+	padding: 0;
 }

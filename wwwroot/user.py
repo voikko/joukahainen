@@ -32,7 +32,7 @@ import time
 import os
 import random
 
-def login(req, username = None, password = None):
+def login(req, username = None, password = None, wid = None):
 	if req.method != 'POST':
 		joheaders.page_header(req)
 		jotools.write(req, u"Vain POST-pyynnöt ovat sallittuja")
@@ -72,10 +72,13 @@ def login(req, username = None, password = None):
 	db.query(("update appuser set session_key = '%s', session_exp = CURRENT_TIMESTAMP + " +
 	          "interval '%i seconds' where uid = %i") % (sesskey, _config.SESSION_TIMEOUT, uid))
 	req.headers_out['Set-Cookie'] = 'session=%s; path=%s' % (sesskey, _config.WWW_ROOT_DIR)
-	joheaders.redirect_header(req, u"..")
+	if wid == None: wid_n = 0
+	else: wid_n = jotools.toint(wid)
+	if wid_n == 0: joheaders.redirect_header(req, _config.WWW_ROOT_DIR + u"/")
+	else: joheaders.redirect_header(req, _config.WWW_ROOT_DIR + u"/word/edit?wid=%i" % wid_n)
 	return "</html>"
 
-def logout(req):
+def logout(req, wid = None):
 	if req.method != 'POST':
 		joheaders.page_header(req)
 		jotools.write(req, u"Vain POST-pyynnöt ovat sallittuja")
@@ -88,5 +91,8 @@ def logout(req):
 		          "where session_key = '%s'") % session)
 	req.headers_out['Set-Cookie'] = 'session=; path=%s; expires=Thu, 01-Jan-1970 00:00:01 GMT' \
 	                                % _config.WWW_ROOT_DIR
-	joheaders.redirect_header(req, u"..")
+	if wid == None: wid_n = 0
+	else: wid_n = jotools.toint(wid)
+	if wid_n == 0: joheaders.redirect_header(req, _config.WWW_ROOT_DIR + u"/")
+	else: joheaders.redirect_header(req, _config.WWW_ROOT_DIR + u"/word/edit?wid=%i" % wid_n)
 	return "</html>"

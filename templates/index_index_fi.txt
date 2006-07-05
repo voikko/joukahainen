@@ -1,6 +1,8 @@
+Joukahainen: aloitus
+
 <div class="topbar">
 <h1>Joukahainen: aloitus</h1>
-<div class="login">$$login_logout(UID,UNAME)$$</div>
+<div class="login">$$login_logout(UID,UNAME,0)$$</div>
 <div class="clear"></div>
 </div>
 <div class="main">
@@ -24,12 +26,12 @@ ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki
 <li><a href="query/listwords">Kaikki sanat (200 sanaa kerrallaan)</a></li>
 <li>Hae sana
  <ul>
- <li><form method="get" action="query/findword">Tarkka haku <input type="text" name="word">
-    <input type="submit" value="Hae"></form></li>
- <li><form method="get" action="query/findword">SQL-standardin säännöllinen lauseke
-    <input type="text" name="word">
-    <input type="hidden" name="regexp" value="on">
-    <input type="submit" value="Hae"></form></li>
+ <li><form method="get" action="query/findword"><p>Tarkka haku <input type="text" name="word" />
+    <input type="submit" value="Hae" /></p></form></li>
+ <li><form method="get" action="query/findword"><p>SQL-standardin säännöllinen lauseke
+    <input type="text" name="word" />
+    <input type="hidden" name="regexp" value="on" />
+    <input type="submit" value="Hae" /></p></form></li>
  </ul>
 </li>
 </ul>

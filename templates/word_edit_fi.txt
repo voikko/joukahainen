@@ -1,6 +1,8 @@
+Sana: $$WORD$$
+
 <div class="topbar">
 <h1>Sana: $$WORD$$</h1>
-<div class="login">$$login_logout(UID,UNAME)$$</div>
+<div class="login">$$login_logout(UID,UNAME,WID)$$</div>
 <div class="clear"></div>
 </div>
 <div class="main">
@@ -11,14 +13,12 @@ $$noun_inflection(WID,WORD)$$
 $$word_class(CLASSID)$$
 </p>
 <h2>Kirjoitusasut</h2>
-<p>
 $$related_words(WID)$$
-</p>
+
 <p><a href="rwords?wid=$$WID$$">Muokkaa kirjoitusasuja...</a></p>
 <h2>Asetetut liput</h2>
-<p>
 $$flag_attributes(WID)$$
-</p>
+
 <p><a href="flags?wid=$$WID$$">Muokkaa lippuja...</a></p>
 $$main_form_start(EDITABLE)$$
 <p>

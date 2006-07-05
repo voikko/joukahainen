@@ -22,19 +22,20 @@
 import mod_python.apache
 import _config
 
-def page_header(req):
+def page_header(req, title):
 	req.content_type = "text/html; charset=UTF-8"
 	req.send_http_header()
-	req.write("""
+	req.write("""<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
+<title>%s</title>
 <link rel="stylesheet" type="text/css" href="%s/style.css" />
 <script type="text/javascript" src="%s/jscripts.js"></script>
 </head>
 <body onload="initPage()">
-""" % (_config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR))
+""" % (title.encode('UTF-8'), _config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR))
 
 
 def page_footer(req):
@@ -48,6 +49,6 @@ def redirect_header(req, location):
 	req.write("Redirecting to %s" % location_s)
 
 def error_page(req, errortext):
-	page_header(req)
+	page_header(req, u'Joukahainen: virhe')
 	req.write((u'<h1>Virhe</h1><p>%s</p>\n' % errortext).encode('UTF-8'))
 	page_footer(req)
