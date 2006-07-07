@@ -93,8 +93,14 @@ CREATE TABLE related_word (
   related_word varchar NOT NULL -- the related word form
 );
 
+-- Unclassified word. Dynamic.
+CREATE TABLE raw_word (
+  word varchar PRIMARY KEY NOT NULL, -- word
+  processed boolean NOT NULL DEFAULT FALSE -- is the word already processed
+);
+
 -- Grant privileges
 GRANT SELECT ON language, wordclass, attribute, attribute_class TO joukahainen;
 GRANT SELECT, UPDATE on word_wid_seq, related_word_rwid_seq, event_eid_seq, appuser TO joukahainen;
 GRANT ALL ON word, string_attribute_value, flag_attribute_value,
-  related_word, event TO joukahainen;
+  related_word, event, raw_word TO joukahainen;

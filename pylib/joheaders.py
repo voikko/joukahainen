@@ -21,6 +21,8 @@
 
 import mod_python.apache
 import _config
+import jotools
+import joindex
 
 def page_header(req, title):
 	req.content_type = "text/html; charset=UTF-8"
@@ -51,4 +53,17 @@ def redirect_header(req, location):
 def error_page(req, errortext):
 	page_header(req, u'Joukahainen: virhe')
 	req.write((u'<h1>Virhe</h1><p>%s</p>\n' % errortext).encode('UTF-8'))
+	page_footer(req)
+
+def list_page_header(req, headertext, uid, uname):
+	page_header(req, headertext)
+	jotools.write(req, u"""<div class="topbar">
+<h1>%s</h1>
+<div class="login">%s</div>
+<div class="clear"></div>
+</div>
+<div class="main">""" % (headertext, joindex.login_logout(None, uid, uname, 0)))
+
+def list_page_footer(req):
+	jotools.write(req, u"</div>\n")
 	page_footer(req)

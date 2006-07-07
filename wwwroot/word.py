@@ -75,12 +75,9 @@ def change(req, wid = None):
 	for attribute in edfield_results.getresult():
 		if attribute[0] == 1: # string attribute
 			html_att = 'string%i' % attribute[1]
-			newval = None
-			for field in req.form.list:
-				if field.name == html_att:
-					newval = jotools.decode_form_value(field.value)
-					break
+			newval = jotools.get_param(req, html_att, None)
 			if newval == None: continue
+			
 			vresults = db.query(("select s.value from string_attribute_value s where " +
 			                     "s.wid = %i and s.aid = %i") % (wid_n, attribute[1]))
 			if vresults.ntuples() == 0: oldval = u""
@@ -104,11 +101,7 @@ def change(req, wid = None):
 			messages.append(u"%s: '%s' -> '%s'" % (unicode(attribute[2], 'UTF-8'),
 			                oldval, newval))
 	
-	comment = u''
-	for field in req.form.list:
-		if field.name == 'comment':
-			comment = jotools.decode_form_value(field.value)
-			break
+	comment = jotools.get_param(req, 'comment', u'')
 	
 	if comment != u'':
 		if not event_inserted:
@@ -160,12 +153,8 @@ def flags(req, wid = None):
 	
 	for attribute in edfield_results.getresult():
 		html_att = 'attr%i' % attribute[0]
-		
-		newval = False
-		for field in req.form.list:
-			if field.name == html_att:
-				if jotools.decode_form_value(field.value) == 'on': newval = True
-				break
+		if jotools.get_param(req, html_att, u'') == u'on': newval = True
+		else: newval = False
 		
 		if attribute[2] == 't': oldval = True
 		else: oldval = False
@@ -184,11 +173,7 @@ def flags(req, wid = None):
 			          "values(%i, %i, %i)") % (wid_n, attribute[0], eid))
 			messages.append(u"Lippu lisätty: '%s'" % unicode(attribute[1], 'UTF-8'))
 	
-	comment = u''
-	for field in req.form.list:
-		if field.name == 'comment':
-			comment = jotools.decode_form_value(field.value)
-			break
+	comment = jotools.get_param(req, 'comment', u'')
 	
 	if comment != u'':
 		if not event_inserted:
@@ -237,12 +222,8 @@ def rwords(req, wid = None):
 	
 	for attribute in rword_res:
 		html_att = 'rword%i' % attribute[0]
-		
-		remove = False
-		for field in req.form.list:
-			if field.name == html_att:
-				if jotools.decode_form_value(field.value) == 'on': remove = True
-				break
+		if jotools.get_param(req, html_att, u'') == u'on': remove = True
+		else: remove = False
 		
 		if not remove: continue
 		if not event_inserted:
@@ -252,11 +233,7 @@ def rwords(req, wid = None):
 		db.query(("delete from related_word where wid = %i and rwid = %i") % (wid_n, attribute[0]))
 		messages.append(u"Kirjoitusasu poistettu: '%s'" % unicode(attribute[1], 'UTF-8'))
 	
-	newwords = u''
-	for field in req.form.list:
-		if field.name == 'add':
-			newwords = jotools.decode_form_value(field.value)
-			break
+	newwords = jotools.get_param(req, 'add', u'')
 	for word in jotools.unique(newwords.split()):
 		if not jotools.checkword(word): continue
 		already_listed = False
@@ -273,11 +250,7 @@ def rwords(req, wid = None):
 		         % (wid_n, eid, jotools.escape_sql_string(word)))
 		messages.append(u"Kirjoitusasu lisätty: '%s'" % word)
 	
-	comment = u''
-	for field in req.form.list:
-		if field.name == 'comment':
-			comment = jotools.decode_form_value(field.value)
-			break
+	comment = jotools.get_param(req, 'comment', u'')
 	
 	if comment != u'':
 		if not event_inserted:
@@ -292,3 +265,23 @@ def rwords(req, wid = None):
 	db.query("commit")
 	joheaders.redirect_header(req, u'edit?wid=%i' % wid_n)
 	return '\n'
+
+def add(req, fromdb = None):
+	(uid, uname, editable) = jotools.get_login_user(req)
+	if not editable:
+		joheaders.error_page(req, u'Ei oikeuksia tietojen muuttamiseen')
+		return '\n'
+	db = jodb.connect()
+	class_res = db.query("select classid, name from wordclass").getresult()
+	if fromdb == None:
+		joheaders.list_page_header(req, u"Joukahainen: Lisää sana", uid, uname)
+		jotools.write(req, u'<form method="post" action="add">\n' + \
+		              u'<p><label>Sana: <input type="text" name="word" /></label>\n')
+		for res in class_res:
+			jotools.write(req, (u'<label><input type="radio" name="class" ' +
+			                     'value="%i">%s</input></label>\n') \
+			              % (res[0], jotools.escape_html(unicode(res[1], 'UTF-8'))))
+		jotools.write(req, u'</p><p><input type="submit" value="Lisää sana"></p></form>\n')
+		joheaders.list_page_footer(req)
+		return '</html>\n'
+	

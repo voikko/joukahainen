@@ -42,7 +42,7 @@ def toint(string):
 	if string.isdigit(): return int(string)
 	else: return 0
 
-WCHARS = u"abcdefghijklmnopqrstuvwxyzåäöszèéABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖŠŽÈÉ-'|"
+WCHARS = u"abcdefghijklmnopqrstuvwxyzåäöszèéšžABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖŠŽÈÉŠŽ-'|"
 # Checks if string looks like a valid word
 def checkword(string):
 	for c in string:
@@ -163,3 +163,10 @@ def unique(oldlist):
 			lastelem = elem
 			newlist.append(lastelem)
 	return newlist
+
+# Returns the value of given request parameter or default if parameter is not set
+def get_param(req, name, default):
+	for field in req.form.list:
+		if field.name == name:
+			return decode_form_value(field.value)
+	return default
