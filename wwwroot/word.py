@@ -272,16 +272,40 @@ def add(req, fromdb = None):
 		joheaders.error_page(req, u'Ei oikeuksia tietojen muuttamiseen')
 		return '\n'
 	db = jodb.connect()
-	class_res = db.query("select classid, name from wordclass").getresult()
+	if req.method == 'GET':
+		class_res = db.query("select classid, name from wordclass").getresult()
+		if fromdb == None:
+			joheaders.list_page_header(req, u"Joukahainen: Lisää sana", uid, uname)
+			jotools.write(req, u'<form method="post" action="add">\n' + \
+			              u'<p><label>Sana: <input type="text" name="word" /></label>\n')
+			for res in class_res:
+				jotools.write(req, (u'<label><input type="radio" name="class" ' +
+				                     'value="%i">%s</input></label>\n') \
+				              % (res[0], jotools.escape_html(unicode(res[1], 'UTF-8'))))
+			jotools.write(req, u'</p><p><input type="submit" value="Lisää sana"></p></form>\n')
+			joheaders.list_page_footer(req)
+			return '</html>\n'
+		# TODO: add from raw_word
+	if req.method != 'POST':
+		joheaders.error_page(req, u'Vain GET/POST-pyynnöt ovat sallittuja')
+		return '\n'
 	if fromdb == None:
-		joheaders.list_page_header(req, u"Joukahainen: Lisää sana", uid, uname)
-		jotools.write(req, u'<form method="post" action="add">\n' + \
-		              u'<p><label>Sana: <input type="text" name="word" /></label>\n')
-		for res in class_res:
-			jotools.write(req, (u'<label><input type="radio" name="class" ' +
-			                     'value="%i">%s</input></label>\n') \
-			              % (res[0], jotools.escape_html(unicode(res[1], 'UTF-8'))))
-		jotools.write(req, u'</p><p><input type="submit" value="Lisää sana"></p></form>\n')
-		joheaders.list_page_footer(req)
-		return '</html>\n'
-	
+		nword = jotools.get_param(req, 'word', u'')
+		if nword == u'':
+			joheaders.error_page(req, u'Lisättävä sana on pakollinen')
+			return '\n'
+		if not jotools.checkword(nword):
+			joheaders.error_page(req, u'Lisättävässä sanassa on vääriä merkkejä')
+			return '\n'
+		nclass = jotools.toint(jotools.get_param(req, 'class', u'0'))
+		if nclass == 0:
+			joheaders.error_page(req, u'Uusi sana pitää laittaa oikeaan luokkaan')
+			return '\n'
+		db.query("begin")
+		wid = db.query("select nextval('word_wid_seq')").getresult()[0][0]
+		db.query("insert into word(wid, word, class, cuser) values(%i, '%s', %i, %i)" \
+		         % (wid, jotools.escape_sql_string(nword), nclass, uid))
+		db.query("commit")
+		joheaders.redirect_header(req, u'edit?wid=%i' % wid)
+		return '\n'
+	# TODO: add from raw_word

@@ -21,7 +21,7 @@ muuntamisessa käytetyt apuohjelmat löytyvät Hunspell-fi -projektin
 ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki.fi</a>) tai Hunspell-fi -projektin
 <a href="http://hunspell-fi.org/mailman/listinfo/devel_hunspell-fi.org">postituslistalle</a>.</p>
 </div>
-<h2>Etsi sanastosta</h2>
+<h2>Etsi ja käsittele sanoja</h2>
 <ul>
 <li><a href="query/listwords">Kaikki sanat (200 sanaa kerrallaan)</a></li>
 <li>Hae sana
@@ -34,6 +34,10 @@ ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki
     <input type="submit" value="Hae" /></p></form></li>
  </ul>
 </li>
+</ul>
+<h2>Lisää sanoja</h2>
+<ul>
+<li><a href="word/add">Lisää yksittäinen sana</a></li>
 </ul>
 <div class="clear"></div>
 </div>

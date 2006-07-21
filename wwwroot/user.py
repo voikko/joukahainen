@@ -34,26 +34,21 @@ import random
 
 def login(req, username = None, password = None, wid = None):
 	if req.method != 'POST':
-		joheaders.page_header(req)
-		jotools.write(req, u"Vain POST-pyynnöt ovat sallittuja")
-		joheaders.page_footer(req)
-		return "</html>"
+		joheaders.error_page(req, u"Vain POST-pyynnöt ovat sallittuja")
+		return '\n'
 	
 	if username == None or password == None or not jotools.checkuname(unicode(username, 'UTF-8')):
-		joheaders.page_header(req)
-		jotools.write(req, u"Käyttäjätunnus tai salasana puuttuu tai käyttäjätunnus on väärin")
-		joheaders.page_footer(req)
-		return "</html>"
+		joheaders.error_page(req,
+		                     u"Käyttäjätunnus tai salasana puuttuu tai käyttäjätunnus on väärin")
+		return '\n'
 	
 	pwhash = sha.new(_config.PW_SALT + unicode(password, 'UTF-8')).hexdigest()
 	db = jodb.connect_private()
 	results = db.query(("select uid from appuser where uname = '%s' and pwhash = '%s' " +
 	                    "and disabled = FALSE") % (username, pwhash))
 	if results.ntuples() == 0:
-		joheaders.page_header(req)
-		jotools.write(req, u"Käyttäjätunnus tai salasana on väärin")
-		joheaders.page_footer(req)
-		return "</html>"
+		joheaders.error_page(req, u"Käyttäjätunnus tai salasana on väärin")
+		return '\n'
 	
 	uid = results.getresult()[0][0]
 	
@@ -80,10 +75,8 @@ def login(req, username = None, password = None, wid = None):
 
 def logout(req, wid = None):
 	if req.method != 'POST':
-		joheaders.page_header(req)
-		jotools.write(req, u"Vain POST-pyynnöt ovat sallittuja")
-		joheaders.page_footer(req)
-		return "</html>"
+		joheaders.error_page(req, u"Vain POST-pyynnöt ovat sallittuja")
+		return '\n'
 	session = jotools.get_session(req)
 	if session != '':
 		db = jodb.connect_private()
