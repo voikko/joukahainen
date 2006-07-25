@@ -34,11 +34,22 @@ def _word_class(db, classid):
 
 CHARACTERISTIC_NOUN_FORMS = ['nominatiivi', 'genetiivi', 'partitiivi', 'illatiivi',
                              'genetiivi_mon', 'partitiivi_mon', 'illatiivi_mon']
+CHARACTERISTIC_VERB_FORMS = ['infinitiivi_1', 'preesens_yks_1', 'imperfekti_yks_3',
+                             'kondit_yks_3', 'imperatiivi_yks_3', 'partisiippi_2',
+                             'imperfekti_pass']
 
-def _noun_inflection(db, wid, word):
+def _word_inflection(db, wid, word, classid):
+	if classid in [1, 2]:
+		classdatafile = _config.HF_DATA + "/subst.aff"
+		characteristic_forms = CHARACTERISTIC_NOUN_FORMS
+	elif classid == 3:
+		classdatafile = _config.HF_DATA + "/verb.aff"
+		characteristic_forms = CHARACTERISTIC_VERB_FORMS
+	else: return u"(taivutuksia ei ole saatavissa tämän sanaluokan sanoille)"
+	
 	results = db.query(("SELECT value FROM string_attribute_value " +
 	                    "WHERE wid = %i AND aid = 1") % wid)
-	if results.ntuples() != 1: return "(taivutuksia ei ole saatavilla)"
+	if results.ntuples() != 1: return "(taivutuksia ei ole saatavilla, tarkista taivutusluokka)"
 	result = results.getresult()[0]
 	
 	infclass_parts = unicode(result[0], 'UTF-8').split('-')
@@ -50,15 +61,15 @@ def _noun_inflection(db, wid, word):
 		grad_type = infclass_parts[1]
 	else: return u"(virheellinen taivutusluokka)"
 	
-	noun_classes = hfaffix.read_noun_classes(_config.HF_DATA + "/subst.aff")
+	word_classes = hfaffix.read_word_classes(classdatafile)
 	tableid = u"inftable%i" % wid
 
 	retdata = (u'<table class="inflection" id="%s">\n<tr><th colspan="2">' +
 	           u'<a href="javascript:switchDetailedDisplay(\'%s\');" id="%s"></a> Taivutus</th></tr>\n') \
 		% (tableid, tableid, tableid + u'a')
-	for noun_class in noun_classes:
-		if not infclass_main in noun_class['smcnames']: continue
-		inflected_words = hfaffix.inflect_noun(word, grad_type, noun_class)
+	for word_class in word_classes:
+		if not infclass_main in word_class['smcnames']: continue
+		inflected_words = hfaffix.inflect_word(word, grad_type, word_class)
 		if inflected_words == None: continue
 		form = None
 		inflist = []
@@ -66,7 +77,7 @@ def _noun_inflection(db, wid, word):
 		for inflected_word in inflected_words:
 			if form != inflected_word[0]:
 				if form != None and len(inflist) > 0:
-					if form in CHARACTERISTIC_NOUN_FORMS:
+					if form in characteristic_forms:
 						htmlclass = u' class="characteristic"'
 					else:
 						htmlclass = ''
@@ -198,9 +209,9 @@ def call(db, funcname, paramlist):
 	if funcname == 'word_class':
 		if len(paramlist) != 1: return u"Error: 1 parameter expected"
 		return _word_class(db, paramlist[0])
-	if funcname == 'noun_inflection':
-		if len(paramlist) != 2: return u"Error: 2 parameters expected"
-		return _noun_inflection(db, paramlist[0], paramlist[1])
+	if funcname == 'word_inflection':
+		if len(paramlist) != 3: return u"Error: 3 parameters expected"
+		return _word_inflection(db, paramlist[0], paramlist[1], paramlist[2])
 	if funcname == 'flag_attributes':
 		if len(paramlist) != 1: return u"Error: 1 parameter expected"
 		return _flag_attributes(db, paramlist[0])

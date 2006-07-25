@@ -275,7 +275,7 @@ def add(req, fromdb = None):
 	if req.method == 'GET':
 		class_res = db.query("select classid, name from wordclass").getresult()
 		if fromdb == None:
-			joheaders.list_page_header(req, u"Joukahainen: Lisää sana", uid, uname)
+			joheaders.list_page_header(req, u"Joukahainen &gt; Lisää sana", uid, uname)
 			jotools.write(req, u'<form method="post" action="add">\n' + \
 			              u'<p><label>Sana: <input type="text" name="word" /></label>\n')
 			for res in class_res:

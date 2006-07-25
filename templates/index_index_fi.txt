@@ -7,7 +7,7 @@ Joukahainen: aloitus
 </div>
 <div class="main">
 <div class="rightinfo">
-<p>Tämä testiasennus sisältää Suomi-malagan oikolukuversiosta ("Voikko edition") otetun noin 12000 sanan
+<p>Tämä testiasennus sisältää Suomi-malagan oikolukuversiosta ("Voikko edition") otetun noin 14000 sanan
 otoksen. Aineiston tekijänoikeudet kuuluvat Hannu Väisäselle ja muille Hunspell-fi -projektiin osallistuneille,
 ja sitä voi käyttää ja levittää
 <a href="http://www.gnu.org/licenses/gpl.html">GPL-lisenssin</a> ehdoilla. Sovelluksen sellainen käyttö,

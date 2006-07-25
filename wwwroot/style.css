@@ -48,6 +48,10 @@ div.editor {
 	left: 0;
 }
 
+div.topbar a {
+	color: #0000FF;
+}
+
 div.main a {
 	color: #0000FF;
 }

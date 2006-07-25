@@ -1,13 +1,13 @@
 Sana: $$WORD$$
 
 <div class="topbar">
-<h1>Sana: $$WORD$$</h1>
+<h1><a href="..">Joukahainen</a> &gt; Sana: $$WORD$$</h1>
 <div class="login">$$login_logout(UID,UNAME,WID)$$</div>
 <div class="clear"></div>
 </div>
 <div class="main">
 <div class="rightinfo">
-$$noun_inflection(WID,WORD)$$
+$$word_inflection(WID,WORD,CLASSID)$$
 </div>
 <p>
 $$word_class(CLASSID)$$
