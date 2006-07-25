@@ -104,6 +104,9 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(26, 'siirretty', 2, TRU
 INSERT INTO attribute_class(aid, classid) VALUES(26, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(26, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(26, 3);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(27, 'ei lAinen -johdosta', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(27, 1);
+
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
 -- Test user, password 'testi'
 INSERT INTO appuser(uid, uname, firstname, lastname) VALUES(2, 'testi', 'Aku', 'Ankka');
