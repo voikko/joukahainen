@@ -79,6 +79,9 @@ def _word_inflection(db, wid, word, classid):
 				if form != None and len(inflist) > 0:
 					if form in characteristic_forms:
 						htmlclass = u' class="characteristic"'
+					elif form[0] == u'!':
+						htmlclass = u' class="characteristic"'
+						form = form[1:]
 					else:
 						htmlclass = ''
 					infs = reduce(lambda x, y: u"%s, %s" % (x, y), inflist)

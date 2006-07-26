@@ -6,6 +6,7 @@
 DELETE FROM related_word;
 DELETE FROM flag_attribute_value;
 DELETE FROM string_attribute_value;
+DELETE FROM event;
 DELETE FROM word;
 DELETE FROM attribute_class;
 DELETE FROM attribute;
