@@ -22,6 +22,7 @@
 from mod_python import apache
 
 import sys
+import random
 import _apply_config
 import joheaders
 import jotools
@@ -266,26 +267,82 @@ def rwords(req, wid = None):
 	joheaders.redirect_header(req, u'edit?wid=%i' % wid_n)
 	return '\n'
 
+# Writes a table body for entering new words. If words != None, the table is initialised with the given
+# list of words. Otherwise empty list is written, with the number of rows taken from parameter 'count'.
+def _add_entry_fields(req, db, words = None, count = 1):
+	class_res = db.query("select classid, name from wordclass").getresult()
+	if words == None:
+		for i in range(count):
+			jotools.write(req, u'<tr><td><input type="text" name="word%i" /></td><td>' % i)
+			for res in class_res:
+				jotools.write(req, (u'<label><input type="radio" name="class%i" ' +
+				                     'value="%i">%s</input></label>\n') \
+				            % (i, res[0], jotools.escape_html(unicode(res[1], 'UTF-8'))))
+			jotools.write(req, u'</td></tr>\n')
+		return
+	i = 0
+	for word in words:
+		jotools.write(req, u'<tr><td><input type="hidden" name="origword%i" value=%s />' \
+		                   % (i, jotools.escape_form_value(word)))
+		jotools.write(req, u'<input type="text" name="word%i" value=%s /></td><td>' \
+		                   % (i, jotools.escape_form_value(word)))
+		for res in class_res:
+			jotools.write(req, (u'<label><input type="radio" name="class%i" ' +
+			                     'value="%i">%s</input></label>\n') \
+			            % (i, res[0], jotools.escape_html(unicode(res[1], 'UTF-8'))))
+		jotools.write(req, (u'<label><input type="radio" name="class%i" value=0>virheellinen ' +
+		                    u'sana</input></label></td></tr>\n') % i)
+		i = i + 1
+
 def add(req, fromdb = None):
 	(uid, uname, editable) = jotools.get_login_user(req)
 	if not editable:
 		joheaders.error_page(req, u'Ei oikeuksia tietojen muuttamiseen')
 		return '\n'
 	db = jodb.connect()
+	words_per_page = 15
 	if req.method == 'GET':
 		class_res = db.query("select classid, name from wordclass").getresult()
-		if fromdb == None:
-			joheaders.list_page_header(req, u"Joukahainen &gt; Lisää sana", uid, uname)
-			jotools.write(req, u'<form method="post" action="add">\n' + \
-			              u'<p><label>Sana: <input type="text" name="word" /></label>\n')
-			for res in class_res:
-				jotools.write(req, (u'<label><input type="radio" name="class" ' +
-				                     'value="%i">%s</input></label>\n') \
-				              % (res[0], jotools.escape_html(unicode(res[1], 'UTF-8'))))
-			jotools.write(req, u'</p><p><input type="submit" value="Lisää sana"></p></form>\n')
+		if fromdb == None: # Add words manually
+			joheaders.list_page_header(req, u"Joukahainen &gt; Lisää sanoja", uid, uname)
+			jotools.write(req, u'<form method="post" action="add">\n' +
+			                   u'<table>\n<tr><th>Sana</th><th>Sanaluokka</th></tr>\n')
+			_add_entry_fields(req, db, None, words_per_page)
+			jotools.write(req, u'</table>\n' +
+			                   u'<p><input type="submit" value="Lisää sanoja"></p></form>\n')
 			joheaders.list_page_footer(req)
 			return '</html>\n'
-		# TODO: add from raw_word
+		else: # Get words from the database
+			category = jotools.get_param(req, 'category', None)
+			if category == None: condition = ""
+			else: condition = "AND coalesce(info, '') = '%s'" \
+			                  % jotools.escape_sql_string(category)
+			results = db.query("SELECT count(*) FROM raw_word WHERE processed = FALSE %s" \
+			                   % condition)
+			nwords = results.getresult()[0][0]
+			if nwords <= words_per_page: limit = ""
+			else: limit = "LIMIT %i OFFSET %i" % (words_per_page,
+			              random.randint(0, nwords - words_per_page))
+			results = db.query(("SELECT word FROM raw_word WHERE processed = FALSE %s " +
+			                    "ORDER BY word %s") % (condition, limit))
+			if results.ntuples() == 0 and category == None:
+				joheaders.error_page(req, u'Tietokannassa ei ole lisäystä odottavia ' +
+				          u'sanoja.')
+				return '\n'
+			if results.ntuples() == 0 and category != None:
+				joheaders.error_page(req, u'Tietokannassa ei ole lisäystä odottavia ' +
+				          u'sanoja kategoriassa %s.' % jotools.escape_html(category))
+				return '\n'
+			joheaders.list_page_header(req, u"Joukahainen &gt; Lisää sanoja", uid, uname)
+			jotools.write(req, u'<form method="post" action="add">\n')
+			jotools.write(req, u'<table>\n')
+			words = []
+			for word in results.getresult(): words.append(unicode(word[0], 'UTF-8'))
+			_add_entry_fields(req, db, words, None)
+			jotools.write(req, u'</table>\n' +
+			                   u'<p><input type="submit" value="Lisää sanoja"></p></form>\n')
+			joheaders.list_page_footer(req)
+			return '</html>\n'
 	if req.method != 'POST':
 		joheaders.error_page(req, u'Vain GET/POST-pyynnöt ovat sallittuja')
 		return '\n'
@@ -309,3 +366,31 @@ def add(req, fromdb = None):
 		joheaders.redirect_header(req, u'edit?wid=%i' % wid)
 		return '\n'
 	# TODO: add from raw_word
+
+def categories(req):
+	(uid, uname, editable) = jotools.get_login_user(req)
+	if not editable:
+		joheaders.error_page(req, u'Ei oikeuksia tietojen muuttamiseen')
+		return '\n'
+	db = jodb.connect()
+	results = db.query("SELECT coalesce(info, ''), count(*) FROM raw_word " +
+	                   "WHERE processed = FALSE " +
+	                   "GROUP BY coalesce(info, '') " +
+	                   "ORDER BY coalesce(info, '') ")
+	if results.ntuples() == 0:
+		joheaders.error_page(req, u'Tietokannassa ei ole lisäystä odottavia sanoja.')
+		return '\n'
+	joheaders.list_page_header(req, u"Joukahainen &gt; Lisää sanoja", uid, uname)
+	jotools.write(req, u"<p>Valitse kategoria, jonka sanoja haluat lisätä:</p>\n")
+	jotools.write(req, u"<table><tr><th>Kategoria</th><th>Sanoja jäljellä</th></tr>\n")
+	for result in results.getresult():
+		cat = unicode(result[0], 'UTF-8')
+		if cat == u'': cats = u'(ei kategoriaa)'
+		else: cats = cat
+		jotools.write(req, (u'<tr><td><a href="add?fromdb=1&amp;category=%s">%s</a></td>' +
+		                    u'<td>%i</td></tr>\n') \
+		  % (jotools.escape_url(cat), jotools.escape_html(cats), result[1]))
+	jotools.write(req, u"</table>\n")
+	jotools.write(req, u'<p><a href="add?fromdb=1">Kaikki sanat ...</a></p>\n')
+	joheaders.list_page_footer(req)
+	return '</html>\n'

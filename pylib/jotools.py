@@ -139,6 +139,10 @@ def get_login_user(req):
 def escape_form_value(string):
 	return saxutils.quoteattr(string)
 
+# Converts a string to a form that is suitable for use in a URL
+def escape_url(string):
+	return urllib.quote_plus(string)
+
 # Converts a string to a form that is suitable for use in html document text
 def escape_html(string):
 	return saxutils.escape(string)
