@@ -64,9 +64,8 @@ def _word_inflection(db, wid, word, classid):
 	word_classes = hfaffix.read_word_classes(classdatafile)
 	tableid = u"inftable%i" % wid
 
-	retdata = (u'<table class="inflection" id="%s">\n<tr><th colspan="2">' +
-	           u'<a href="javascript:switchDetailedDisplay(\'%s\');" id="%s"></a> Taivutus</th></tr>\n') \
-		% (tableid, tableid, tableid + u'a')
+	retdata = u''
+	have_only_characteristic = True
 	for word_class in word_classes:
 		if not infclass_main in word_class['smcnames']: continue
 		inflected_words = hfaffix.inflect_word(word, grad_type, word_class)
@@ -84,6 +83,7 @@ def _word_inflection(db, wid, word, classid):
 						form = form[1:]
 					else:
 						htmlclass = ''
+						have_only_characteristic = False
 					infs = reduce(lambda x, y: u"%s, %s" % (x, y), inflist)
 					retdata = retdata + (u"<tr%s><td>%s</td><td>%s</td></tr>\n" %
 					          (htmlclass, form, infs))
@@ -92,7 +92,14 @@ def _word_inflection(db, wid, word, classid):
 			if hfutils.read_option(inflected_word[2], 'ps', '-') != 'r' \
 			   and not inflected_word[1] in inflist:
 				inflist.append(inflected_word[1])
-	return retdata + u"</table>\n"
+	
+	table_header = u'<table class="inflection" id="%s">\n<tr><th colspan="2">' % tableid
+	if not have_only_characteristic:
+		table_header = table_header \
+		               + u'<a href="javascript:switchDetailedDisplay(\'%s\');" id="%s"></a>' \
+			     % (tableid, tableid + u'a')
+	table_header = table_header + u'Taivutus</th></tr>\n'
+	return table_header + retdata + u'</table>\n'
 
 def _flag_attributes(db, wid):
 	results = db.query(("SELECT a.descr FROM attribute a, flag_attribute_value f " +
@@ -208,6 +215,14 @@ def _rwords_edit_form(db, wid):
 	                  u'</form>'
 	return retstr
 
+def _wiki_link(db, wikiattr, wid, word):
+	results = db.query(("SELECT value FROM string_attribute_value WHERE " +
+	                    "aid = %i and wid = %i") % (wikiattr, wid))
+	if results.ntuples() > 0: wikiword = unicode(results.getresult()[0][0], 'UTF-8')
+	else: wikiword = word
+	wikiurl = _config.WIKI_URL + wikiword
+	return u'<a href=%s>Sana wikissä</a>' % jotools.escape_form_value(wikiurl) 
+
 def call(db, funcname, paramlist):
 	if funcname == 'word_class':
 		if len(paramlist) != 1: return u"Error: 1 parameter expected"
@@ -242,4 +257,7 @@ def call(db, funcname, paramlist):
 	if funcname == 'rwords_edit_form':
 		if len(paramlist) != 1: return u"Error: 1 parameter expected"
 		return _rwords_edit_form(db, paramlist[0])
+	if funcname == 'wiki_link':
+		if len(paramlist) != 3: return u"Error: 3 parameters expected"
+		return _wiki_link(db, paramlist[0], paramlist[1], paramlist[2])
 	return u"Error: unknown function"

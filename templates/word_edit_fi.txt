@@ -27,6 +27,8 @@ $$main_form_start(EDITABLE)$$
 <span class="fsvalue">$$string_attribute(WID,16,EDITABLE)$$</span>
 <br /><span class="fheader">Lyhyt sanan selitys:</span>
 <span class="fsvalue">$$string_attribute(WID,18,EDITABLE)$$</span>
+<br /><span class="fheader">$$wiki_link(28,WID,WORD)$$:</span>
+<span class="fsvalue">$$string_attribute(WID,28,EDITABLE)$$</span>
 </p>
 $$main_form_end(WID,EDITABLE)$$
 <div class="bottominfo">
