@@ -17,6 +17,9 @@ HF_DATA = 'hunspell-fi-svn/trunk/data'
 # Path to template directory
 TEMPLATE_PATH = 'hunspell-fi-svn/trunk/joukahainen/templates'
 
+# URL prefix for Wiki links
+WIKI_URL = u'http://fi.wiktionary.org/wiki/'
+
 # Global password salt
 PW_SALT = u'XPmCefh'
 
