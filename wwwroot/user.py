@@ -59,9 +59,9 @@ def login(req, username = None, password = None, wid = None):
 	if hasattr(os, 'urandom'): # this is only available in Python >= 2.4
 		sesssha.update(os.urandom(15))
 	else:
-		sesssha.update(time.time())
-		sesssha.update(random.random())
-		sesssha.update(os.times())
+		sesssha.update(`time.time()`)
+		sesssha.update(`random.random()`)
+		sesssha.update(`os.times()`)
 	sesskey = sesssha.hexdigest()
 	
 	db.query(("update appuser set session_key = '%s', session_exp = CURRENT_TIMESTAMP + " +
