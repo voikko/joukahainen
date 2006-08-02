@@ -66,7 +66,9 @@ def login(req, username = None, password = None, wid = None):
 	
 	db.query(("update appuser set session_key = '%s', session_exp = CURRENT_TIMESTAMP + " +
 	          "interval '%i seconds' where uid = %i") % (sesskey, _config.SESSION_TIMEOUT, uid))
-	req.headers_out['Set-Cookie'] = 'session=%s; path=%s' % (sesskey, _config.WWW_ROOT_DIR)
+	if _config.WWW_ROOT_DIR == '': cookiepath = '/'
+	else: cookiepath = _config.WWW_ROOT_DIR
+	req.headers_out['Set-Cookie'] = 'session=%s; path=%s' % (sesskey, cookiepath)
 	if wid == None: wid_n = 0
 	else: wid_n = jotools.toint(wid)
 	if wid_n == 0: joheaders.redirect_header(req, _config.WWW_ROOT_DIR + u"/")
