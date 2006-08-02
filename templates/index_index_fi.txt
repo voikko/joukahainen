@@ -51,4 +51,5 @@ siihen tallennettua sanastoa vapaasti, mutta muutosten tekeminen vaatii käyttä
 Tämä testiasennus siirtyy tuotantokäyttöön kesän aikana.</p>
 <h2>Muutoshistoria</h2>
 <p>2006-06-21: ensimmäinen testiasennus</p>
+<p>2006-08-02: toinen testiasennus</p>
 </div>

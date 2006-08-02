@@ -293,6 +293,7 @@ def _add_entry_fields(req, db, words = None, count = 1):
 		else:
 			jotools.write(req, u'<input type="text" name="word%i" value=%s /></td><td>' \
 			                   % (i, jotools.escape_form_value(word)))
+			jotools.write(req, u'%s</td><td>' % jotools.escape_html(homonyms))
 		for res in class_res:
 			jotools.write(req, (u'<label><input type="radio" name="class%i" ' +
 			                     'value="%i">%s</input></label>\n') \
@@ -368,7 +369,8 @@ def add(req, fromdb = None):
 			if nwords <= words_per_page: limit = ""
 			else: limit = "LIMIT %i OFFSET %i" % (words_per_page,
 			              random.randint(0, nwords - words_per_page))
-			results = db.query(("SELECT word FROM raw_word WHERE processed = FALSE %s " +
+			results = db.query(("SELECT word, coalesce(notes, '') FROM raw_word " +
+			                    "WHERE processed = FALSE %s " +
 			                    "ORDER BY word %s") % (condition, limit))
 			if results.ntuples() == 0 and category == None:
 				joheaders.error_page(req, u'Tietokannassa ei ole lisäystä odottavia ' +
@@ -384,7 +386,8 @@ def add(req, fromdb = None):
 			words = []
 			for word in results.getresult():
 				words.append((unicode(word[0], 'UTF-8'),
-				              unicode(word[0], 'UTF-8'), False, None))
+				              unicode(word[0], 'UTF-8'), False,
+					    unicode(word[1], 'UTF-8')))
 			_add_entry_fields(req, db, words, None)
 			jotools.write(req, u'</table>\n' +
 			                   u'<p><input type="submit" value="Lisää sanoja"></p></form>\n')

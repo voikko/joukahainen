@@ -96,7 +96,8 @@ CREATE TABLE related_word (
 -- Unclassified word. Dynamic.
 CREATE TABLE raw_word (
   word varchar PRIMARY KEY NOT NULL, -- word
-  info varchar, -- additional information about the word
+  info varchar, -- classification or other similar information
+  notes varchar, -- notes about the word
   processed boolean NOT NULL DEFAULT FALSE -- is the word already processed
 );
 
