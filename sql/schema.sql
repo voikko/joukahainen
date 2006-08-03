@@ -101,8 +101,24 @@ CREATE TABLE raw_word (
   processed boolean NOT NULL DEFAULT FALSE -- is the word already processed
 );
 
+-- Vocabulary editing task. Static.
+CREATE TABLE task (
+  tid integer PRIMARY KEY, -- task identifier
+  descr varchar NOT NULL, -- task description
+  sql varchar NOT NULL -- SQL query returning the list of widS that are part of this task
+);
+
+-- Words processed in a task. Dynamic.
+CREATE TABLE task_word (
+  tid integer NOT NULL REFERENCES task, -- task
+  wid integer NOT NULL REFERENCES word, -- word
+  uid integer REFERENCES appuser, -- user who processed the word
+  ctime timestamp DEFAULT CURRENT_TIMESTAMP, -- record creation time
+  PRIMARY KEY (tid, wid)
+);
+
 -- Grant privileges
 GRANT SELECT ON language, wordclass, attribute, attribute_class TO joukahainen;
 GRANT SELECT, UPDATE on word_wid_seq, related_word_rwid_seq, event_eid_seq, appuser TO joukahainen;
 GRANT ALL ON word, string_attribute_value, flag_attribute_value,
-  related_word, event, raw_word TO joukahainen;
+  related_word, event, raw_word, task, task_word TO joukahainen;

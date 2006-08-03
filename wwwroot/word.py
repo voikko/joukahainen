@@ -267,6 +267,29 @@ def rwords(req, wid = None):
 	joheaders.redirect_header(req, u'edit?wid=%i' % wid_n)
 	return '\n'
 
+# Returns a html class selector for a list of classes in form (cid, description). If cid != None,
+# then that class is already selected (as a hidden field). Row is the number of editable row
+# in the table. If include_no_class is True, then it will be possible to choose class 0
+# (invalid word).
+def _get_class_selector(classlist, cid, row, include_no_class):
+	if cid == None:
+		retstr = u''
+		for res in classlist:
+			retstr = retstr + (u'<label><input type="radio" name="class%i" ' +
+			                   u'value="%i">%s</input></label>') \
+			         % (row, res[0], jotools.escape_html(unicode(res[1], 'UTF-8')))
+		if include_no_class:
+			retstr = retstr + (u'<label><input type="radio" name="class%i" ' +
+			                     'value="0">virheellinen sana</input></label>') % row
+		return retstr
+	else:
+		for res in classlist:
+			if res[0] == cid:
+				return (u'<input type="hidden" name="class%i" value="%i" />' +
+			                  u'%s') % (row, cid,
+				        jotools.escape_html(unicode(res[1], 'UTF-8')))
+		return u'&nbsp;'
+
 # Writes a table body for entering new words. If words != None, the table is initialised with the given
 # list of words. Otherwise empty list is written, with the number of rows taken from parameter 'count'.
 def _add_entry_fields(req, db, words = None, count = 1):
@@ -280,34 +303,35 @@ def _add_entry_fields(req, db, words = None, count = 1):
 				            % (i, res[0], jotools.escape_html(unicode(res[1], 'UTF-8'))))
 			jotools.write(req, u'</td></tr>\n')
 		return
+	confirm_column = False
+	for word in words:
+		if word['try_again'] == True:
+			confirm_column = True
+			break
 	i = 0
-	for (oword, word, need_confirm, homonyms) in words:
+	for word in words:
 		jotools.write(req, u'<tr><td>')
-		if oword != None:
-			jotools.write(req, u'<input type="hidden" name="origword%i" value=%s />' \
-			                   % (i, jotools.escape_form_value(oword)))
-		if need_confirm:
-			jotools.write(req, u'<input type="hidden" name="word%i" value=%s />' \
-			                   % (i, jotools.escape_form_value(word)))
-			jotools.write(req, u'%s</td><td>' % jotools.escape_html(word))
-		else:
-			jotools.write(req, u'<input type="text" name="word%i" value=%s /></td><td>' \
-			                   % (i, jotools.escape_form_value(word)))
-			jotools.write(req, u'%s</td><td>' % jotools.escape_html(homonyms))
-		for res in class_res:
-			jotools.write(req, (u'<label><input type="radio" name="class%i" ' +
-			                     'value="%i">%s</input></label>\n') \
-			            % (i, res[0], jotools.escape_html(unicode(res[1], 'UTF-8'))))
-		if oword != None:
-			jotools.write(req, (u'<label><input type="radio" name="class%i" value=0>' +
-			                    u'virheellinen sana</input></label>') % i)
-		jotools.write(req, u'</td>')
-		if need_confirm:
+		if word['try_again']:
+			if word['oword'] != None:
+				jotools.write(req, u'<input type="hidden" name="origword%i" value=%s />' \
+				                   % (i, jotools.escape_form_value(word['oword'])))
+			jotools.write(req, u'<input type="hidden" name="word%i" value=%s />%s</td><td>' \
+			                   % (i, jotools.escape_form_value(word['word']), 
+				               jotools.escape_html(word['word'])))
+			jotools.write(req, _get_class_selector(class_res, word['cid'], i, False))
 			jotools.write(req, u'<td><input type="checkbox" name="confirm%i"></td><td>' % i)
-			jotools.write(req, homonyms)
+			jotools.write(req, word['error'])
+			jotools.write(req, u'</td>')
+			i = i + 1
+		else:
+			jotools.write(req, jotools.escape_html(word['word']))
+			jotools.write(req, u'</td><td>')
+			jotools.write(req, _get_class_selector(class_res, word['cid'], i, False))
+			jotools.write(req, u'</td><td>')
+			if confirm_column: jotools.write(req, u'&nbsp;</td><td>')
+			jotools.write(req, word['error'])
 			jotools.write(req, u'</td>')
 		jotools.write(req, u'</tr>\n')
-		i = i + 1
 
 # Returns a list of links for all of the homonyms of given word.
 def _list_homonyms(db, word):
@@ -319,82 +343,132 @@ def _list_homonyms(db, word):
 		h = h + u'<a href="edit?wid=%i">%s(%s)</a> ' \
 		    % (r[0], jotools.escape_html(unicode(r[1], 'UTF-8')),
 		       jotools.escape_html(unicode(r[2], 'UTF-8')))
-	return h
+	if len(h) == 0: return u''
+	else: return u'Homonyymit: ' + h
 
 # Stores a new word into the database and marks the original in raw_words as processed
 # (if needed). Returns (wid, add_entry_structure) where wid is the identifier for
 # the new word (or None if nothing was added) and add_entry_structure is a tuple
 # for _add_entry containing the description of a word that needs confirmation from
 # user before being added (or None if no confirmation is needed).
-def _store_word(db, word, oword, wclass, dupl_confirmed, uid):
-	if wclass != 0:
-		if not dupl_confirmed:
-			hlist = _list_homonyms(db, word)
-			if len(hlist) > 0: return (None, (oword, word, True, hlist))
-		wid = db.query("SELECT nextval('word_wid_seq')").getresult()[0][0]
+#def _store_word(db, word, oword, wclass, dupl_confirmed, uid):
+def _store_word(db, word, uid):
+	if word['try_again'] == False: return word
+	retval = {'word': word['word'], 'oword': word['oword'], 'cid': word['cid'], 'confirmed': False,
+	          'wid': None, 'error': None}
+	if not jotools.checkword(word['word']):
+		retval['wid'] = None
+		retval['error'] = u'Sanassa on kiellettyjä merkkejä'
+		retval['try_again'] = False
+		return retval
+	if word['cid'] == None:
+		retval['wid'] = None
+		retval['error'] = u'Sanaluokka on asettamatta'
+		retval['try_again'] = True
+		return retval
+	if word['cid'] != 0:
+		if not word['confirmed']:
+			homonyms = _list_homonyms(db, word['word'])
+			if len(homonyms) > 0:
+				retval['wid'] = None
+				retval['error'] = homonyms
+				retval['try_again'] = True
+				return retval
+		retval['wid'] = db.query("SELECT nextval('word_wid_seq')").getresult()[0][0]
 		db.query("INSERT INTO word(wid, word, class, cuser) VALUES(%i, '%s', %i, %i)" \
-		         % (wid, jotools.escape_sql_string(word), wclass, uid))
-	if oword != None:
+		         % (retval['wid'], jotools.escape_sql_string(retval['word']),
+		            retval['cid'], uid))
+		retval['error'] = u'<a href="edit?wid=%i">Sana lisätty</a>' % retval['wid']
+	if word['oword'] != None:
 		db.query("UPDATE raw_word SET processed = TRUE WHERE word = '%s'" \
-		         % jotools.escape_sql_string(oword))
-	if wclass == 0: return (None, None)
-	else: return (wid, None)
+		         % jotools.escape_sql_string(word['oword']))
+		if retval['error'] == None:
+			retval['error'] = u'Sana poistettu ehdotettujen sanojen listalta'
+	retval['try_again'] = False
+	if retval['error'] == None: retval['error'] = u'Ei tehty mitään'
+	return retval
 
-def add(req, fromdb = None):
+def add_from_db(req):
+	(uid, uname, editable) = jotools.get_login_user(req)
+	if not editable:
+		joheaders.error_page(req, u'Ei oikeuksia tietojen muuttamiseen')
+		return '\n'
+	if req.method != 'GET':
+		joheaders.error_page(req, u'Vain GET-pyynnöt ovat sallittuja')
+		return '\n'
+	db = jodb.connect()
+	words_per_page = 15
+	category = jotools.get_param(req, 'category', None)
+	if category == None: condition = ""
+	else: condition = "AND coalesce(info, '') = '%s'" \
+	                  % jotools.escape_sql_string(category)
+	results = db.query("SELECT count(*) FROM raw_word WHERE processed = FALSE %s" \
+	                   % condition)
+	nwords = results.getresult()[0][0]
+	if nwords <= words_per_page: limit = ""
+	else: limit = "LIMIT %i OFFSET %i" % (words_per_page,
+	              random.randint(0, nwords - words_per_page))
+	results = db.query(("SELECT word, coalesce(notes, '') FROM raw_word " +
+	                    "WHERE processed = FALSE %s " +
+	                    "ORDER BY word %s") % (condition, limit))
+	if results.ntuples() == 0 and category == None:
+		joheaders.error_page(req, u'Tietokannassa ei ole lisäystä odottavia ' +
+		          u'sanoja.')
+		return '\n'
+	if results.ntuples() == 0 and category != None:
+		joheaders.error_page(req, u'Tietokannassa ei ole lisäystä odottavia ' +
+		          u'sanoja kategoriassa %s.' % jotools.escape_html(category))
+		return '\n'
+	class_res = db.query("select classid, name from wordclass").getresult()
+	joheaders.list_page_header(req, u"Joukahainen &gt; Lisää sanoja", uid, uname)
+	jotools.write(req, u'<form method="post" action="add">\n')
+	jotools.write(req, u'<table class="wadd">\n')
+	jotools.write(req, u'<tr><th>Sana</th><th>Sanaluokka</th><th>Huomioita</th></tr>\n')
+	i = 0
+	for result in results.getresult():
+		word = unicode(result[0], 'UTF-8')
+		notes = unicode(result[1], 'UTF-8')
+		jotools.write(req, u'<tr><td><input type="hidden" name="origword%i" value=%s />' \
+			                   % (i, jotools.escape_form_value(word)))
+		jotools.write(req, u'<input type="text" name="word%i" value=%s /></td><td>' \
+		                   % (i, jotools.escape_form_value(word)))
+		jotools.write(req, _get_class_selector(class_res, None, i, True))
+		jotools.write(req, u'</td><td>')
+		jotools.write(req, jotools.escape_html(notes))
+		jotools.write(req, u'</td></tr>\n')
+		i = i + 1
+	jotools.write(req, u'</table>\n' +
+	                   u'<p><input type="submit" value="Lisää sanoja"></p></form>\n')
+	joheaders.list_page_footer(req)
+	return '</html>\n'
+
+def add_manual(req):
+	(uid, uname, editable) = jotools.get_login_user(req)
+	if not editable:
+		joheaders.error_page(req, u'Ei oikeuksia tietojen muuttamiseen')
+		return '\n'
+	if req.method != 'GET':
+		joheaders.error_page(req, u'Vain GET-pyynnöt ovat sallittuja')
+		return '\n'
+	db = jodb.connect()
+	words_per_page = 15
+	joheaders.list_page_header(req, u"Joukahainen &gt; Lisää sanoja", uid, uname)
+	jotools.write(req, u'<form method="post" action="add">\n' +
+	                   u'<table class="wadd">\n<tr><th>Sana</th><th>Sanaluokka</th></tr>\n')
+	_add_entry_fields(req, db, None, words_per_page)
+	jotools.write(req, u'</table>\n' +
+	                   u'<p><input type="submit" value="Lisää sanoja"></p></form>\n')
+	joheaders.list_page_footer(req)
+	return '</html>\n'
+
+def add(req):
 	(uid, uname, editable) = jotools.get_login_user(req)
 	if not editable:
 		joheaders.error_page(req, u'Ei oikeuksia tietojen muuttamiseen')
 		return '\n'
 	db = jodb.connect()
-	words_per_page = 15
-	if req.method == 'GET':
-		class_res = db.query("select classid, name from wordclass").getresult()
-		if fromdb == None: # Add words manually
-			joheaders.list_page_header(req, u"Joukahainen &gt; Lisää sanoja", uid, uname)
-			jotools.write(req, u'<form method="post" action="add">\n' +
-			                   u'<table class="wadd">\n<tr><th>Sana</th><th>Sanaluokka</th></tr>\n')
-			_add_entry_fields(req, db, None, words_per_page)
-			jotools.write(req, u'</table>\n' +
-			                   u'<p><input type="submit" value="Lisää sanoja"></p></form>\n')
-			joheaders.list_page_footer(req)
-			return '</html>\n'
-		else: # Get words from the database
-			category = jotools.get_param(req, 'category', None)
-			if category == None: condition = ""
-			else: condition = "AND coalesce(info, '') = '%s'" \
-			                  % jotools.escape_sql_string(category)
-			results = db.query("SELECT count(*) FROM raw_word WHERE processed = FALSE %s" \
-			                   % condition)
-			nwords = results.getresult()[0][0]
-			if nwords <= words_per_page: limit = ""
-			else: limit = "LIMIT %i OFFSET %i" % (words_per_page,
-			              random.randint(0, nwords - words_per_page))
-			results = db.query(("SELECT word, coalesce(notes, '') FROM raw_word " +
-			                    "WHERE processed = FALSE %s " +
-			                    "ORDER BY word %s") % (condition, limit))
-			if results.ntuples() == 0 and category == None:
-				joheaders.error_page(req, u'Tietokannassa ei ole lisäystä odottavia ' +
-				          u'sanoja.')
-				return '\n'
-			if results.ntuples() == 0 and category != None:
-				joheaders.error_page(req, u'Tietokannassa ei ole lisäystä odottavia ' +
-				          u'sanoja kategoriassa %s.' % jotools.escape_html(category))
-				return '\n'
-			joheaders.list_page_header(req, u"Joukahainen &gt; Lisää sanoja", uid, uname)
-			jotools.write(req, u'<form method="post" action="add">\n')
-			jotools.write(req, u'<table class="wadd">\n')
-			words = []
-			for word in results.getresult():
-				words.append((unicode(word[0], 'UTF-8'),
-				              unicode(word[0], 'UTF-8'), False,
-					    unicode(word[1], 'UTF-8')))
-			_add_entry_fields(req, db, words, None)
-			jotools.write(req, u'</table>\n' +
-			                   u'<p><input type="submit" value="Lisää sanoja"></p></form>\n')
-			joheaders.list_page_footer(req)
-			return '</html>\n'
 	if req.method != 'POST':
-		joheaders.error_page(req, u'Vain GET/POST-pyynnöt ovat sallittuja')
+		joheaders.error_page(req, u'Vain POST-pyynnöt ovat sallittuja')
 		return '\n'
 	db.query("BEGIN")
 	if jotools.get_param(req, 'confirm', u'') == u'on': confirm = True
@@ -407,52 +481,45 @@ def add(req, fromdb = None):
 		i = i + 1
 		nword = jotools.get_param(req, 'word%i' % i, u'')
 		if nword == u'': break
-		nclass = jotools.toint(jotools.get_param(req, 'class%i' % i, u'-1'))
-		oword = jotools.get_param(req, 'origword%i' % i, None)
+		word = {'word': nword, 'try_again': True, 'confirmed': False, 'wid': None}
+		word['oword'] = jotools.get_param(req, 'origword%i' % i, None)
 		nclass = jotools.get_param(req, 'class%i' % i, None)
 		if not nclass in [None, u'']: nclass = jotools.toint(nclass)
-		else: continue
+		else: nclass = None
+		word['cid'] = nclass
 		if confirm and nclass != 0 and jotools.get_param(req, 'confirm%i' % i, u'') != u'on':
-			continue
-		new_item = _store_word(db, nword, oword, nclass, confirm, uid)
-		if new_item[0] != None: added_count = added_count + 1
-		if new_item[1] != None: need_confirm_count = need_confirm_count + 1
-		nwordlist.append(new_item)
+			word['error'] = u'Sanaa ei lisätty'
+			word['try_again'] = False
+		if jotools.get_param(req, 'confirm%i' % i, u'') == u'on': word['confirmed'] = True
+		stored_word = _store_word(db, word, uid)
+		if stored_word['wid'] != None: added_count = added_count + 1
+		if stored_word['try_again']: need_confirm_count = need_confirm_count + 1
+		nwordlist.append(stored_word)
 	db.query("COMMIT")
+	joheaders.list_page_header(req, u'Joukahainen &gt; Lisää sanoja', uid, uname)
 	if need_confirm_count > 0:
-		joheaders.list_page_header(req, u'Joukahainen &gt; Lisää sanoja', uid, uname)
-		jotools.write(req, u'<p>Ainakin osa lisäämistäsi sanoista on jo sanastossa. ' +
-		              u'Aseta sanaluokka ja merkitse rastilla sanat, jotka haluat ' +
-			    u'lisättäviksi tästä huolimatta ja yritä tallennusta uudelleen.</p>')
+		jotools.write(req, u'<p>Joidenkin sanojen lisäys ei onnistunut tai vaatii ' +
+		              u'vahvistuksen. Tee tarvittavat korjaukset ja merkitse rastilla ' +
+			    u'sanat, jotka edelleen haluat lisättäviksi ja yritä tallennusta ' +
+			    u'uudelleen.</p>')
 		jotools.write(req, u'<form method="post" action="add">\n')
-		jotools.write(req, u'<table class="wadd"><tr><th>Sana</th><th>Sanaluokka</th><th>' +
-		              u'Vahvista homonyymin lisäys</th><th>Homonyymit</th></tr>\n')
-		words = []
-		for word in nwordlist:
-			if word[1] != None: words.append(word[1])
-		_add_entry_fields(req, db, words, None)
+		jotools.write(req, u'<table class="wadd"><tr><th>Sana</th><th>Sanaluokka</th>' +
+		              u'<th>Vahvista sanan lisäys</th><th>Huomioita</th></tr>\n')
+		_add_entry_fields(req, db, nwordlist, None)
 		jotools.write(req, u'</table>\n<p>' +
 		                   u'<input type="hidden" name="confirm" value="on">' +
 		                   u'<input type="submit" value="Lisää sanoja"></p></form>\n')
 		joheaders.list_page_footer(req)
 		return '</html>\n'
-	if added_count == 0:
-		joheaders.page_header(req, u"Joukahainen &gt; Lisää sanoja")
-		jotools.write(req, u'<p>Yhtään sanaa ei lisätty sanastoon. ' +
-		                   u'<a href="..">Takaisin aloitussivulle ...</a></p>')
-		joheaders.page_footer(req)
-		joheaders.error_page(req, u'Yhtään sanaa ei lisätty')
+	else:
+		jotools.write(req, u'<p>Seuraavat muutokset tehtiin:</p>')
+		jotools.write(req, u'<table class="wadd"><tr><th>Sana</th><th>Sanaluokka</th>' +
+		              u'<th>Huomioita</th></tr>\n')
+		_add_entry_fields(req, db, nwordlist, None)
+		jotools.write(req, u'</table>\n')
+		jotools.write(req, u'<p><a href="../">Takaisin aloitussivulle ...</a></p>\n')
+		joheaders.list_page_footer(req)
 		return '</html>\n'
-	if added_count == 1:
-		for n in nwordlist:
-			if n[0] != None:
-				joheaders.redirect_header(req, u'edit?wid=%i' % n[0])
-				return '\n'
-	# More than one word was added
-	joheaders.page_header(req, u"Joukahainen &gt; Lisää sanoja")
-	jotools.write(req, u'<p>Sanoja lisätty. <a href="..">Takaisin aloitussivulle ...</a></p>')
-	joheaders.page_footer(req)
-	return '</html>\n'
 
 def categories(req):
 	(uid, uname, editable) = jotools.get_login_user(req)
@@ -474,10 +541,10 @@ def categories(req):
 		cat = unicode(result[0], 'UTF-8')
 		if cat == u'': cats = u'(ei kategoriaa)'
 		else: cats = cat
-		jotools.write(req, (u'<tr><td><a href="add?fromdb=1&amp;category=%s">%s</a></td>' +
+		jotools.write(req, (u'<tr><td><a href="add_from_db?category=%s">%s</a></td>' +
 		                    u'<td>%i</td></tr>\n') \
 		  % (jotools.escape_url(cat), jotools.escape_html(cats), result[1]))
 	jotools.write(req, u"</table>\n")
-	jotools.write(req, u'<p><a href="add?fromdb=1">Kaikki sanat ...</a></p>\n')
+	jotools.write(req, u'<p><a href="add_from_db">Kaikki sanat ...</a></p>\n')
 	joheaders.list_page_footer(req)
 	return '</html>\n'

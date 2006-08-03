@@ -37,7 +37,7 @@ ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki
 </ul>
 <h2>Lisää sanoja</h2>
 <ul>
-<li><a href="word/add">Lisää omia sanoja</a></li>
+<li><a href="word/add_manual">Lisää omia sanoja</a></li>
 <li><a href="word/categories">Lisää sanoja ehdotettujen sanojen listalta</a></li>
 </ul>
 <div class="clear"></div>

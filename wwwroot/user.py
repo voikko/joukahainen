@@ -32,20 +32,22 @@ import time
 import os
 import random
 
-def login(req, username = None, password = None, wid = None):
+def login(req, wid = None):
 	if req.method != 'POST':
 		joheaders.error_page(req, u"Vain POST-pyynnöt ovat sallittuja")
 		return '\n'
 	
-	if username == None or password == None or not jotools.checkuname(unicode(username, 'UTF-8')):
+	password = jotools.get_param(req, 'password', None) 
+	username = jotools.get_param(req, 'username', None)
+	if username == None or password == None or not jotools.checkuname(username):
 		joheaders.error_page(req,
-		                     u"Käyttäjätunnus tai salasana puuttuu tai käyttäjätunnus on väärin")
+		                 u"Käyttäjätunnus tai salasana puuttuu tai käyttäjätunnus on väärin")
 		return '\n'
 	
-	pwhash = sha.new(_config.PW_SALT + unicode(password, 'UTF-8')).hexdigest()
+	pwhash = sha.new((_config.PW_SALT + password).encode('UTF-8')).hexdigest()
 	db = jodb.connect_private()
 	results = db.query(("select uid from appuser where uname = '%s' and pwhash = '%s' " +
-	                    "and disabled = FALSE") % (username, pwhash))
+	                    "and disabled = FALSE") % (username.encode('UTF-8'), pwhash))
 	if results.ntuples() == 0:
 		joheaders.error_page(req, u"Käyttäjätunnus tai salasana on väärin")
 		return '\n'
