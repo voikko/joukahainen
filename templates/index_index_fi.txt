@@ -50,6 +50,7 @@ ominaisuuksia lisätään vähitellen aina elokuun loppuun saakka. Sovelluksen k
 siihen tallennettua sanastoa vapaasti, mutta muutosten tekeminen vaatii käyttäjätunnuksen.
 Tämä testiasennus siirtyy tuotantokäyttöön kesän aikana.</p>
 <h2>Muutoshistoria</h2>
-<p>2006-06-21: ensimmäinen testiasennus</p>
+<p>2006-08-03: ohjelmapäivitys SVN:stä, ei muutoksia tietokantaan</p>
 <p>2006-08-02: toinen testiasennus</p>
+<p>2006-06-21: ensimmäinen testiasennus</p>
 </div>

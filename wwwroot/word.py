@@ -272,7 +272,7 @@ def rwords(req, wid = None):
 # in the table. If include_no_class is True, then it will be possible to choose class 0
 # (invalid word).
 def _get_class_selector(classlist, cid, row, include_no_class):
-	if cid == None:
+	if cid == None and row != -1:
 		retstr = u''
 		for res in classlist:
 			retstr = retstr + (u'<label><input type="radio" name="class%i" ' +
@@ -318,7 +318,8 @@ def _add_entry_fields(req, db, words = None, count = 1):
 			jotools.write(req, u'<input type="hidden" name="word%i" value=%s />%s</td><td>' \
 			                   % (i, jotools.escape_form_value(word['word']), 
 				               jotools.escape_html(word['word'])))
-			jotools.write(req, _get_class_selector(class_res, word['cid'], i, False))
+			incnocls = word['oword'] != None
+			jotools.write(req, _get_class_selector(class_res, word['cid'], i, incnocls))
 			jotools.write(req, u'<td><input type="checkbox" name="confirm%i"></td><td>' % i)
 			jotools.write(req, word['error'])
 			jotools.write(req, u'</td>')
@@ -326,7 +327,7 @@ def _add_entry_fields(req, db, words = None, count = 1):
 		else:
 			jotools.write(req, jotools.escape_html(word['word']))
 			jotools.write(req, u'</td><td>')
-			jotools.write(req, _get_class_selector(class_res, word['cid'], i, False))
+			jotools.write(req, _get_class_selector(class_res, word['cid'], -1, False))
 			jotools.write(req, u'</td><td>')
 			if confirm_column: jotools.write(req, u'&nbsp;</td><td>')
 			jotools.write(req, word['error'])
@@ -500,15 +501,14 @@ def add(req):
 	if need_confirm_count > 0:
 		jotools.write(req, u'<p>Joidenkin sanojen lisäys ei onnistunut tai vaatii ' +
 		              u'vahvistuksen. Tee tarvittavat korjaukset ja merkitse rastilla ' +
-			    u'sanat, jotka edelleen haluat lisättäviksi ja yritä tallennusta ' +
-			    u'uudelleen.</p>')
+			    u'sanat, jotka edelleen haluat lisättäviksi.</p>')
 		jotools.write(req, u'<form method="post" action="add">\n')
 		jotools.write(req, u'<table class="wadd"><tr><th>Sana</th><th>Sanaluokka</th>' +
 		              u'<th>Vahvista sanan lisäys</th><th>Huomioita</th></tr>\n')
 		_add_entry_fields(req, db, nwordlist, None)
 		jotools.write(req, u'</table>\n<p>' +
 		                   u'<input type="hidden" name="confirm" value="on">' +
-		                   u'<input type="submit" value="Lisää sanoja"></p></form>\n')
+		                   u'<input type="submit" value="Jatka"></p></form>\n')
 		joheaders.list_page_footer(req)
 		return '</html>\n'
 	else:
