@@ -113,8 +113,7 @@ CREATE TABLE task_word (
   tid integer NOT NULL REFERENCES task, -- task
   wid integer NOT NULL REFERENCES word, -- word
   uid integer REFERENCES appuser, -- user who processed the word
-  ctime timestamp DEFAULT CURRENT_TIMESTAMP, -- record creation time
-  PRIMARY KEY (tid, wid)
+  ctime timestamp DEFAULT CURRENT_TIMESTAMP -- record creation time
 );
 
 -- Grant privileges

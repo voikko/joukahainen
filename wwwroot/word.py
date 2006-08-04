@@ -423,7 +423,7 @@ def add_from_db(req):
 	class_res = db.query("select classid, name from wordclass").getresult()
 	joheaders.list_page_header(req, u"Joukahainen &gt; Lisää sanoja", uid, uname)
 	jotools.write(req, u'<form method="post" action="add">\n')
-	jotools.write(req, u'<table class="wadd">\n')
+	jotools.write(req, u'<table class="border">\n')
 	jotools.write(req, u'<tr><th>Sana</th><th>Sanaluokka</th><th>Huomioita</th></tr>\n')
 	i = 0
 	for result in results.getresult():
@@ -455,7 +455,7 @@ def add_manual(req):
 	words_per_page = 15
 	joheaders.list_page_header(req, u"Joukahainen &gt; Lisää sanoja", uid, uname)
 	jotools.write(req, u'<form method="post" action="add">\n' +
-	                   u'<table class="wadd">\n<tr><th>Sana</th><th>Sanaluokka</th></tr>\n')
+	                   u'<table class="border">\n<tr><th>Sana</th><th>Sanaluokka</th></tr>\n')
 	_add_entry_fields(req, db, None, words_per_page)
 	jotools.write(req, u'</table>\n' +
 	                   u'<p><input type="submit" value="Lisää sanoja"></p></form>\n')
@@ -503,7 +503,7 @@ def add(req):
 		              u'vahvistuksen. Tee tarvittavat korjaukset ja merkitse rastilla ' +
 			    u'sanat, jotka edelleen haluat lisättäviksi.</p>')
 		jotools.write(req, u'<form method="post" action="add">\n')
-		jotools.write(req, u'<table class="wadd"><tr><th>Sana</th><th>Sanaluokka</th>' +
+		jotools.write(req, u'<table class="border"><tr><th>Sana</th><th>Sanaluokka</th>' +
 		              u'<th>Vahvista sanan lisäys</th><th>Huomioita</th></tr>\n')
 		_add_entry_fields(req, db, nwordlist, None)
 		jotools.write(req, u'</table>\n<p>' +
@@ -513,7 +513,7 @@ def add(req):
 		return '</html>\n'
 	else:
 		jotools.write(req, u'<p>Seuraavat muutokset tehtiin:</p>')
-		jotools.write(req, u'<table class="wadd"><tr><th>Sana</th><th>Sanaluokka</th>' +
+		jotools.write(req, u'<table class="border"><tr><th>Sana</th><th>Sanaluokka</th>' +
 		              u'<th>Huomioita</th></tr>\n')
 		_add_entry_fields(req, db, nwordlist, None)
 		jotools.write(req, u'</table>\n')

@@ -40,6 +40,7 @@ ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki
 <li><a href="word/add_manual">Lisää omia sanoja</a></li>
 <li><a href="word/categories">Lisää sanoja ehdotettujen sanojen listalta</a></li>
 </ul>
+<h2><a href="task/list">Tehtävät</a></h2>
 <div class="clear"></div>
 </div>
 

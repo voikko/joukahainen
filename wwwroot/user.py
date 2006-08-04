@@ -73,8 +73,12 @@ def login(req, wid = None):
 	req.headers_out['Set-Cookie'] = 'session=%s; path=%s' % (sesskey, cookiepath)
 	if wid == None: wid_n = 0
 	else: wid_n = jotools.toint(wid)
-	if wid_n == 0: joheaders.redirect_header(req, _config.WWW_ROOT_DIR + u"/")
-	else: joheaders.redirect_header(req, _config.WWW_ROOT_DIR + u"/word/edit?wid=%i" % wid_n)
+	if wid_n != 0:
+		joheaders.redirect_header(req, _config.WWW_ROOT_DIR + u"/word/edit?wid=%i" % wid_n)
+	elif jotools.get_param(req, 'redir', None) != None:
+		joheaders.redirect_header(req, _config.WWW_ROOT_DIR +
+		                               jotools.get_param(req, 'redir', u''))
+	else: joheaders.redirect_header(req, _config.WWW_ROOT_DIR + u"/")
 	return "</html>"
 
 def logout(req, wid = None):

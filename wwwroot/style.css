@@ -29,15 +29,15 @@ table.inflection tr.characteristic > td {
 	display: table-cell;
 }
 
-table.wadd {
+table.border {
 	border-collapse: collapse;
 }
 
-table.wadd td {
+table.border td {
 	border: 1px solid black;
 }
 
-table.wadd th {
+table.border th {
 	border: 1px solid black;
 }
 
