@@ -116,12 +116,15 @@ INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
 -- Test user, password 'testi'
 INSERT INTO appuser(uid, uname, firstname, lastname) VALUES(2, 'testi', 'Aku', 'Ankka');
 
-INSERT INTO task(tid, descr, sql) VALUES(1, 'Substantiivien taivutusluokkien tarkistus',
-                                         'SELECT wid FROM word WHERE class = 1');
-INSERT INTO task(tid, descr, sql) VALUES(2, 'Adjektiivien taivutusluokkien tarkistus',
-                                            'SELECT wid FROM word WHERE class = 2');
-INSERT INTO task(tid, descr, sql) VALUES(3, 'Verbien taivutusluokkien tarkistus',
-                                            'SELECT wid FROM word WHERE class = 3');
+INSERT INTO task(tid, descr, sql, orderby) VALUES(1, 'Substantiivien taivutusluokkien tarkistus',
+  'SELECT taskw.wid, tasksa.value AS tluokka FROM word taskw, string_attribute_value tasksa WHERE taskw.class = 1 AND tasksa.aid = 1 AND tasksa.wid = taskw.wid',
+  't.tluokka, w.word');
+INSERT INTO task(tid, descr, sql, orderby) VALUES(2, 'Adjektiivien taivutusluokkien tarkistus',
+  'SELECT taskw.wid, tasksa.value AS tluokka FROM word taskw, string_attribute_value tasksa WHERE taskw.class = 2 AND tasksa.aid = 1 AND tasksa.wid = taskw.wid',
+  't.tluokka, w.word');
+INSERT INTO task(tid, descr, sql, orderby) VALUES(3, 'Verbien taivutusluokkien tarkistus',
+  'SELECT taskw.wid, tasksa.value AS tluokka FROM word taskw, string_attribute_value tasksa WHERE taskw.class = 3 AND tasksa.aid = 1 AND tasksa.wid = taskw.wid',
+  't.tluokka, w.word');
 
 \c joukahainen_private
 DELETE FROM appuser;

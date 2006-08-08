@@ -26,6 +26,7 @@ import _apply_config
 import joheaders
 import jotools
 import jodb
+import random
 
 def list(req):
 	(uid, uname, editable) = jotools.get_login_user(req)
@@ -51,3 +52,58 @@ def list(req):
 	joheaders.list_page_footer(req)
 	return '</html>\n'
 
+def show(req):
+	(uid, uname, editable) = jotools.get_login_user(req)
+	if not editable:
+		joheaders.error_page(req, u'Ei oikeuksia tietojen muuttamiseen')
+		return '\n'
+	tid = jotools.toint(jotools.get_param(req, "tid", "0"))
+	if tid == 0:
+		joheaders.error_page(req, u'Parametri tid on pakollinen')
+		return '\n'
+	words_per_page = 20
+	db = jodb.connect()
+	taskq = db.query("SELECT sql, orderby FROM task WHERE tid = %i" % tid)
+	if taskq.ntuples() != 1:
+		joheaders.error_page(req, u'Parametri tid on virheellinen')
+		return '\n'
+	tasksql = taskq.getresult()[0][0]
+	taskorder = taskq.getresult()[0][1]
+	results = db.query(("SELECT w.wid, w.word FROM word w, (%s) t " +
+	                    "WHERE t.wid = w.wid AND w.wid NOT IN " +
+		          "(SELECT tw.wid FROM task_word tw WHERE tw.tid = %i)" +
+			"ORDER BY %s") % (tasksql, tid, taskorder))
+	joheaders.page_header(req, u"Joukahainen &gt; Tehtävä %i" % tid)
+	jotools.write(req, u'<div class="main">\n')
+	jotools.write(req, u'<form method="post" action="save">\n')
+	jotools.write(req, u'<table class="border">\n<tr><th>OK</th><th>Sana</th></tr>\n')
+	firstword = random.randint(0, max(results.ntuples() - words_per_page, 0))
+	restuples = results.getresult()
+	for i in range(firstword, min(firstword + words_per_page, results.ntuples() - 1)):
+		word = restuples[i]
+		jotools.write(req, u'<tr><td><input type="checkbox" name="checked%i" /></td>' \
+		                   % word[0])
+		jotools.write(req, (u'<td><a href="../word/edit?wid=%i" target="right">%s' +
+		                    u'</a></td></tr>\n') \
+				% (word[0], jotools.escape_html(unicode(word[1], 'UTF-8'))))
+	jotools.write(req, u'</table>')
+	jotools.write(req, u'<p><input type="submit" value="Tallenna tarkistetut"></form></p>')
+	jotools.write(req, u'</div>')
+	joheaders.page_footer(req)
+	return '</html>\n'
+
+def work(req):
+	(uid, uname, editable) = jotools.get_login_user(req)
+	if not editable:
+		joheaders.error_page(req, u'Ei oikeuksia tietojen muuttamiseen')
+		return '\n'
+	tid = jotools.toint(jotools.get_param(req, "tid", "0"))
+	if tid == 0:
+		joheaders.error_page(req, u'Parametri tid on pakollinen')
+		return '\n'
+	joheaders.frame_header(req, u"Joukahainen &gt; Tehtävä %i" % tid)
+	jotools.write(req, u'<frameset cols="20%, 80%">\n')
+	jotools.write(req, u'<frame name="left" src="show?tid=%i" />\n' % tid)
+	jotools.write(req, u'<frame name="right" />\n')
+	jotools.write(req, u'</frameset>\n')
+	joheaders.frame_footer(req)

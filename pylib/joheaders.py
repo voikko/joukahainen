@@ -39,9 +39,24 @@ def page_header(req, title):
 <body onload="initPage()">
 """ % (title.encode('UTF-8'), _config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR))
 
+def frame_header(req, title):
+	req.content_type = "text/html; charset=UTF-8"
+	req.send_http_header()
+	req.write("""<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html>
+<head>
+<title>%s</title>
+<link rel="stylesheet" type="text/css" href="%s/style.css" />
+</head>
+""" % (title.encode('UTF-8'), _config.WWW_ROOT_DIR))
 
 def page_footer(req):
 	req.write('\n</body>')
+
+def frame_footer(req):
+	req.write('\n</html>')
 
 def redirect_header(req, location):
 	location_s = location.encode('UTF-8')

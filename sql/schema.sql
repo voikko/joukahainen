@@ -105,7 +105,8 @@ CREATE TABLE raw_word (
 CREATE TABLE task (
   tid integer PRIMARY KEY, -- task identifier
   descr varchar NOT NULL, -- task description
-  sql varchar NOT NULL -- SQL query returning the list of widS that are part of this task
+  sql varchar NOT NULL, -- SQL query returning the list of widS that are part of this task
+  orderby varchar NOT NULL -- SQL ORDER BY statement for sorting the words
 );
 
 -- Words processed in a task. Dynamic.
