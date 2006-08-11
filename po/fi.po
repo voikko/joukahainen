@@ -1,21 +1,169 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Finnish translation for Joukahainen.
+# Copyright (C) 2006 Harri Pitkänen 
+# This file is distributed under the same license as the Joukahainen package.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: Joukahainen 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-11 13:16+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2006-08-11 16:53+0300\n"
 "Last-Translator: Harri Pitkänen <hatapitk@iki.fi>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: wwwroot/word.py:37
-msgid "Parameter wid is required"
-msgstr "Parametri wid on pakollinen"
+#: wwwroot/word.py:36 wwwroot/word.py:62 wwwroot/word.py:131
+#: wwwroot/word.py:205
+#, python-format
+msgid "Parameter %s is required"
+msgstr "Parametri %s on pakollinen"
+
+#: wwwroot/word.py:43 wwwroot/word.py:70 wwwroot/word.py:137
+#: wwwroot/word.py:211
+#, python-format
+msgid "Word %i does not exist"
+msgstr "Sanaa %i ei ole olemassa"
+
+#: wwwroot/word.py:55 wwwroot/word.py:483
+msgid "Only POST requests are allowed"
+msgstr "Vain POST-pyynnöt ovat sallittuja"
+
+#: wwwroot/word.py:59 wwwroot/word.py:128 wwwroot/word.py:202
+#: wwwroot/word.py:405 wwwroot/word.py:459 wwwroot/word.py:479
+#: wwwroot/word.py:543
+msgid "You are not allowed to edit data"
+msgstr "Sinulla ei ole oikeutta tietojen muutamiseen"
+
+#: wwwroot/word.py:149 wwwroot/word.py:223
+msgid "Only GET and POST requests are allowed"
+msgstr "Vain GET- ja POST-pyynnöt ovat sallittuja"
+
+#: wwwroot/word.py:177
+#, python-format
+msgid "Flag removed: '%s'"
+msgstr "Lippu poistettu: '%s'"
+
+#: wwwroot/word.py:181
+#, python-format
+msgid "Flag added: '%s'"
+msgstr "Lippu lisätty: '%s'"
+
+#: wwwroot/word.py:244
+#, python-format
+msgid "Alternative spelling removed: '%s'"
+msgstr "Kirjoitusasu poistettu: '%s'"
+
+#: wwwroot/word.py:262
+#, python-format
+msgid "Alternative spelling added: '%s'"
+msgstr "Kirjoitusasu lisätty: '%s'"
+
+#: wwwroot/word.py:293
+msgid "incorrect word"
+msgstr "virheellinen sana"
+
+#: wwwroot/word.py:358
+msgid "Homonyms"
+msgstr "Homonyymit"
+
+#: wwwroot/word.py:372
+msgid "Forbidden characters in the word"
+msgstr "Sanassa on kiellettyjä merkkejä"
+
+#: wwwroot/word.py:377
+msgid "Word class must be set"
+msgstr "Sanaluokka on asetettava"
+
+#: wwwroot/word.py:392
+msgid "Word added"
+msgstr "Sana lisätty"
+
+#: wwwroot/word.py:397
+msgid "Word removed from the list of candidate words"
+msgstr "Sana poistettu ehdotettujen sanojen listalta"
+
+#: wwwroot/word.py:399
+msgid "Nothing was done"
+msgstr "Mitään ei tehty"
+
+#: wwwroot/word.py:408 wwwroot/word.py:462
+msgid "Only GET requests are allowed"
+msgstr "Vain GET-pyynnöt ovat sallittuja"
+
+#: wwwroot/word.py:426 wwwroot/word.py:429 wwwroot/word.py:551
+msgid "There are no words to be added"
+msgstr "Lisäystä odottavia sanoja ei ole"
+
+#: wwwroot/word.py:430
+#, python-format
+msgid "in category %s"
+msgstr "kategoriassa %s"
+
+#: wwwroot/word.py:433 wwwroot/word.py:452 wwwroot/word.py:466
+#: wwwroot/word.py:472 wwwroot/word.py:511 wwwroot/word.py:553
+msgid "Add words"
+msgstr "Lisää sanoja"
+
+#: wwwroot/word.py:437 wwwroot/word.py:469 wwwroot/word.py:521
+#: wwwroot/word.py:532
+msgid "Word"
+msgstr "Sana"
+
+#: wwwroot/word.py:437 wwwroot/word.py:469 wwwroot/word.py:521
+#: wwwroot/word.py:532
+msgid "Word class"
+msgstr "Sanaluokka"
+
+#: wwwroot/word.py:437 wwwroot/word.py:521 wwwroot/word.py:532
+msgid "Notes"
+msgstr "Huomioita"
+
+#: wwwroot/word.py:503
+msgid "Word was not added"
+msgstr "Sanaa ei lisätty"
+
+#: wwwroot/word.py:516
+msgid ""
+"Adding some words failed or requires confirmation.\n"
+"Make the required changes and mark the words that you still want to add."
+msgstr ""
+"Joidenkin sanojen lisäys ei onnistunut tai vaatii vahvistuksen.\n"
+"Tee tarvittavat korjaukset ja merkitse sanat, jotka edelleen haluat "
+"lisättäviksi."
+
+#: wwwroot/word.py:521
+msgid "Confirm addition"
+msgstr "Vahvista lisäys"
+
+#: wwwroot/word.py:525
+msgid "Continue"
+msgstr "Jatka"
+
+#: wwwroot/word.py:529
+msgid "The following changes were made"
+msgstr "Seuraavat muutokset tehtiin"
+
+#: wwwroot/word.py:536
+msgid "Back to main page"
+msgstr "Takaisin aloitussivulle"
+
+#: wwwroot/word.py:555
+msgid "Choose a category from which you want to add words"
+msgstr "Valitse kategoria, josta haluat lisätä sanoja"
+
+#: wwwroot/word.py:557
+msgid "Category"
+msgstr "Kategoria"
+
+#: wwwroot/word.py:557
+msgid "Words left"
+msgstr "Sanoja jäljellä"
+
+#: wwwroot/word.py:560
+msgid "no category"
+msgstr "ei kategoriaa"
+
+#: wwwroot/word.py:566
+msgid "All words"
+msgstr "Kaikki sanat"
