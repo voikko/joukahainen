@@ -24,13 +24,16 @@ from mod_python import apache
 import sys
 import random
 import _apply_config
+import _config
 import joheaders
 import jotools
 import jodb
 
+_ = _apply_config.translation.ugettext
+
 def edit(req, wid = None):
 	if (wid == None):
-		joheaders.error_page(req, u'Parametri wid on pakollinen')
+		joheaders.error_page(req, _(u'Parameter wid is required'))
 		return '\n'
 	wid_n = jotools.toint(wid)
 	db = jodb.connect()
@@ -42,7 +45,7 @@ def edit(req, wid = None):
 	(uid, uname, editable) = jotools.get_login_user(req)
 	static_vars = {'WID': wid_n, 'WORD': unicode(wordinfo[0], 'UTF-8'), 'CLASSID': wordinfo[1],
 	               'UID': uid, 'UNAME': uname, 'EDITABLE': editable}
-	jotools.process_template(req, db, static_vars, 'word_edit', 'fi', 'joeditors')
+	jotools.process_template(req, db, static_vars, u'word_edit', _config.LANG, u'joeditors')
 	joheaders.page_footer(req)
 	return "</html>"
 
@@ -134,9 +137,11 @@ def flags(req, wid = None):
 		return '\n'
 	wordinfo = results.getresult()[0]
 	if req.method == 'GET': # show editor
-		static_vars = {'WID': wid_n, 'WORD': unicode(wordinfo[0], 'UTF-8'), 'CLASSID': wordinfo[1],
-		               'UID': uid, 'UNAME': uname, 'EDITABLE': editable}
-		jotools.process_template(req, db, static_vars, 'word_flags', 'fi', 'joeditors')
+		static_vars = {'WID': wid_n, 'WORD': unicode(wordinfo[0], 'UTF-8'),
+		               'CLASSID': wordinfo[1], 'UID': uid, 'UNAME': uname,
+		               'EDITABLE': editable}
+		jotools.process_template(req, db, static_vars, u'word_flags', _config.LANG,
+		                         u'joeditors')
 		joheaders.page_footer(req)
 		return "</html>"
 	if req.method != 'POST':
@@ -206,9 +211,11 @@ def rwords(req, wid = None):
 		return '\n'
 	wordinfo = results.getresult()[0]
 	if req.method == 'GET': # show editor
-		static_vars = {'WID': wid_n, 'WORD': unicode(wordinfo[0], 'UTF-8'), 'CLASSID': wordinfo[1],
-		               'UID': uid, 'UNAME': uname, 'EDITABLE': editable}
-		jotools.process_template(req, db, static_vars, 'word_rwords', 'fi', 'joeditors')
+		static_vars = {'WID': wid_n, 'WORD': unicode(wordinfo[0], 'UTF-8'),
+		               'CLASSID': wordinfo[1], 'UID': uid, 'UNAME': uname,
+		               'EDITABLE': editable}
+		jotools.process_template(req, db, static_vars, u'word_rwords', _config.LANG,
+		                         u'joeditors')
 		joheaders.page_footer(req)
 		return "</html>"
 	if req.method != 'POST':
@@ -231,7 +238,8 @@ def rwords(req, wid = None):
 			db.query("insert into event(eid, eword, euser) values(%i, %i, %i)" % \
 			         (eid, wid_n, uid))
 			event_inserted = True
-		db.query(("delete from related_word where wid = %i and rwid = %i") % (wid_n, attribute[0]))
+		db.query("delete from related_word where wid = %i and rwid = %i" \
+		         % (wid_n, attribute[0]))
 		messages.append(u"Kirjoitusasu poistettu: '%s'" % unicode(attribute[1], 'UTF-8'))
 	
 	newwords = jotools.get_param(req, 'add', u'')

@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-
 # Copyright 2006 Harri Pitkänen (hatapitk@iki.fi)
 # This file is part of Joukahainen, a vocabulary management application
-
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
@@ -17,13 +15,32 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# This file contains the common initialisation code for the application
+# Makefile for updating the translations etc.
 
-import sys
-import gettext
-import _config
+SOURCES_TO_TRANSLATE := wwwroot/word.py
+LINGUAS := fi
+POTFILE := transl/joukahainen.pot
 
-sys.path.append(_config.INSTALLATION_DIRECTORY + u'/pylib')
-sys.path.append(_config.MODULE_PATH_HFTOOLS)
-translation = gettext.translation(u'joukahainen', _config.INSTALLATION_DIRECTORY + u'/transl',
-                                  [_config.LANG])
+
+
+POFILES := $(patsubst %,transl/%.po,$(LINGUAS))
+MOFILES := $(patsubst %,transl/%/LC_MESSAGES/joukahainen.mo,$(LINGUAS))
+
+.PHONY: all
+
+all: $(POTFILE) $(POFILES) $(MOFILES)
+
+$(POTFILE): $(SOURCES_TO_TRANSLATE)
+	mkdir -p transl
+	xgettext -L Python -d joukahainen -o $@ $(SOURCES_TO_TRANSLATE)
+
+
+# Rule for merging translations
+transl/%.po: po/%.po $(POTFILE)
+	msgmerge -o $@ $< $(POTFILE)
+
+# Rule for creating .mo files
+transl/%/LC_MESSAGES/joukahainen.mo: transl/%.po
+	mkdir -p $(@D)
+	msgfmt -o $@ $<
+

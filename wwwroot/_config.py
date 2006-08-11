@@ -2,20 +2,17 @@
 
 # Application configuration file for Joukahainen
 
+# Installation directory
+INSTALLATION_DIRECTORY = u'hunspell-fi-svn/trunk/joukahainen'
+
 # Root directory of the application as seen from the web
 WWW_ROOT_DIR = '/joukahainen'
-
-# Path to module directory (Joukahainen)
-MODULE_PATH_JOUKAHAINEN = 'hunspell-fi-svn/trunk/joukahainen/pylib'
 
 # Path to module directory (Hunspell-fi tools)
 MODULE_PATH_HFTOOLS = 'hunspell-fi-svn/trunk/tools/pylib'
 
 # Path to Hunspell-fi data directory
 HF_DATA = 'hunspell-fi-svn/trunk/data'
-
-# Path to template directory
-TEMPLATE_PATH = 'hunspell-fi-svn/trunk/joukahainen/templates'
 
 # URL prefix for Wiki links
 WIKI_URL = u'http://fi.wiktionary.org/wiki/'
@@ -25,6 +22,9 @@ PW_SALT = u'XPmCefh'
 
 # Session timeout in seconds
 SESSION_TIMEOUT = 7200
+
+# User interface language
+LANG = u'fi'
 
 # Database connection parameters
 DBHOST = 'localhost'

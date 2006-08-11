@@ -69,8 +69,10 @@ def write(req, string):
 def errormsg(req, error):
 	write(req, error)
 
+# Processes the given page template and writes the content to request req
 def process_template(req, db, static_vars, template_name, lang, module):
-	tmplfilename = _config.TEMPLATE_PATH + '/' + template_name + '_' + lang + '.txt'
+	tmplfilename = _config.INSTALLATION_DIRECTORY + '/templates/' + \
+	               template_name + '_' + lang + '.txt'
 	tmplfile = codecs.open(tmplfilename, 'r', 'utf-8')
 	var_re = re.compile("^(.*)\\$\\$(.*)\\$\\$(.*)$")
 	func_re = re.compile("^(.*)\\((.*)\\)$")
