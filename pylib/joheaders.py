@@ -70,6 +70,14 @@ def error_page(req, errortext):
 	req.write((u'<h1>Virhe</h1><p>%s</p>\n' % errortext).encode('UTF-8'))
 	page_footer(req)
 
+def ok_page(req, message):
+	page_header(req, u'Joukahainen: toiminto suoritettu')
+	req.write((u'<h1>Toiminto suoritettu</h1><p>%s</p>\n' % message).encode('UTF-8'))
+	req.write((u'<p><a href="%s">Takaisin aloitussivulle ...</a></p>\n' \
+	           % _config.WWW_ROOT_DIR).encode('UTF-8'))
+	page_footer(req)
+	req.write('\n</html>')
+
 def list_page_header(req, headertext, uid, uname):
 	page_header(req, headertext)
 	jotools.write(req, u"""<div class="topbar">

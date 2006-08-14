@@ -119,6 +119,6 @@ CREATE TABLE task_word (
 
 -- Grant privileges
 GRANT SELECT ON language, wordclass, attribute, attribute_class TO joukahainen;
-GRANT SELECT, UPDATE on word_wid_seq, related_word_rwid_seq, event_eid_seq, appuser TO joukahainen;
-GRANT ALL ON word, string_attribute_value, flag_attribute_value,
+GRANT SELECT, UPDATE on word_wid_seq, related_word_rwid_seq, event_eid_seq TO joukahainen;
+GRANT ALL ON word, string_attribute_value, flag_attribute_value, appuser,
   related_word, event, raw_word, task, task_word TO joukahainen;

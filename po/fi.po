@@ -7,126 +7,127 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joukahainen\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-11 16:53+0300\n"
+"POT-Creation-Date: 2006-08-14 13:46+0300\n"
+"PO-Revision-Date: 2006-08-14 13:52+0300\n"
 "Last-Translator: Harri Pitkänen <hatapitk@iki.fi>\n"
+"Language-Team: Finnish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2006-08-13 20:27+0300\n"
-"Language-Team: Finnish\n"
 "X-Generator: KBabel 1.11.2\n"
 
-#: wwwroot/word.py:36 wwwroot/word.py:62 wwwroot/word.py:131
-#: wwwroot/word.py:205
+#: wwwroot/word.py:36 wwwroot/word.py:61 wwwroot/word.py:130
+#: wwwroot/word.py:204
 #, python-format
 msgid "Parameter %s is required"
 msgstr "Parametri %s on pakollinen"
 
-#: wwwroot/word.py:43 wwwroot/word.py:70 wwwroot/word.py:137
-#: wwwroot/word.py:211
+#: wwwroot/word.py:42 wwwroot/word.py:69 wwwroot/word.py:136
+#: wwwroot/word.py:210
 #, python-format
 msgid "Word %i does not exist"
 msgstr "Sanaa %i ei ole olemassa"
 
-#: wwwroot/word.py:55 wwwroot/word.py:483
+#: wwwroot/word.py:54 wwwroot/word.py:482 wwwroot/user.py:40
+#: wwwroot/user.py:89
 msgid "Only POST requests are allowed"
 msgstr "Vain POST-pyynnöt ovat sallittuja"
 
-#: wwwroot/word.py:59 wwwroot/word.py:128 wwwroot/word.py:202
-#: wwwroot/word.py:405 wwwroot/word.py:459 wwwroot/word.py:479
-#: wwwroot/word.py:543
+#: wwwroot/word.py:58 wwwroot/word.py:127 wwwroot/word.py:201
+#: wwwroot/word.py:404 wwwroot/word.py:458 wwwroot/word.py:478
+#: wwwroot/word.py:539
 msgid "You are not allowed to edit data"
 msgstr "Sinulla ei ole oikeutta tietojen muuttamiseen"
 
-#: wwwroot/word.py:149 wwwroot/word.py:223
+#: wwwroot/word.py:148 wwwroot/word.py:222
 msgid "Only GET and POST requests are allowed"
 msgstr "Vain GET- ja POST-pyynnöt ovat sallittuja"
 
-#: wwwroot/word.py:177
+#: wwwroot/word.py:176
 #, python-format
 msgid "Flag removed: '%s'"
 msgstr "Lippu poistettu: '%s'"
 
-#: wwwroot/word.py:181
+#: wwwroot/word.py:180
 #, python-format
 msgid "Flag added: '%s'"
 msgstr "Lippu lisätty: '%s'"
 
-#: wwwroot/word.py:244
+#: wwwroot/word.py:243
 #, python-format
 msgid "Alternative spelling removed: '%s'"
 msgstr "Kirjoitusasu poistettu: '%s'"
 
-#: wwwroot/word.py:262
+#: wwwroot/word.py:261
 #, python-format
 msgid "Alternative spelling added: '%s'"
 msgstr "Kirjoitusasu lisätty: '%s'"
 
-#: wwwroot/word.py:293
+#: wwwroot/word.py:292
 msgid "incorrect word"
 msgstr "virheellinen sana"
 
-#: wwwroot/word.py:358
+#: wwwroot/word.py:357
 msgid "Homonyms"
 msgstr "Homonyymit"
 
-#: wwwroot/word.py:372
+#: wwwroot/word.py:371
 msgid "Forbidden characters in the word"
 msgstr "Sanassa on kiellettyjä merkkejä"
 
-#: wwwroot/word.py:377
+#: wwwroot/word.py:376
 msgid "Word class must be set"
 msgstr "Sanaluokka on asetettava"
 
-#: wwwroot/word.py:392
+#: wwwroot/word.py:391
 msgid "Word added"
 msgstr "Sana lisätty"
 
-#: wwwroot/word.py:397
+#: wwwroot/word.py:396
 msgid "Word removed from the list of candidate words"
 msgstr "Sana poistettu ehdotettujen sanojen listalta"
 
-#: wwwroot/word.py:399
+#: wwwroot/word.py:398
 msgid "Nothing was done"
 msgstr "Mitään ei tehty"
 
-#: wwwroot/word.py:408 wwwroot/word.py:462
+#: wwwroot/word.py:407 wwwroot/word.py:461
 msgid "Only GET requests are allowed"
 msgstr "Vain GET-pyynnöt ovat sallittuja"
 
-#: wwwroot/word.py:426 wwwroot/word.py:429 wwwroot/word.py:551
+#: wwwroot/word.py:425 wwwroot/word.py:428 wwwroot/word.py:547
 msgid "There are no words to be added"
 msgstr "Lisäystä odottavia sanoja ei ole"
 
-#: wwwroot/word.py:430
+#: wwwroot/word.py:429
 #, python-format
 msgid "in category %s"
 msgstr "kategoriassa %s"
 
-#: wwwroot/word.py:433 wwwroot/word.py:452 wwwroot/word.py:466
-#: wwwroot/word.py:472 wwwroot/word.py:511 wwwroot/word.py:553
+#: wwwroot/word.py:432 wwwroot/word.py:451 wwwroot/word.py:465
+#: wwwroot/word.py:471 wwwroot/word.py:510 wwwroot/word.py:549
 msgid "Add words"
 msgstr "Lisää sanoja"
 
-#: wwwroot/word.py:437 wwwroot/word.py:469 wwwroot/word.py:521
-#: wwwroot/word.py:532
+#: wwwroot/word.py:436 wwwroot/word.py:468 wwwroot/word.py:517
+#: wwwroot/word.py:528
 msgid "Word"
 msgstr "Sana"
 
-#: wwwroot/word.py:437 wwwroot/word.py:469 wwwroot/word.py:521
-#: wwwroot/word.py:532
+#: wwwroot/word.py:436 wwwroot/word.py:468 wwwroot/word.py:517
+#: wwwroot/word.py:528
 msgid "Word class"
 msgstr "Sanaluokka"
 
-#: wwwroot/word.py:437 wwwroot/word.py:521 wwwroot/word.py:532
+#: wwwroot/word.py:436 wwwroot/word.py:517 wwwroot/word.py:528
 msgid "Notes"
 msgstr "Huomioita"
 
-#: wwwroot/word.py:503
+#: wwwroot/word.py:502
 msgid "Word was not added"
 msgstr "Sanaa ei lisätty"
 
-#: wwwroot/word.py:516
+#: wwwroot/word.py:512
 msgid ""
 "Adding some words failed or requires confirmation.\n"
 "Make the required changes and mark the words that you still want to add."
@@ -135,39 +136,88 @@ msgstr ""
 "Tee tarvittavat korjaukset ja merkitse sanat, jotka edelleen haluat "
 "lisättäviksi."
 
-#: wwwroot/word.py:521
+#: wwwroot/word.py:517
 msgid "Confirm addition"
 msgstr "Vahvista lisäys"
 
-#: wwwroot/word.py:525
+#: wwwroot/word.py:521
 msgid "Continue"
 msgstr "Jatka"
 
-#: wwwroot/word.py:529
+#: wwwroot/word.py:525
 msgid "The following changes were made"
 msgstr "Seuraavat muutokset tehtiin"
 
-#: wwwroot/word.py:536
+#: wwwroot/word.py:532
 msgid "Back to main page"
 msgstr "Takaisin aloitussivulle"
 
-#: wwwroot/word.py:555
+#: wwwroot/word.py:551
 msgid "Choose a category from which you want to add words"
 msgstr "Valitse kategoria, josta haluat lisätä sanoja"
 
-#: wwwroot/word.py:557
+#: wwwroot/word.py:553
 msgid "Category"
 msgstr "Kategoria"
 
-#: wwwroot/word.py:557
+#: wwwroot/word.py:553
 msgid "Words left"
 msgstr "Sanoja jäljellä"
 
-#: wwwroot/word.py:560
+#: wwwroot/word.py:556
 msgid "no category"
 msgstr "ei kategoriaa"
 
-#: wwwroot/word.py:566
+#: wwwroot/word.py:562
 msgid "All words"
 msgstr "Kaikki sanat"
+
+#: wwwroot/user.py:47
+msgid "Missing or incorrect username or password"
+msgstr "Käyttäjätunnus tai salasana on väärin tai puuttuu"
+
+#: wwwroot/user.py:55
+msgid "Incorrect username or password"
+msgstr "Käyttäjätunnus tai salasana on väärin"
+
+#: wwwroot/user.py:107 wwwroot/user.py:130
+msgid "You must be an administrator to do this"
+msgstr "Tämä toiminto vaatii pääkäyttäjän oikeudet"
+
+#: wwwroot/user.py:109 wwwroot/user.py:122 wwwroot/user.py:123
+msgid "Add user"
+msgstr "Lisää käyttäjä"
+
+#: wwwroot/user.py:122
+msgid "First name"
+msgstr "Etunimi"
+
+#: wwwroot/user.py:122
+msgid "Last name"
+msgstr "Sukunimi"
+
+#: wwwroot/user.py:122
+msgid "Username"
+msgstr "Käyttäjätunnus"
+
+#: wwwroot/user.py:122
+msgid "Email address"
+msgstr "Sähköpostiosoite"
+
+#: wwwroot/user.py:123
+msgid "Password"
+msgstr "Salasana"
+
+#: wwwroot/user.py:139
+#, python-format
+msgid "Required field %s is missing"
+msgstr "Pakollinen kenttä %s puuttuu"
+
+#: wwwroot/user.py:149
+msgid "User name is already in use"
+msgstr "Käyttäjänimi on jo käytössä"
+
+#: wwwroot/user.py:155
+msgid "New user was added succesfully"
+msgstr "Uuden käyttäjän lisäys onnistui"
 

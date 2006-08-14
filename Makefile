@@ -17,7 +17,7 @@
 
 # Makefile for updating the translations etc.
 
-SOURCES_TO_TRANSLATE := wwwroot/word.py
+SOURCES_TO_TRANSLATE := wwwroot/word.py wwwroot/user.py
 LINGUAS := fi
 POTFILE := transl/joukahainen.pot
 

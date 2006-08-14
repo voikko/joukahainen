@@ -137,6 +137,14 @@ def get_login_user(req):
 	         % (_config.SESSION_TIMEOUT, result[0]))
 	return (result[0], unicode(result[1], 'UTF-8'), True)
 
+# Returns True, if given user is an administrator
+def is_admin(uid):
+	if uid == None: return False
+	db = jodb.connect_private()
+	results = db.query("SELECT isadmin FROM appuser WHERE uid = %i AND isadmin = TRUE" % uid)
+	if results.ntuples() == 1: return True
+	return False
+
 # Converts a string to a form that is suitable for use as a value of the value attribute in html form elements
 def escape_form_value(string):
 	return saxutils.quoteattr(string)
