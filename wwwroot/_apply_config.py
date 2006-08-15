@@ -23,7 +23,20 @@ import sys
 import gettext
 import _config
 
+sys.path.append(_config.INSTALLATION_DIRECTORY + u'/langpacks/' + _config.LANG)
 sys.path.append(_config.INSTALLATION_DIRECTORY + u'/pylib')
 sys.path.append(_config.MODULE_PATH_HFTOOLS)
 translation = gettext.translation(u'joukahainen', _config.INSTALLATION_DIRECTORY + u'/transl',
                                   [_config.LANG])
+
+_ = translation.ugettext
+
+import functions
+
+jotools_checkword = functions.checkword
+
+def _default_word_inflection(db, wid, word, classid):
+	return u"(%s)" % _(u"Inflections are not available for this language")
+
+if hasattr(functions, 'word_inflection'): joeditors_word_inflection = functions.word_inflection
+else: joeditors_word_inflection = _default_word_inflection

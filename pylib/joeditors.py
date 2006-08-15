@@ -19,11 +19,10 @@
 
 # This file contains metadata display and editor components
 
-import hfaffix
-import hfutils
 import joindex
 import jotools
 import _config
+import _apply_config
 
 def _word_class(db, classid):
 	results = db.query("SELECT name FROM wordclass WHERE classid = %i" % classid)
@@ -31,75 +30,6 @@ def _word_class(db, classid):
 		return u"Error: word class %i does not exist" % classid
 	return (u"<span class=\"fheader\">Sanaluokka:</span>" +
 	        u" <span class=\"fsvalue\">%s</span>") % unicode(results.getresult()[0][0], 'UTF-8')
-
-CHARACTERISTIC_NOUN_FORMS = ['nominatiivi', 'genetiivi', 'partitiivi', 'illatiivi',
-                             'genetiivi_mon', 'partitiivi_mon', 'illatiivi_mon']
-CHARACTERISTIC_VERB_FORMS = ['infinitiivi_1', 'preesens_yks_1', 'imperfekti_yks_3',
-                             'kondit_yks_3', 'imperatiivi_yks_3', 'partisiippi_2',
-                             'imperfekti_pass']
-
-def _word_inflection(db, wid, word, classid):
-	if classid in [1, 2]:
-		classdatafile = _config.HF_DATA + "/subst.aff"
-		characteristic_forms = CHARACTERISTIC_NOUN_FORMS
-	elif classid == 3:
-		classdatafile = _config.HF_DATA + "/verb.aff"
-		characteristic_forms = CHARACTERISTIC_VERB_FORMS
-	else: return u"(taivutuksia ei ole saatavissa tämän sanaluokan sanoille)"
-	
-	results = db.query(("SELECT value FROM string_attribute_value " +
-	                    "WHERE wid = %i AND aid = 1") % wid)
-	if results.ntuples() != 1: return "(taivutuksia ei ole saatavilla, tarkista taivutusluokka)"
-	result = results.getresult()[0]
-	
-	infclass_parts = unicode(result[0], 'UTF-8').split('-')
-	if len(infclass_parts) == 1:
-		infclass_main = unicode(result[0], 'UTF-8')
-		grad_type = '-'
-	elif len(infclass_parts) == 2:
-		infclass_main = infclass_parts[0]
-		grad_type = infclass_parts[1]
-	else: return u"(virheellinen taivutusluokka)"
-	
-	word_classes = hfaffix.read_word_classes(classdatafile)
-	tableid = u"inftable%i" % wid
-
-	retdata = u''
-	have_only_characteristic = True
-	for word_class in word_classes:
-		if not infclass_main in word_class['smcnames']: continue
-		inflected_words = hfaffix.inflect_word(word, grad_type, word_class)
-		if inflected_words == None: continue
-		form = None
-		inflist = []
-		inflected_words.append((u'', u'', u''))
-		for inflected_word in inflected_words:
-			if form != inflected_word[0]:
-				if form != None and len(inflist) > 0:
-					if form in characteristic_forms:
-						htmlclass = u' class="characteristic"'
-					elif form[0] == u'!':
-						htmlclass = u' class="characteristic"'
-						form = form[1:]
-					else:
-						htmlclass = ''
-						have_only_characteristic = False
-					infs = reduce(lambda x, y: u"%s, %s" % (x, y), inflist)
-					retdata = retdata + (u"<tr%s><td>%s</td><td>%s</td></tr>\n" %
-					          (htmlclass, form, infs))
-				inflist = []
-				form = inflected_word[0]
-			if hfutils.read_option(inflected_word[2], 'ps', '-') != 'r' \
-			   and not inflected_word[1] in inflist:
-				inflist.append(inflected_word[1])
-	
-	table_header = u'<table class="inflection" id="%s">\n<tr><th colspan="2">' % tableid
-	if not have_only_characteristic:
-		table_header = table_header \
-		               + u'<a href="javascript:switchDetailedDisplay(\'%s\');" id="%s"></a>' \
-			     % (tableid, tableid + u'a')
-	table_header = table_header + u'Taivutus</th></tr>\n'
-	return table_header + retdata + u'</table>\n'
 
 def _flag_attributes(db, wid):
 	results = db.query(("SELECT a.descr FROM attribute a, flag_attribute_value f " +
@@ -229,7 +159,8 @@ def call(db, funcname, paramlist):
 		return _word_class(db, paramlist[0])
 	if funcname == 'word_inflection':
 		if len(paramlist) != 3: return u"Error: 3 parameters expected"
-		return _word_inflection(db, paramlist[0], paramlist[1], paramlist[2])
+		return _apply_config.joeditors_word_inflection(db, paramlist[0],
+		                                               paramlist[1], paramlist[2])
 	if funcname == 'flag_attributes':
 		if len(paramlist) != 1: return u"Error: 1 parameter expected"
 		return _flag_attributes(db, paramlist[0])

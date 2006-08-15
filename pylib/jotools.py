@@ -27,6 +27,7 @@ import urllib
 import jodb
 import joheaders
 import _config
+import _apply_config
 from xml.sax import saxutils
 
 def _call_handler(db, module, funcname, paramlist):
@@ -42,15 +43,11 @@ def toint(string):
 	if string.isdigit(): return int(string)
 	else: return 0
 
-WCHARS = u"abcdefghijklmnopqrstuvwxyzåäöszèéšžABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖŠŽÈÉŠŽ-'|"
 # Checks if string looks like a valid word
-def checkword(string):
-	for c in string:
-		if not c in WCHARS: return False
-	return True
+checkword = _apply_config.jotools_checkword
 
 # Checks if string is safe to be used as a SQL standard regular expression
-RECHARS = WCHARS + u"_%*()[]+."
+RECHARS = u"abcdefghijklmnopqrstuvwxyzåäöszèéšžABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖŠŽÈÉŠŽ-'|_%*()[]+."
 def checkre(string):
 	for c in string:
 		if not c in RECHARS: return False

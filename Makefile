@@ -17,8 +17,8 @@
 
 # Makefile for updating the translations etc.
 
-SOURCES_TO_TRANSLATE := wwwroot/word.py wwwroot/user.py
-LINGUAS := fi
+SOURCES_TO_TRANSLATE := wwwroot/word.py wwwroot/user.py wwwroot/_apply_config.py
+LINGUAS := $(patsubst langpacks/%/messages.po,%,$(wildcard langpacks/*/messages.po))
 POTFILE := transl/joukahainen.pot
 
 
@@ -36,7 +36,7 @@ $(POTFILE): $(SOURCES_TO_TRANSLATE)
 
 
 # Rule for merging translations
-transl/%.po: po/%.po $(POTFILE)
+transl/%.po: langpacks/%/messages.po $(POTFILE)
 	msgmerge -o $@ $< $(POTFILE)
 
 # Rule for creating .mo files
