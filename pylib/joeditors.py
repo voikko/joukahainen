@@ -24,17 +24,19 @@ import jotools
 import _config
 import _apply_config
 
+_ = _apply_config.translation.ugettext
+
 def _word_class(db, classid):
 	results = db.query("SELECT name FROM wordclass WHERE classid = %i" % classid)
 	if results.ntuples() == 0:
-		return u"Error: word class %i does not exist" % classid
-	return (u"<span class=\"fheader\">Sanaluokka:</span>" +
-	        u" <span class=\"fsvalue\">%s</span>") % unicode(results.getresult()[0][0], 'UTF-8')
+		return _(u"Error: word class %i does not exist") % classid
+	return (u"<span class=\"fheader\">%s:</span>" % _(u"Word class")) \
+	      +(u" <span class=\"fsvalue\">%s</span>" % unicode(results.getresult()[0][0], 'UTF-8'))
 
 def _flag_attributes(db, wid):
 	results = db.query(("SELECT a.descr FROM attribute a, flag_attribute_value f " +
 	                    "WHERE a.aid = f.aid AND a.type = 2 AND f.wid = %i") % wid)
-	if results.ntuples() == 0: return u"<p>(ei asetettuja lippuja)</p>"
+	if results.ntuples() == 0: return u"<p>(%s)</p>" % _(u"No flags set")
 	retdata = u"<ul>\n"
 	for result in results.getresult():
 		retdata = retdata + (u"<li>%s</li>\n" % unicode(result[0], 'UTF-8'))
@@ -48,12 +50,12 @@ def _string_attribute(db, wid, aid, editable):
 		else: oldval = jotools.escape_form_value(unicode(results.getresult()[0][0], 'UTF-8'))
 		return u'<input type="text" value=%s size="60" name="string%i" />' % (oldval, aid)
 	else:
-		if results.ntuples() == 0 : return u"(ei asetettu)"
+		if results.ntuples() == 0 : return u"(%s)" % _(u'Not set')
 		return unicode(results.getresult()[0][0], 'UTF-8')
 
 def _related_words(db, wid):
 	results = db.query("SELECT related_word FROM related_word WHERE wid = %i" % wid)
-	if results.ntuples() == 0: return u"<p>(ei asetettu)</p>"
+	if results.ntuples() == 0: return u"<p>(%s)</p>" % _(u'Not set')
 	retdata = "<ul>\n"
 	for result in results.getresult():
 		retdata = retdata + ("<li>%s</li>\n" % unicode(result[0], 'UTF-8'))
@@ -67,12 +69,12 @@ def _main_form_start(db, editable):
 
 def _main_form_end(db, wid, editable):
 	if editable:
-		return u'''<p><span class="fheader">Lisää kommentti:</span>
+		return u'''<p><span class="fheader">%s:</span>
 <textarea name="comment" cols="80" rows="5"></textarea></p>
-<p><input type="submit" value="Tallenna muutokset" />
-<input type="reset" value="Peruuta muutokset" />
+<p><input type="submit" value="%s" />
+<input type="reset" value="%s" />
 <input type="hidden" name="wid" value="%i" /></p>
-</form>''' % wid
+</form>''' % (_(u'Add a comment'), _(u'Save changes'), _(u'Cancel changes'), wid)
 	else:
 		return u''
 
@@ -82,7 +84,7 @@ def _message_log(db, wid):
 	                    "FROM appuser u, event e " +
 	                    "WHERE u.uid = e.euser AND e.eword = %i ORDER BY e.etime") % wid)
 	if results.ntuples() == 0:
-		return u'<p>(ei muutostietoja)</p>'
+		return u'<p>(%s)</p>' % _(u'No changelog')
 	retstr = u""
 	for result in results.getresult():
 		date = result[1]
@@ -108,19 +110,19 @@ def _flag_edit_form(db, wid, classid):
 	                    "LEFT OUTER JOIN flag_attribute_value fav ON (a.aid = fav.aid and fav.wid = %i) " +
 	                    "WHERE a.aid = ac.aid AND ac.classid = %i AND a.type = 2" +
 			"ORDER BY a.descr") % (wid, classid))
-	if results.ntuples() == 0: return u"(ei asetettavissa olevia lippuja)"
+	if results.ntuples() == 0: return u"(%s)" % _(u'No flags available')
 	retstr = u'<form method="post" action="flags"><p>\n'
 	for result in results.getresult():
 		retstr = retstr + u'<label><input type="checkbox" value="on" name="attr%i"' % result[0]
 		if result[2] == 't': retstr = retstr + u' checked="checked"'
 		retstr = retstr + u' />' + jotools.escape_html(unicode(result[1], 'UTF-8'))
 		retstr = retstr + u'</label><br />\n'
-	retstr = retstr + u'<input type="hidden" name="wid" value="%i" /></p>\n' % wid + \
-	                  u'<p><span class="fheader">Lisää kommentti:</span>\n' + \
-	                  u'<textarea name="comment" cols="80" rows="5"></textarea></p>\n' + \
-	                  u'<p><input type="submit" value="Tallenna muutokset" />\n' + \
-	                  u'<input type="reset" value="Peruuta muutokset" />\n' + \
-	                  u'</p></form>'
+	retstr = retstr + u''''<input type="hidden" name="wid" value="%i" /></p>
+<p><span class="fheader">%s:</span>
+<textarea name="comment" cols="80" rows="5"></textarea></p>
+<p><input type="submit" value="%s" />
+<input type="reset" value="%s" />
+u'</p></form>''' % (wid, _(u'Add a comment'), _(u'Save changes'), _(u'Cancel changes'))
 	return retstr
 
 def _rwords_edit_form(db, wid):
@@ -128,21 +130,22 @@ def _rwords_edit_form(db, wid):
 	                    "WHERE r.wid = %i ORDER BY r.related_word") % wid)
 	retstr = u'<form method="post" action="rwords">\n'
 	if results.ntuples() > 0:
-		retstr = retstr + u'<h2>Poista kirjoitusasuja</h2>\n<p>\n'
+		retstr = retstr + u'<h2>%s</h2>\n<p>\n' % _(u'Remove alternative forms')
 	for result in results.getresult():
 		retstr = retstr + u'<label><input type="checkbox" value="on" name="rword%i" />' % result[0]
 		retstr = retstr + jotools.escape_html(unicode(result[1], 'UTF-8'))
 		retstr = retstr + u'</label><br />\n'
 	if results.ntuples() > 0:
 		retstr = retstr + u'</p>\n'
-	retstr = retstr + u'<p><span class="fheader">Lisää kirjoitusasuja</span>\n' + \
-	                  u'<input type="text" size="80" name="add" /></p>\n' + \
-	                  u'<p><span class="fheader">Lisää kommentti:</span>\n' + \
-	                  u'<textarea name="comment" cols="80" rows="5"></textarea></p>\n' + \
-	                  u'<p><input type="hidden" name="wid" value="%i" />\n' % wid + \
-	                  u'<input type="submit" value="Tallenna muutokset" />\n' + \
-	                  u'<input type="reset" value="Peruuta muutokset" /></p>\n' + \
-	                  u'</form>'
+	retstr = retstr + u'''<p><span class="fheader">%s</span>
+<input type="text" size="80" name="add" /></p>
+<p><span class="fheader">%s:</span>
+<textarea name="comment" cols="80" rows="5"></textarea></p>
+<p><input type="hidden" name="wid" value="%i" />
+<input type="submit" value="%s" />
+<input type="reset" value="%s" /></p>
+</form>''' % (_(u'Add alternative forms'), _(u'Add a comment'), wid, _(u'Save changes'),
+              _(u'Cancel changes'))
 	return retstr
 
 def _wiki_link(db, wikiattr, wid, word):
@@ -151,44 +154,44 @@ def _wiki_link(db, wikiattr, wid, word):
 	if results.ntuples() > 0: wikiword = unicode(results.getresult()[0][0], 'UTF-8')
 	else: wikiword = word
 	wikiurl = _config.WIKI_URL + wikiword
-	return u'<a href=%s>Sana wikissä</a>' % jotools.escape_form_value(wikiurl) 
+	return u'<a href=%s>%s</a>' % (jotools.escape_form_value(wikiurl), _(u'Word in Wiki')) 
 
 def call(db, funcname, paramlist):
 	if funcname == 'word_class':
-		if len(paramlist) != 1: return u"Error: 1 parameter expected"
+		if len(paramlist) != 1: return _(u"Error: 1 parameter expected")
 		return _word_class(db, paramlist[0])
 	if funcname == 'word_inflection':
-		if len(paramlist) != 3: return u"Error: 3 parameters expected"
+		if len(paramlist) != 3: return _(u"Error: %i parameters expected" % 3)
 		return _apply_config.joeditors_word_inflection(db, paramlist[0],
 		                                               paramlist[1], paramlist[2])
 	if funcname == 'flag_attributes':
-		if len(paramlist) != 1: return u"Error: 1 parameter expected"
+		if len(paramlist) != 1: return _(u"Error: 1 parameter expected")
 		return _flag_attributes(db, paramlist[0])
 	if funcname == 'string_attribute':
-		if len(paramlist) != 3: return u"Error: 3 parameters expected"
+		if len(paramlist) != 3: return _(u"Error: %i parameters expected" % 3)
 		return _string_attribute(db, paramlist[0], paramlist[1], paramlist[2])
 	if funcname == 'related_words':
-		if len(paramlist) != 1: return u"Error: 1 parameter expected"
+		if len(paramlist) != 1: return _(u"Error: 1 parameter expected")
 		return _related_words(db, paramlist[0])
 	if funcname == 'login_logout':
-		if len(paramlist) != 3: return u"Error: 3 parameters expected"
+		if len(paramlist) != 3: return _(u"Error: %i parameters expected" % 3)
 		return joindex.login_logout(db, paramlist[0], paramlist[1], paramlist[2])
 	if funcname == 'main_form_start':
-		if len(paramlist) != 1: return u"Error: 1 parameter expected"
+		if len(paramlist) != 1: return _(u"Error: 1 parameter expected")
 		return _main_form_start(db, paramlist[0])
 	if funcname == 'main_form_end':
-		if len(paramlist) != 2: return u"Error: 2 parameters expected"
+		if len(paramlist) != 2: return _(u"Error: %i parameters expected" % 2)
 		return _main_form_end(db, paramlist[0], paramlist[1])
 	if funcname == 'message_log':
-		if len(paramlist) != 1: return u"Error: 1 parameter expected"
+		if len(paramlist) != 1: return _(u"Error: 1 parameter expected")
 		return _message_log(db, paramlist[0])
 	if funcname == 'flag_edit_form':
-		if len(paramlist) != 2: return u"Error: 2 parameters expected"
+		if len(paramlist) != 2: return _(u"Error: %i parameters expected" % 2)
 		return _flag_edit_form(db, paramlist[0], paramlist[1])
 	if funcname == 'rwords_edit_form':
-		if len(paramlist) != 1: return u"Error: 1 parameter expected"
+		if len(paramlist) != 1: return _(u"Error: 1 parameter expected")
 		return _rwords_edit_form(db, paramlist[0])
 	if funcname == 'wiki_link':
-		if len(paramlist) != 3: return u"Error: 3 parameters expected"
+		if len(paramlist) != 3: return _(u"Error: %i parameters expected" % 3)
 		return _wiki_link(db, paramlist[0], paramlist[1], paramlist[2])
-	return u"Error: unknown function"
+	return _(u"Error: unknown function")

@@ -30,6 +30,8 @@ import _config
 import _apply_config
 from xml.sax import saxutils
 
+_ = _apply_config.translation.ugettext
+
 def _call_handler(db, module, funcname, paramlist):
 	if module == 'joeditors':
 		import joeditors
@@ -37,7 +39,7 @@ def _call_handler(db, module, funcname, paramlist):
 	if module == 'joindex':
 		import joindex
 		return joindex.call(db, funcname, paramlist)
-	return u"Error: unknown module"
+	return _(u"Error: unknown module")
 
 def toint(string):
 	if string.isdigit(): return int(string)
@@ -68,8 +70,8 @@ def errormsg(req, error):
 
 # Processes the given page template and writes the content to request req
 def process_template(req, db, static_vars, template_name, lang, module):
-	tmplfilename = _config.INSTALLATION_DIRECTORY + '/templates/' + \
-	               template_name + '_' + lang + '.txt'
+	tmplfilename = _config.INSTALLATION_DIRECTORY + '/langpacks/' + \
+	               lang + '/' + template_name + '.txt'
 	tmplfile = codecs.open(tmplfilename, 'r', 'utf-8')
 	var_re = re.compile("^(.*)\\$\\$(.*)\\$\\$(.*)$")
 	func_re = re.compile("^(.*)\\((.*)\\)$")

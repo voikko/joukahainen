@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joukahainen\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-14 13:46+0300\n"
-"PO-Revision-Date: 2006-08-14 13:52+0300\n"
+"POT-Creation-Date: 2006-08-15 14:42+0300\n"
+"PO-Revision-Date: 2006-08-15 14:45+0300\n"
 "Last-Translator: Harri Pitkänen <hatapitk@iki.fi>\n"
 "Language-Team: Finnish\n"
 "MIME-Version: 1.0\n"
@@ -115,7 +115,7 @@ msgid "Word"
 msgstr "Sana"
 
 #: wwwroot/word.py:436 wwwroot/word.py:468 wwwroot/word.py:517
-#: wwwroot/word.py:528
+#: wwwroot/word.py:528 pylib/joeditors.py:33
 msgid "Word class"
 msgstr "Sanaluokka"
 
@@ -220,4 +220,72 @@ msgstr "Käyttäjänimi on jo käytössä"
 #: wwwroot/user.py:155
 msgid "New user was added succesfully"
 msgstr "Uuden käyttäjän lisäys onnistui"
+
+#: wwwroot/_apply_config.py:39
+msgid "Inflections are not available for this language"
+msgstr "Taivutustietoja ei ole saatavilla tälle kielelle"
+
+#: pylib/jotools.py:42
+msgid "Error: unknown module"
+msgstr "Virhe: tuntematon moduuli"
+
+#: pylib/joeditors.py:32
+#, python-format
+msgid "Error: word class %i does not exist"
+msgstr "Virhe: sanaluokkaa %i ei ole olemassa"
+
+#: pylib/joeditors.py:39
+msgid "No flags set"
+msgstr "Ei asetettuja lippuja"
+
+#: pylib/joeditors.py:53 pylib/joeditors.py:58
+msgid "Not set"
+msgstr "Ei asetettu"
+
+#: pylib/joeditors.py:77 pylib/joeditors.py:125 pylib/joeditors.py:147
+msgid "Add a comment"
+msgstr "Lisää kommentti"
+
+#: pylib/joeditors.py:77 pylib/joeditors.py:125 pylib/joeditors.py:147
+msgid "Save changes"
+msgstr "Tallenna muutokset"
+
+#: pylib/joeditors.py:77 pylib/joeditors.py:125 pylib/joeditors.py:148
+msgid "Cancel changes"
+msgstr "Peruuta muutokset"
+
+#: pylib/joeditors.py:87
+msgid "No changelog"
+msgstr "Ei muutostietoja"
+
+#: pylib/joeditors.py:113
+msgid "No flags available"
+msgstr "Lippuja ei ole olemassa"
+
+#: pylib/joeditors.py:133
+msgid "Remove alternative forms"
+msgstr "Poista kirjoitusasuja"
+
+#: pylib/joeditors.py:147
+msgid "Add alternative forms"
+msgstr "Lisää kirjoitusasuja"
+
+#: pylib/joeditors.py:157
+msgid "Word in Wiki"
+msgstr "Sana Wikissä"
+
+#: pylib/joeditors.py:161 pylib/joeditors.py:168 pylib/joeditors.py:174
+#: pylib/joeditors.py:180 pylib/joeditors.py:186 pylib/joeditors.py:192
+msgid "Error: 1 parameter expected"
+msgstr "Virhe: tarvitaan 1 parametri"
+
+#: pylib/joeditors.py:164 pylib/joeditors.py:171 pylib/joeditors.py:177
+#: pylib/joeditors.py:183 pylib/joeditors.py:189 pylib/joeditors.py:195
+#, python-format
+msgid "Error: %i parameters expected"
+msgstr "Virhe: tarvitaan %i parametriä"
+
+#: pylib/joeditors.py:197
+msgid "Error: unknown function"
+msgstr "Virhe: tuntematon funktio"
 

@@ -17,12 +17,12 @@
 
 # Makefile for updating the translations etc.
 
-SOURCES_TO_TRANSLATE := wwwroot/word.py wwwroot/user.py wwwroot/_apply_config.py
-LINGUAS := $(patsubst langpacks/%/messages.po,%,$(wildcard langpacks/*/messages.po))
+SOURCES_TO_TRANSLATE := wwwroot/word.py wwwroot/user.py wwwroot/_apply_config.py \
+	pylib/jotools.py pylib/joeditors.py
 POTFILE := transl/joukahainen.pot
 
 
-
+LINGUAS := $(patsubst langpacks/%/messages.po,%,$(wildcard langpacks/*/messages.po))
 POFILES := $(patsubst %,transl/%.po,$(LINGUAS))
 MOFILES := $(patsubst %,transl/%/LC_MESSAGES/joukahainen.mo,$(LINGUAS))
 
