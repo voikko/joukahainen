@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joukahainen\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-15 14:42+0300\n"
-"PO-Revision-Date: 2006-08-15 14:45+0300\n"
+"POT-Creation-Date: 2006-08-16 11:31+0300\n"
+"PO-Revision-Date: 2006-08-16 11:33+0300\n"
 "Last-Translator: Harri Pitkänen <hatapitk@iki.fi>\n"
 "Language-Team: Finnish\n"
 "MIME-Version: 1.0\n"
@@ -220,6 +220,34 @@ msgstr "Käyttäjänimi on jo käytössä"
 #: wwwroot/user.py:155
 msgid "New user was added succesfully"
 msgstr "Uuden käyttäjän lisäys onnistui"
+
+#: wwwroot/user.py:161 wwwroot/user.py:180
+msgid "You must be logged in to do this"
+msgstr "Tämä toiminto toimii vain kirjautuneilla käyttäjillä"
+
+#: wwwroot/user.py:163 wwwroot/user.py:173
+msgid "Change password"
+msgstr "Vaihda salasana"
+
+#: wwwroot/user.py:173
+msgid "Old password"
+msgstr "Vanha salasana"
+
+#: wwwroot/user.py:173
+msgid "New password"
+msgstr "Uusi salasana"
+
+#: wwwroot/user.py:185
+msgid "Required field is missing"
+msgstr "Pakollinen kenttä puuttuu"
+
+#: wwwroot/user.py:192
+msgid "Incorrect old password"
+msgstr "Vanha salasana on väärin"
+
+#: wwwroot/user.py:196
+msgid "Password was changed succesfully"
+msgstr "Salasanan vaihto onnistui"
 
 #: wwwroot/_apply_config.py:39
 msgid "Inflections are not available for this language"

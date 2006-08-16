@@ -154,3 +154,44 @@ def add(req):
 		values['firstname'], values['lastname'], values['email']))
 	joheaders.ok_page(req, _(u'New user was added succesfully'))
 	return '\n'
+
+def passwdform(req):
+	(uid, uname, editable) = jotools.get_login_user(req)
+	if uid == None:
+		joheaders.error_page(req, _(u'You must be logged in to do this'))
+		return '\n'
+	joheaders.page_header(req, u'Joukahainen -&gt; ' + _(u'Change password'))
+	jotools.write(req, u'''
+<h1>Joukahainen -&gt; %s</h1>
+<form method="post" action="changepasswd">
+<table>
+<tr><td>%s</td><td><input type="password" name="oldpw" /></td></tr>
+<tr><td>%s</td><td><input type="password" name="newpw" /></td></tr>
+</table>
+<input type="submit" value="%s" />
+</form>
+'''        % (_(u'Change password'), _(u'Old password'), _(u'New password'), _(u'Change password')))
+	joheaders.page_footer(req)
+	return "</html>\n"
+
+def changepasswd(req):
+	(uid, uname, editable) = jotools.get_login_user(req)
+	if uid == None:
+		joheaders.error_page(req, _(u'You must be logged in to do this'))
+		return '\n'
+	oldpw = jotools.get_param(req, 'oldpw', u'')
+	newpw = jotools.get_param(req, 'newpw', u'')
+	if oldpw == u'' or newpw == u'':
+		joheaders.error_page(req, _(u'Required field is missing'))
+		return '\n'
+	oldpwhash = sha.new((_config.PW_SALT + oldpw).encode('UTF-8')).hexdigest()
+	db = jodb.connect_private()
+	results = db.query(("select uid from appuser where uid = %i and pwhash = '%s'") \
+	                   % (uid, oldpwhash))
+	if results.ntuples() == 0:
+		joheaders.error_page(req, _(u"Incorrect old password"))
+		return '\n'
+	newpwhash = sha.new((_config.PW_SALT + newpw).encode('UTF-8')).hexdigest()
+	db.query("update appuser set pwhash = '%s' where uid = %i" % (newpwhash, uid))
+	joheaders.ok_page(req, _(u'Password was changed succesfully'))
+	return '\n'

@@ -44,6 +44,7 @@ ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki
 <h2>Käyttäjänhallinta</h2>
 <ul>
 <li><a href="user/addform">Lisää käyttäjä</a></li>
+<li><a href="user/passwdform">Vaihda salasanasi</a></li>
 </ul>
 <div class="clear"></div>
 </div>
