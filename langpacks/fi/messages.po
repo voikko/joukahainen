@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joukahainen\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-16 11:31+0300\n"
-"PO-Revision-Date: 2006-08-16 11:33+0300\n"
+"POT-Creation-Date: 2006-08-17 13:32+0300\n"
+"PO-Revision-Date: 2006-08-17 13:33+0300\n"
 "Last-Translator: Harri Pitkänen <hatapitk@iki.fi>\n"
 "Language-Team: Finnish\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,8 @@ msgstr ""
 "X-Generator: KBabel 1.11.2\n"
 
 #: wwwroot/word.py:36 wwwroot/word.py:61 wwwroot/word.py:130
-#: wwwroot/word.py:204
+#: wwwroot/word.py:204 wwwroot/task.py:70 wwwroot/task.py:112
+#: wwwroot/task.py:132
 #, python-format
 msgid "Parameter %s is required"
 msgstr "Parametri %s on pakollinen"
@@ -29,13 +30,14 @@ msgid "Word %i does not exist"
 msgstr "Sanaa %i ei ole olemassa"
 
 #: wwwroot/word.py:54 wwwroot/word.py:482 wwwroot/user.py:40
-#: wwwroot/user.py:89
+#: wwwroot/user.py:89 wwwroot/task.py:128
 msgid "Only POST requests are allowed"
 msgstr "Vain POST-pyynnöt ovat sallittuja"
 
 #: wwwroot/word.py:58 wwwroot/word.py:127 wwwroot/word.py:201
 #: wwwroot/word.py:404 wwwroot/word.py:458 wwwroot/word.py:478
-#: wwwroot/word.py:539
+#: wwwroot/word.py:539 wwwroot/task.py:66 wwwroot/task.py:108
+#: wwwroot/task.py:125
 msgid "You are not allowed to edit data"
 msgstr "Sinulla ei ole oikeutta tietojen muuttamiseen"
 
@@ -110,7 +112,7 @@ msgid "Add words"
 msgstr "Lisää sanoja"
 
 #: wwwroot/word.py:436 wwwroot/word.py:468 wwwroot/word.py:517
-#: wwwroot/word.py:528
+#: wwwroot/word.py:528 wwwroot/task.py:88
 msgid "Word"
 msgstr "Sana"
 
@@ -160,7 +162,7 @@ msgstr "Valitse kategoria, josta haluat lisätä sanoja"
 msgid "Category"
 msgstr "Kategoria"
 
-#: wwwroot/word.py:553
+#: wwwroot/word.py:553 wwwroot/task.py:46
 msgid "Words left"
 msgstr "Sanoja jäljellä"
 
@@ -196,7 +198,7 @@ msgstr "Etunimi"
 msgid "Last name"
 msgstr "Sukunimi"
 
-#: wwwroot/user.py:122
+#: wwwroot/user.py:122 pylib/joindex.py:39
 msgid "Username"
 msgstr "Käyttäjätunnus"
 
@@ -204,7 +206,7 @@ msgstr "Käyttäjätunnus"
 msgid "Email address"
 msgstr "Sähköpostiosoite"
 
-#: wwwroot/user.py:123
+#: wwwroot/user.py:123 pylib/joindex.py:39
 msgid "Password"
 msgstr "Salasana"
 
@@ -248,6 +250,46 @@ msgstr "Vanha salasana on väärin"
 #: wwwroot/user.py:196
 msgid "Password was changed succesfully"
 msgstr "Salasanan vaihto onnistui"
+
+#: wwwroot/task.py:40
+msgid "There are no tasks."
+msgstr "Tehtäviä ei ole"
+
+#: wwwroot/task.py:42
+msgid "tasks"
+msgstr "tehtävät"
+
+#: wwwroot/task.py:43
+msgid "Choose a task"
+msgstr "Valitse tehtävä"
+
+#: wwwroot/task.py:46
+msgid "Task"
+msgstr "Tehtävä"
+
+#: wwwroot/task.py:46
+msgid "Total words"
+msgstr "Sanoja yhteensä"
+
+#: wwwroot/task.py:46
+msgid "Completed"
+msgstr "Valmiina"
+
+#: wwwroot/task.py:59
+msgid "Number of words left is an estimate"
+msgstr "Jäljellä olevien sanojen määrä on arvio"
+
+#: wwwroot/task.py:84 wwwroot/task.py:114
+msgid "task"
+msgstr "tehtävä"
+
+#: wwwroot/task.py:88
+msgid "OK"
+msgstr "OK"
+
+#: wwwroot/task.py:100
+msgid "Save checked"
+msgstr "Tallenna tarkistetut"
 
 #: wwwroot/_apply_config.py:39
 msgid "Inflections are not available for this language"
@@ -313,7 +355,40 @@ msgstr "Virhe: tarvitaan 1 parametri"
 msgid "Error: %i parameters expected"
 msgstr "Virhe: tarvitaan %i parametriä"
 
-#: pylib/joeditors.py:197
+#: pylib/joeditors.py:197 pylib/joindex.py:51
 msgid "Error: unknown function"
 msgstr "Virhe: tuntematon funktio"
+
+#: pylib/joindex.py:39
+msgid "Log in"
+msgstr "Kirjaudu sisään"
+
+#: pylib/joindex.py:45
+msgid "Log out user"
+msgstr "Kirjaa ulos käyttäjä"
+
+#: pylib/joindex.py:49
+msgid "Error: % parameters expected"
+msgstr "Virhe: tarvitaan %i parametriä"
+
+#: pylib/joheaders.py:69
+#, python-format
+msgid "Redirecting to %s"
+msgstr "Uudelleenohjataan osoitteeseen %s"
+
+#: pylib/joheaders.py:72
+msgid "error"
+msgstr "virhe"
+
+#: pylib/joheaders.py:73
+msgid "Error"
+msgstr "Virhe"
+
+#: pylib/joheaders.py:77 pylib/joheaders.py:78
+msgid "operation succeeded"
+msgstr "toiminto suoritettu"
+
+#: pylib/joheaders.py:80
+msgid "Back to front page"
+msgstr "Takaisin aloitussivulle"
 

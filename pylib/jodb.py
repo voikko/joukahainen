@@ -22,6 +22,8 @@
 import _pg
 import _config
 
+# No translatable strings
+
 def connect():
 	return _pg.connect(
 		host=_config.DBHOST,

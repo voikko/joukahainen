@@ -26,6 +26,8 @@ import joheaders
 import jotools
 import jodb
 
+# No translatable strings
+
 def index(req):
 	db = jodb.connect()
 	(uid, uname, editable) = jotools.get_login_user(req)

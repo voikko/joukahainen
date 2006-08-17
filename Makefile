@@ -17,8 +17,8 @@
 
 # Makefile for updating the translations etc.
 
-SOURCES_TO_TRANSLATE := wwwroot/word.py wwwroot/user.py wwwroot/_apply_config.py \
-	pylib/jotools.py pylib/joeditors.py
+SOURCES_TO_TRANSLATE := wwwroot/word.py wwwroot/user.py wwwroot/task.py wwwroot/_apply_config.py \
+	pylib/jotools.py pylib/joeditors.py pylib/joindex.py pylib/joheaders.py
 POTFILE := transl/joukahainen.pot
 
 

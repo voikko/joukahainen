@@ -21,8 +21,11 @@
 
 import mod_python.apache
 import _config
+import _apply_config
 import jotools
 import joindex
+
+_ = _apply_config.translation.ugettext
 
 def page_header(req, title):
 	req.content_type = "text/html; charset=UTF-8"
@@ -63,18 +66,18 @@ def redirect_header(req, location):
 	req.headers_out['location'] = location_s
 	req.status = mod_python.apache.HTTP_MOVED_TEMPORARILY
 	req.send_http_header()
-	req.write("Redirecting to %s" % location_s)
+	jotools.write(req, _(u"Redirecting to %s") % location_s)
 
 def error_page(req, errortext):
-	page_header(req, u'Joukahainen: virhe')
-	req.write((u'<h1>Virhe</h1><p>%s</p>\n' % errortext).encode('UTF-8'))
+	page_header(req, u'Joukahainen: %s' % _(u'error'))
+	jotools.write(req, u'<h1>%s</h1><p>%s</p>\n' % (_(u'Error'), errortext))
 	page_footer(req)
 
 def ok_page(req, message):
-	page_header(req, u'Joukahainen: toiminto suoritettu')
-	req.write((u'<h1>Toiminto suoritettu</h1><p>%s</p>\n' % message).encode('UTF-8'))
-	req.write((u'<p><a href="%s">Takaisin aloitussivulle ...</a></p>\n' \
-	           % _config.WWW_ROOT_DIR).encode('UTF-8'))
+	page_header(req, u'Joukahainen: %s' % _(u'operation succeeded'))
+	jotools.write(req, u'<h1>%s</h1><p>%s</p>\n' % (_(u'operation succeeded'), message))
+	jotools.write(req, u'<p><a href="%s">%s ...</a></p>\n' \
+	           % (_(u'Back to front page'), _config.WWW_ROOT_DIR))
 	page_footer(req)
 	req.write('\n</html>')
 

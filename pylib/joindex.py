@@ -23,26 +23,29 @@ import hfaffix
 import hfutils
 import types
 import _config
+import _apply_config
+
+_ = _apply_config.translation.ugettext
 
 def login_logout(db, uid, uname, wid):
 	if uid == None:
 		return u"""
 <form method="post" action="%s/user/login"><p>
-<label>Käyttäjätunnus: <input type="text" name="username" /></label>&nbsp;
-<label>Salasana: <input type="password" name="password" /></label>&nbsp;
+<label>%s: <input type="text" name="username" /></label>&nbsp;
+<label>%s: <input type="password" name="password" /></label>&nbsp;
 <input type="hidden" name="wid" value="%i" />
-<input type="submit" value="Kirjaudu sisään" />
+<input type="submit" value="%s" />
 </p></form>
-""" % (_config.WWW_ROOT_DIR, wid)
+""" % (_config.WWW_ROOT_DIR, _(u'Username'), _(u'Password'), wid, _(u'Log in'))
 	return u"""
 <form method="post" action="%s/user/logout"><p>
 <input type="hidden" name="wid" value="%i" />
-<input type="submit" value="Kirjaa ulos käyttäjä %s" />
+<input type="submit" value="%s %s" />
 </p></form>
-""" % (_config.WWW_ROOT_DIR, wid, uname)
+""" % (_config.WWW_ROOT_DIR, wid, _(u'Log out user'), uname)
 
 def call(db, funcname, paramlist):
 	if funcname == 'login_logout':
-		if len(paramlist) != 3: return u"Error: 3 parameter expected"
+		if len(paramlist) != 3: return _(u"Error: % parameters expected" % 3)
 		return login_logout(db, paramlist[0], paramlist[1], paramlist[2])
-	return u"Error: unknown function"
+	return _(u"Error: unknown function")
