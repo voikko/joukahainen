@@ -99,6 +99,8 @@ def show(req):
 	jotools.write(req, u'<p><input type="hidden" name="tid" value="%i" />' % tid)
 	jotools.write(req, u'<input type="submit" value="%s"></form></p>' % _(u'Save checked'))
 	jotools.write(req, u'</div>')
+	jotools.write(req, u'<p><a href="../" target="_top">%s</a></p>\n' \
+	                   %_(u'Back to main page'))
 	joheaders.page_footer(req)
 	return '</html>\n'
 

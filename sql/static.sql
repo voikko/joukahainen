@@ -7,6 +7,8 @@ DELETE FROM related_word;
 DELETE FROM flag_attribute_value;
 DELETE FROM string_attribute_value;
 DELETE FROM event;
+DELETE FROM task_word;
+DELETE FROM task;
 DELETE FROM word;
 DELETE FROM attribute_class;
 DELETE FROM attribute;
@@ -111,6 +113,12 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(28, 'fi.wiktionary.org'
 INSERT INTO attribute_class(aid, classid) VALUES(28, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(28, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(28, 3);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(29, 'vain yhdyssanan jälkiosana', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(29, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(29, 2);
+INSERT INTO attribute_class(aid, classid) VALUES(29, 3);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(30, 'ei mAinen -johdosta', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(30, 1);
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
 -- Test user, password 'testi'

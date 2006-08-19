@@ -117,12 +117,12 @@ def _flag_edit_form(db, wid, classid):
 		if result[2] == 't': retstr = retstr + u' checked="checked"'
 		retstr = retstr + u' />' + jotools.escape_html(unicode(result[1], 'UTF-8'))
 		retstr = retstr + u'</label><br />\n'
-	retstr = retstr + u''''<input type="hidden" name="wid" value="%i" /></p>
+	retstr = retstr + u'''<input type="hidden" name="wid" value="%i" /></p>
 <p><span class="fheader">%s:</span>
 <textarea name="comment" cols="80" rows="5"></textarea></p>
 <p><input type="submit" value="%s" />
 <input type="reset" value="%s" />
-u'</p></form>''' % (wid, _(u'Add a comment'), _(u'Save changes'), _(u'Cancel changes'))
+</p></form>''' % (wid, _(u'Add a comment'), _(u'Save changes'), _(u'Cancel changes'))
 	return retstr
 
 def _rwords_edit_form(db, wid):

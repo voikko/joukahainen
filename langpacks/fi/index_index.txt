@@ -7,8 +7,9 @@ Joukahainen: aloitus
 </div>
 <div class="main">
 <div class="rightinfo">
-<p>Tämä testiasennus sisältää Suomi-malagan oikolukuversiosta ("Voikko edition") otetun noin 19000 sanan
-otoksen. Aineiston tekijänoikeudet kuuluvat Hannu Väisäselle ja muille Hunspell-fi -projektiin osallistuneille,
+<p>Tämä Joukahaisen asennus sisältää Suomi-malagan oikolukuversion ("Voikko edition") substantiivit,
+adjektiivit ja verbit.
+Aineiston tekijänoikeudet kuuluvat Hannu Väisäselle ja muille Hunspell-fi -projektiin osallistuneille,
 ja sitä voi käyttää ja levittää
 <a href="http://www.gnu.org/licenses/gpl.html">GPL-lisenssin</a> ehdoilla. Sovelluksen sellainen käyttö,
 johon ei liity aineiston kopioimista, on sallittu ilman rajoituksia. Tietokannan sisältö on ladattavissa
@@ -50,12 +51,12 @@ ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki
 </div>
 
 <div class="bottominfo">
-<p>Tervetuloa käyttämään sanastonhallintasovellus Joukahaista! <strong>Tämä on testiasennus</strong>,
-dokumentaatiota ja
-ominaisuuksia lisätään vähitellen aina elokuun loppuun saakka. Sovelluksen kautta voi kuka tahansa selata
-siihen tallennettua sanastoa vapaasti, mutta muutosten tekeminen vaatii käyttäjätunnuksen.
-Tämä testiasennus siirtyy tuotantokäyttöön kesän aikana.</p>
+<p>Tervetuloa käyttämään sanastonhallintasovellus Joukahaista! Tämä asennus on osittaisessa
+tuotantokäytössä, dokumentaatiota ja
+ominaisuuksia lisätään kuitenkin edelleen. Sovelluksen kautta voi kuka tahansa selata
+siihen tallennettua sanastoa vapaasti, mutta muutosten tekeminen vaatii käyttäjätunnuksen.</p>
 <h2>Muutoshistoria</h2>
+<p>2006-08-20: kolmas testiasennus, osa ominaisuuksista on jo tuotantokäytössä</p>
 <p>2006-08-03: ohjelmapäivitys SVN:stä, ei muutoksia tietokantaan</p>
 <p>2006-08-02: toinen testiasennus</p>
 <p>2006-06-21: ensimmäinen testiasennus</p>
