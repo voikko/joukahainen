@@ -135,9 +135,12 @@ def add(req):
 		values[datafield] = jotools.get_param(req, datafield, u'')
 		if datafield != 'passwd':
 			values[datafield] = jotools.escape_sql_string(values[datafield])
-		if datafield != 'email' and values[datafield] == u'':
+		if datafield not in ['email', 'passwd'] and values[datafield] == '':
 			joheaders.error_page(req, _(u'Required field %s is missing') % datafield)
 			return '\n'
+	if values['passwd'] == u'':
+		joheaders.error_page(req, _(u'Required field %s is missing') % u'passwd')
+		return '\n'
 	pwhash = sha.new((_config.PW_SALT + values['passwd']).encode('UTF-8')).hexdigest()
 	privdb = jodb.connect_private()
 	newuid = privdb.query("SELECT nextval('appuser_uid_seq')").getresult()[0][0]
