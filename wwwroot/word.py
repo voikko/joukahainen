@@ -524,7 +524,7 @@ Make the required changes and mark the words that you still want to add.''') + u
 	else:
 		jotools.write(req, u'<p>%s:</p>' % _(u'The following changes were made'))
 		jotools.write(req,
-		  u'<table class="border"><tr><th>%s</th><th>%s</th><th></th></tr>\n' \
+		  u'<table class="border"><tr><th>%s</th><th>%s</th><th>%s</th></tr>\n' \
 		  % (_(u'Word'), _(u'Word class'), _(u'Notes')))
 		_add_entry_fields(req, db, nwordlist, None)
 		jotools.write(req, u'</table>\n')
