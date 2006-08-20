@@ -77,7 +77,7 @@ def ok_page(req, message):
 	page_header(req, u'Joukahainen: %s' % _(u'operation succeeded'))
 	jotools.write(req, u'<h1>%s</h1><p>%s</p>\n' % (_(u'operation succeeded'), message))
 	jotools.write(req, u'<p><a href="%s">%s ...</a></p>\n' \
-	           % (_config.WWW_ROOT_DIR, _(u'Back to front page')))
+	           % (_config.WWW_ROOT_DIR + '/', _(u'Back to front page')))
 	page_footer(req)
 	req.write('\n</html>')
 
