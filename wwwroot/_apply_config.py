@@ -34,6 +34,8 @@ _ = translation.ugettext
 import functions
 
 jotools_checkword = functions.checkword
+jooutput_list_supported_types = functions.jooutput_list_supported_types
+jooutput_call = functions.jooutput_call
 
 def _default_word_inflection(db, wid, word, classid):
 	return u"(%s)" % _(u"Inflections are not available for this language")

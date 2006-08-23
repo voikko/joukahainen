@@ -101,3 +101,16 @@ def word_inflection(db, wid, word, classid):
 			     % (tableid, tableid + u'a')
 	table_header = table_header + u'Taivutus</th></tr>\n'
 	return table_header + retdata + u'</table>\n'
+
+# Lists the language specific output types. This is a mandatory function
+def jooutput_list_supported_types():
+	types = []
+	types.append(('malaga', u'Tulosta Suomi-malagan käyttämässä muodossa'))
+	return types
+
+# Language specific list output. This is a mandatory functions
+def jooutput_call(req, outputtype, db, query):
+	if outputtype == 'malaga':
+		_jooutput_malaga(req, db, query)
+	else:
+		joheaders.error_page(req, _(u'Unsupported output type'))

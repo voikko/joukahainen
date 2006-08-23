@@ -25,63 +25,52 @@ import sys
 import _apply_config
 import joheaders
 import jotools
+import jooutput
 import jodb
 
-def listwords(req, offset = None, limit = None):
-	joheaders.page_header(req, u'Kaikki sanat')
-	jotools.write(req, u"<h1>Kaikki sanat</h1>\n")
-	db = jodb.connect()
-	
-	if offset == None: offset_s = u'0'
-	else: offset_s = `jotools.toint(offset)`
-	
-	if limit == None: limit_s = u'200'
-	elif jotools.toint(limit) == 0: limit_s = u'ALL'
-	else: limit_s = `jotools.toint(limit)`
-	
-	results = db.query("SELECT w.wid, w.word, c.name FROM word w, wordclass c " +
-	                   "WHERE w.class = c.classid ORDER BY w.word, c.name, w.wid LIMIT %s OFFSET %s" \
-		         % (limit_s, offset_s))
-	if results.ntuples() == 0:
-		jotools.write(req, u"<p>Hakuehdon mukaisia sanoja ei löydy</p>\n")
-	else:
-		jotools.write(req, u"<table><tr><th>Sana</th><th>Sanaluokka</th></tr>\n")
-		for result in results.getresult():
-			jotools.write(req, u"<tr><td><a href=\"../word/edit?wid=%i\">%s</a></td><td>%s</td></tr>\n" %
-			              (result[0], unicode(result[1], 'UTF-8'), unicode(result[2], 'UTF-8')))
-		jotools.write(req, u"</table>\n")
-		if not limit_s == u'ALL' and results.ntuples() == jotools.toint(limit_s):
-			jotools.write(req, (u'<p><a href="listwords?offset=%i&limit=%s">' +
-			              u"Lisää tuloksia ...</a></p>\n") % (int(offset_s)+int(limit_s), limit_s))
+_ = _apply_config.translation.ugettext
+
+def form(req):
+	joheaders.page_header(req, _(u'Search database'))
+	jotools.write(req, u'<form method="get" action="wlist">\n<p>')
+	jotools.write(req, u'<label>%s: <input type="text" name="word" /></label>\n' % _(u'Word'))
+	jotools.write(req, u'<label>%s <input type="checkbox" name="wordre" /></label></p><p>\n' \
+	              % _(u'Use regular expression'))
+	for (tname, tdesc) in jooutput.list_supported_types():
+		if tname == 'html': selected = u'checked="checked"'
+		else: selected = u''
+		jotools.write(req, (u'<label><input type="radio" name="listtype" value="%s" %s>' +
+		                    u'%s</label><br />\n') % (tname, selected, tdesc))
+	jotools.write(req, u'</p><p><input type="submit" value="%s" /><input type="reset" value="%s" /></p>\n' \
+	              % (_(u'Search'), _(u'Reset')))
+	jotools.write(req, u'</form>\n')
 	joheaders.page_footer(req)
 	return "</html>"
 
-def findword(req, word = None, regexp = None):
-	if word == None: 
-		joheaders.error_page(req, u"Parametri word on pakollinen")
-		return "\n"
-	if not jotools.checkre(unicode(word, 'UTF-8')):
-		joheaders.error_page(req, u"Annetussa sanassa on kielletyjä merkkejä")
-		return "\n"
-	word_s = jotools.escape_sql_string(unicode(word, 'UTF-8'))
-	
-	db = jodb.connect()
-	if regexp == 'on': compop = 'SIMILAR TO'
-	else: compop = '='
-	results = db.query(("SELECT w.wid, w.word, c.name FROM word w, wordclass c WHERE w.class = c.classid " +
-	                   "AND w.word %s '%s' ORDER BY w.word, c.name, w.wid") % (compop, word_s))
-	if results.ntuples() == 0:
-		joheaders.error_page(req, u"Annettua sanaa ei löytynyt")
-		return "\n"
-	elif results.ntuples() == 1:
-		joheaders.redirect_header(req, u"../word/edit?wid=%i" % results.getresult()[0][0])
-		return "\n"
+def wlist(req):
+	qselect = "SELECT w.wid, w.word, c.name FROM word w, wordclass c"
+	conditions = []
+	word = jotools.get_param(req, 'word', u'')
+	if word != u'':
+		if not jotools.checkre(word):
+			joheaders.error_page(req, _(u'Word has forbidden characters in it'))
+			return "\n"
+		if jotools.get_param(req, 'wordre', u'') == u'on': compop = 'SIMILAR TO'
+		else: compop = '='
+		conditions.append("w.word %s '%s'" % (compop, jotools.escape_sql_string(word)))
+	# FIXME: user should be able to select the order
+	order = "ORDER BY w.word, c.name, w.wid"
+	# Build the full select clause
+	if len(conditions) == 0:
+		select = qselect + " " + order
+	elif len(conditions) == 1:
+		select = qselect + " WHERE " + conditions[0] + " " + order
 	else:
-		joheaders.page_header(req, u"Hakutulokset")
-		jotools.write(req, "<table><tr><th>Sana</th><th>Sanaluokka</th></tr>\n")
-		for result in results.getresult():
-			jotools.write(req, "<tr><td><a href=\"../word/edit?wid=%i\">%s</a></td><td>%s</td></tr>\n" %
-			              (result[0], unicode(result[1], 'UTF-8'), unicode(result[2], 'UTF-8')))
-		jotools.write(req, "</table>\n")
-	joheaders.page_footer(req)
-	return "</html>"
+		select = qselect + " WHERE " + conditions[0]
+		for condition in conditions[1:]:
+			select = select + " AND " + condition
+		select = select + " " + order
+	
+	outputtype = jotools.get_param(req, "listtype", u'html')
+	jooutput.call(req, outputtype, select)
+	return "\n"
