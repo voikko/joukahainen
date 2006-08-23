@@ -48,8 +48,8 @@ def form(req):
 	return "</html>"
 
 def wlist(req):
-	qselect = "SELECT w.wid, w.word, c.name FROM word w, wordclass c"
-	conditions = []
+	qselect = "SELECT w.wid, w.word, c.name AS classname, w.class FROM word w, wordclass c"
+	conditions = ["w.class = c.classid"]
 	word = jotools.get_param(req, 'word', u'')
 	if word != u'':
 		if not jotools.checkre(word):

@@ -21,6 +21,8 @@
 
 import hfaffix
 import hfutils
+import hfconv
+import time
 import _config
 
 
@@ -102,13 +104,132 @@ def word_inflection(db, wid, word, classid):
 	table_header = table_header + u'Taivutus</th></tr>\n'
 	return table_header + retdata + u'</table>\n'
 
+# Returns tuple (alku, jatko) for given word in Joukahainen
+def _find_malaga_word_class(word, hf_class, hf_histclass, hf_wordclass):
+	# If historical class was set, see first if it can be used in Malaga
+	for histclass in hfconv.histmap:
+		if hf_histclass == histclass[0]:
+			for infclass in hfconv.classmap:
+				for subclass in infclass[2]:
+					if subclass[2] == histclass[1]:
+						alku = hfconv.match_re(word, subclass[1])
+						if alku != None: return (alku, hf_histclass)
+	
+	# No (usable) historical class, use the modern class
+	classparts = hf_class.split(u'-')
+	if len(classparts) == 1:
+		classparts.append(None)
+		gradtypes = [ None ]
+	else:
+		gradtypes = []
+		for grad in hfconv.grads:
+			if grad[2] == classparts[1]: gradtypes.append(grad[1])
+	
+	for infclass in hfconv.classmap:
+		if infclass[0] != classparts[0]: continue
+		for subclass in infclass[2]:
+			if len(subclass) > 3 and not hf_wordclass in subclass[3]: continue
+			if not subclass[0] in gradtypes: continue
+			alku = hfconv.match_re(word, subclass[1])
+			if alku != None: return (alku, subclass[2])
+	
+	return (None, None)
+
+# Returns tuple (luokka, tiedot) for given word in Joukahainen
+def _get_class_and_flags(db, hf_wclass, wid):
+	flags = db.query('SELECT aid FROM flag_attribute_value WHERE wid = %i' % wid)
+	flag_s = u''
+	if hf_wclass == 1: class_s = u'nimisana'
+	elif hf_wclass == 2: class_s = u'laatusana'
+	elif hf_wclass == 3: class_s = u'teonsana'
+	for flag in flags.getresult():
+		if hf_wclass == 2 and flag[0] == 10: class_s = u'nimi_laatusana'
+		elif hf_wclass == 1 and flag[0] == 11: class_s = u'etunimi'
+		elif hf_wclass == 1 and flag[0] == 12: class_s = u'sukunimi'
+		elif hf_wclass == 1 and flag[0] == 13: class_s = u'paikannimi'
+		elif hf_wclass == 1 and flag[0] == 14: class_s = u'nimi'
+		else:
+			for f in hfconv.flagmap:
+				if flag[0] == f[1]: flag_s = flag_s + f[0] + u', '
+	if flag_s == u'': flag_s = None
+	else: flag_s = flag_s[:-2]
+	return (class_s, flag_s)
+
+# Prints a line or lines to be added to Suomi-malaga lexicon for given word
+def _malaga_line(db, req, wid, word, classid, hf_class, hf_histclass):
+	altforms_res = db.query('SELECT related_word FROM related_word WHERE wid = %i' % wid)
+	if altforms_res.ntuples() == 0: altforms = [word]
+	else:
+		altforms = []
+		for res in altforms_res.getresult():
+			altforms.append(unicode(res[0], 'UTF-8'))
+	for altform in altforms:
+		word = altform.replace(u'|', u'')
+		sepind = altform.rfind(u'|')
+		if sepind == -1: word_end = word
+		else: word_end = altform[sepind+1:]
+		if classid in [1, 2, 3]:
+			(alku, jatko) = _find_malaga_word_class(word, hf_class, hf_histclass, classid)
+			if alku == None:
+				jotools.write(req, u"#Malaga class not found for (%s, %i, %s)\n" \
+				              % (word, classid, hf_class))
+				continue
+			vtype = hfutils.vowel_type(word_end)
+			if vtype == hfutils.VOWEL_FRONT: malaga_vtype = u'ä'
+			elif vtype == hfutils.VOWEL_BACK: malaga_vtype = u'a'
+			elif vtype == hfutils.VOWEL_BOTH: malaga_vtype = u'aä'
+			(wclass_s, flags) = _get_class_and_flags(db, classid, wid)
+			if flags == None: flags = u''
+			else: flags = u', tiedot: <%s>' % flags
+			req.write((u'[perusmuoto: "%s", alku: "%s", luokka: %s, jatko: <%s>, äs: %s%s];\n' \
+			          % (word, alku, wclass_s, jatko, malaga_vtype, flags)).encode('UTF-8'))
+
+def _jooutput_malaga(req, db, query):
+	req.content_type = "text/plain"
+	req.send_http_header()
+	req.write(("""# This file is generated for use in Suomi-malaga by
+# vocabulary management application Joukahainen. For information about
+# authors of the program and the data see the application introduction page at
+# http://joukahainen.lokalisointi.org
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# Time of generation: %s
+
+""" % time.strftime("%Y-%m-%d %H:%M:%S %Z")).encode('UTF-8'))
+	results = db.query(("SELECT w.word, w.class, sa.value, w.wid, hc.value FROM string_attribute_value sa, " +
+	"(%s) w LEFT JOIN string_attribute_value hc ON (w.wid = hc.wid AND hc.aid = 16) " +
+	"WHERE w.wid = sa.wid AND sa.aid = 1 AND sa.value != 'poikkeava' " +
+	"ORDER BY w.word, w.class, w.wid") % query)
+	for result in results.getresult():
+		wid = result[3]
+		word = unicode(result[0], 'UTF-8')
+		classid = result[1]
+		if result[2] == None: continue
+		hf_class = unicode(result[2], 'UTF-8')
+		if result[4] == None: hf_histclass = None
+		else: hf_histclass = unicode(result[4], 'UTF-8')
+		_malaga_line(db, req, wid, word, classid, hf_class, hf_histclass)
+
 # Lists the language specific output types. This is a mandatory function
 def jooutput_list_supported_types():
 	types = []
 	types.append(('malaga', u'Tulosta Suomi-malagan käyttämässä muodossa'))
 	return types
 
-# Language specific list output. This is a mandatory functions
+# Language specific list output. This is a mandatory function
 def jooutput_call(req, outputtype, db, query):
 	if outputtype == 'malaga':
 		_jooutput_malaga(req, db, query)
