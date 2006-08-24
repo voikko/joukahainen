@@ -37,12 +37,18 @@ def form(req):
 	jotools.write(req, u'<label>%s: <input type="text" name="word" /></label>\n' % _(u'Word'))
 	jotools.write(req, u'<label>%s <input type="checkbox" name="wordre" /></label></p><p>\n' \
 	              % _(u'Use regular expression'))
-	textattrs = db.query("SELECT aid, descr FROM attribute WHERE type = 1").getresult()
+	textattrs = db.query("SELECT aid, descr FROM attribute WHERE type = 1 ORDER BY descr, aid").getresult()
 	jotools.write(req, u'<select name="textaid">\n')
 	jotools.write(req, u'<option selected="1" value="">(%s)</option>\n' % _(u'select attribute'))
 	for (aid, dsc) in textattrs:
 		jotools.write(req, u'<option value="%i">%s</option>\n' % (aid, unicode(dsc, 'UTF-8')))
 	jotools.write(req, u'</select> %s <input type="text" name="textvalue" /><br />\n' % _(u'is'))
+	flagattrs = db.query("SELECT aid, descr FROM attribute WHERE type = 2 ORDER BY descr, aid").getresult()
+	jotools.write(req, u'</p><p><optgroup>%s:<br />' % _(u'Flags set'))
+	for (aid, dsc) in flagattrs:
+		jotools.write(req, u'<label><input type="checkbox" name="flagon%i" />%s</label>\n' \
+		              % (aid, unicode(dsc, 'UTF-8')))
+	jotools.write(req, u'</optgroup></p><p>\n')
 	for (tname, tdesc) in jooutput.list_supported_types():
 		if tname == 'html': selected = u'checked="checked"'
 		else: selected = u''
@@ -74,6 +80,12 @@ def wlist(req):
 			cond = ("w.wid IN (SELECT wid FROM string_attribute_value " +
 			        "WHERE aid = %i AND value = '%s')") % (aid, jotools.escape_sql_string(value))
 		conditions.append(cond)
+	for field in req.form.list:
+		if field.name.startswith('flagon'):
+			aid = jotools.toint(field.name[6:])
+			if jotools.get_param(req, 'flagon%i' % aid, u'') == u'on':
+				cond = "w.wid IN (SELECT wid FROM flag_attribute_value WHERE aid = %i)" % aid
+				conditions.append(cond)
 	# FIXME: user should be able to select the order
 	order = "ORDER BY w.word, c.name, w.wid"
 	# Build the full select clause
