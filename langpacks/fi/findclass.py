@@ -40,6 +40,62 @@ CHARACTERISTIC_VERB_FORMS = ['infinitiivi_1', 'preesens_yks_1', 'imperfekti_yks_
 def classlist(req):
 	joheaders.page_header(req, u'Etsi sanalle taivutusluokka')
 	jotools.write(req, u'''
+<div class="main">
+<div class="rightinfo">
+<p>
+<h2>Astevaihteluluokat</h2>
+<dl>
+<dt>av1</dt><dd>
+  tt->t: ma<em>tt</em>o->ma<em>t</em>on<br />
+
+  pp->p: kaa<em>pp</em>i->kaa<em>p</em>in<br />
+  kk->k: ruu<em>kk</em>u->ruu<em>k</em>un<br />
+  mp->mm: so<em>mp</em>a->so<em>mm</em>an<br />
+
+  p->v: ta<em>p</em>a->ta<em>v</em>an<br />
+  nt->nn: ku<em>nt</em>a->ku<em>nn</em>an<br />
+  lt->ll: ki<em>lt</em>a->ki<em>ll</em>an<br />
+
+  rt->rr: ke<em>rt</em>a->ke<em>rr</em>an<br />
+  t->d: pöy<em>t</em>ä->pöy<em>d</em>än<br />
+  nk->ng: ha<em>nk</em>o->ha<em>ng</em>on<br />
+
+  uku->uvu: p<em>uku</em>->p<em>uvu</em>n<br />
+  yky->yvy: k<em>yky</em>->k<em>yvy</em>n
+</dd>
+<dt>av2</dt><dd>
+  t->tt: rii<em>t</em>e->rii<em>tt</em>een<br />
+
+  p->pp: o<em>p</em>as->o<em>pp</em>aan<br />
+  k->kk: lii<em>k</em>e->lii<em>kk</em>een<br />
+  mm->mp: lu<em>mm</em>e->lu<em>mp</em>een<br />
+
+  v->p: tar<em>v</em>e->tar<em>p</em>een<br />
+  nn->nt: ra<em>nn</em>e->ra<em>nt</em>een<br />
+  ll->lt: sive<em>ll</em>in->sive<em>lt</em>imen<br />
+
+  rr->rt: va<em>rr</em>as->va<em>rt</em>aan<br />
+  d->t: sa<em>d</em>e->sa<em>t</em>een<br />
+  ng->nk: ka<em>ng</em>as->ka<em>nk</em>aan
+
+</dd>
+<dt>av3</dt><dd>
+  k->j: jär<em>k</em>i->jär<em>j</em>en
+</dd>
+<dt>av4</dt><dd>
+  j->k: pal<em>j</em>e->pal<em>k</em>een
+
+</dd>
+<dt>av5</dt><dd>
+  k->&empty;: vuo<em>k</em>a->vuoan
+</dd>
+<dt>av6</dt><dd>
+  &empty;->k: säie->säi<em>k</em>een
+</dd>
+</dl>
+
+</p>
+</div>
 <form method="get" action="classlist"><p>
 <label>Sana: <input type="text" name="word" /><br />
 Sanaluokka: <select name="class">
@@ -65,6 +121,7 @@ Astevaihteluluokka: <select name="gclass">
 		classdatafile = _config.HF_DATA + "/verb.aff"
 		characteristic_forms = CHARACTERISTIC_VERB_FORMS
 	elif classid == 0:
+		jotools.write(req, "</div>\n")
 		joheaders.page_footer(req)
 		return "</html>"
 	else:
@@ -72,6 +129,10 @@ Astevaihteluluokka: <select name="gclass">
 		return '\n'
 	
 	word = jotools.get_param(req, 'word', u'')
+	if len(word) == 0:
+		jotools.write(req, "</div>\n")
+		joheaders.page_footer(req)
+		return "</html>"
 	grad_type = jotools.get_param(req, 'gclass', u'')
 	if grad_type == u'':
 		grad_type_s = u''
@@ -105,6 +166,6 @@ Astevaihteluluokka: <select name="gclass">
 			   and not inflected_word[1] in inflist:
 				inflist.append(inflected_word[1])
 		jotools.write(req, u'</table>\n')
-	
+	jotools.write(req, "</div>\n")
 	joheaders.page_footer(req)
 	return "</html>"

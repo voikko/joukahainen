@@ -28,8 +28,6 @@ import _apply_config
 _ = _apply_config.translation.ugettext
 
 def _html(req, db, query):
-	joheaders.page_header(req, _('Search results'))
-	
 	offset_s = `jotools.toint(jotools.get_param(req, 'offset', u'0'))`
 	limit_s = `jotools.toint(jotools.get_param(req, 'limit', u'200'))`
 	if limit_s == u'0': limit_s = u'ALL'
@@ -41,10 +39,16 @@ def _html(req, db, query):
 	
 	results = db.query("%s LIMIT %s OFFSET %s" % (query, limit_s, offset_s))
 	if results.ntuples() == 0:
+		joheaders.page_header(req, _('Search results'))
 		jotools.write(req, u"<p>%s</p>\n" % _(u'No matching words were found'))
+	elif results.ntuples() == 1:
+		joheaders.redirect_header(req, _config.WWW_ROOT_DIR + "/word/edit?wid=%i" \
+		                               % results.getresult()[0][0])
+		return "\n"
 	else:
-		jotools.write(req, u"<table><tr><th>%s</th><th>%s</th></tr>\n" % (_("Word"),
-		                    _("Word class")))
+		joheaders.page_header(req, _('Search results'))
+		jotools.write(req, u'<div class="main"><table><tr><th>%s</th><th>%s</th></tr>\n' \
+		                   % (_("Word"), _("Word class")))
 		for result in results.getresult():
 			jotools.write(req, u"<tr><td><a href=\"../word/edit?wid=%i\">%s</a></td><td>%s</td></tr>\n" %
 			              (result[0], unicode(result[1], 'UTF-8'), unicode(result[2], 'UTF-8')))
@@ -53,6 +57,7 @@ def _html(req, db, query):
 			jotools.write(req, (u'<p><a href="wlist?%soffset=%i&limit=%s">' +
 			              u"%s ...</a></p>\n") % (param_s, int(offset_s)+int(limit_s),
 				    limit_s, _(u'More results')))
+		jotools.write(req, "</div>\n")
 	
 	joheaders.page_footer(req)
 	return '</html>\n'
