@@ -19,8 +19,6 @@
 
 # This file contains index page components
 
-import hfaffix
-import hfutils
 import types
 import _config
 import _apply_config

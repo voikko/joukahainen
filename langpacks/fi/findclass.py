@@ -31,6 +31,8 @@ import jotools
 import jooutput
 import jodb
 
+# Path to Hunspell-fi data directory
+HF_DATA = '/home/harri/hunspell-fi/svn/trunk/data'
 
 CHARACTERISTIC_NOUN_FORMS = ['nominatiivi', 'genetiivi', 'partitiivi', 'illatiivi',
                              'genetiivi_mon', 'partitiivi_mon', 'illatiivi_mon']
@@ -115,10 +117,10 @@ Astevaihteluluokka: <select name="gclass">
 </form>''')
 	classid = jotools.toint(jotools.get_param(req, 'class', u'0'))
 	if classid == 1:
-		classdatafile = _config.HF_DATA + "/subst.aff"
+		classdatafile = HF_DATA + "/subst.aff"
 		characteristic_forms = CHARACTERISTIC_NOUN_FORMS
 	elif classid == 3:
-		classdatafile = _config.HF_DATA + "/verb.aff"
+		classdatafile = HF_DATA + "/verb.aff"
 		characteristic_forms = CHARACTERISTIC_VERB_FORMS
 	elif classid == 0:
 		jotools.write(req, "</div>\n")

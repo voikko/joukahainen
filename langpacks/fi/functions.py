@@ -19,11 +19,18 @@
 
 # This file contains language specific program code for Finnish
 
+# Path to module directory (Hunspell-fi tools)
+MODULE_PATH_HFTOOLS = '/home/harri/hunspell-fi/svn/trunk/tools/pylib'
+
+# Path to Hunspell-fi data directory
+HF_DATA = '/home/harri/hunspell-fi/svn/trunk/data'
+
+import sys
+sys.path.append(MODULE_PATH_HFTOOLS)
 import hfaffix
 import hfutils
 import hfconv
 import time
-import _config
 
 
 WCHARS = u"abcdefghijklmnopqrstuvwxyzåäöszèéšžABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖŠŽÈÉŠŽ-'|"
@@ -43,10 +50,10 @@ CHARACTERISTIC_VERB_FORMS = ['infinitiivi_1', 'preesens_yks_1', 'imperfekti_yks_
 # Inflection table for a Finnish noun or verb.
 def word_inflection(db, wid, word, classid):
 	if classid in [1, 2]:
-		classdatafile = _config.HF_DATA + "/subst.aff"
+		classdatafile = HF_DATA + "/subst.aff"
 		characteristic_forms = CHARACTERISTIC_NOUN_FORMS
 	elif classid == 3:
-		classdatafile = _config.HF_DATA + "/verb.aff"
+		classdatafile = HF_DATA + "/verb.aff"
 		characteristic_forms = CHARACTERISTIC_VERB_FORMS
 	else: return u"(taivutuksia ei ole saatavissa tämän sanaluokan sanoille)"
 	
