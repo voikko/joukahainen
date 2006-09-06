@@ -1,0 +1,31 @@
+Word: $$WORD$$
+
+<div class="topbar">
+<h1><a href="..">Joukahainen</a> &gt; Word: $$WORD$$</h1>
+<div class="login">$$login_logout(UID,UNAME,WID)$$</div>
+<div class="clear"></div>
+</div>
+<div class="main">
+<p>
+$$word_class(CLASSID)$$
+</p>
+<h2>Alternative spellings</h2>
+$$related_words(WID)$$
+
+<p><a href="rwords?wid=$$WID$$">Edit alternative spellings...</a></p>
+<h2>Flags set</h2>
+$$flag_attributes(WID)$$
+
+<p><a href="flags?wid=$$WID$$">Edit flags...</a></p>
+$$main_form_start(EDITABLE)$$
+<p>
+<br /><span class="fheader">Short explanation for the word:</span>
+<span class="fsvalue">$$string_attribute(WID,18,EDITABLE)$$</span>
+<br /><span class="fheader">$$wiki_link(28,WID,WORD)$$:</span>
+<span class="fsvalue">$$string_attribute(WID,28,EDITABLE)$$</span>
+</p>
+$$main_form_end(WID,EDITABLE)$$
+<div class="bottominfo">
+$$message_log(WID)$$
+</div>
+</div>

@@ -1,0 +1,44 @@
+Joukahainen: start
+
+<div class="topbar">
+<h1>Joukahainen: start</h1>
+<div class="login">$$login_logout(UID,UNAME,0)$$</div>
+<div class="clear"></div>
+</div>
+<div class="main">
+<div class="rightinfo">
+<p>This is an example installation of Joukahainen for English language. This section should contain
+general information about the data in this installation, for example its license.</p>
+</div>
+<h2>Find and edit words</h2>
+<ul>
+<li><a href="query/wlist">All words (200 words at a time)</a></li>
+<li>Find word
+ <ul>
+ <li><form method="get" action="query/wlist"><p>Exact search <input type="text" name="word" />
+    <input type="submit" value="Hae" /></p></form></li>
+ <li><form method="get" action="query/wlist"><p>SQL standard regular expression
+    <input type="text" name="word" />
+    <input type="hidden" name="wordre" value="on" />
+    <input type="submit" value="Hae" /></p></form></li>
+ <li><a href="query/form">Search form</a></li>
+ </ul>
+</li>
+</ul>
+<h2>Add words</h2>
+<ul>
+<li><a href="word/add_manual">Add your own words</a></li>
+<li><a href="word/categories">Add words from a list of suggested words</a></li>
+</ul>
+<h2><a href="task/list">Tasks</a></h2>
+<h2>User management</h2>
+<ul>
+<li><a href="user/addform">Add user</a></li>
+<li><a href="user/passwdform">Change your password</a></li>
+</ul>
+<div class="clear"></div>
+</div>
+
+<div class="bottominfo">
+<p>This section is meant to contain news and information about recent changes to the installation.</p>
+</div>

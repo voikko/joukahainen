@@ -26,7 +26,7 @@ import _config
 sys.path.append(_config.INSTALLATION_DIRECTORY + u'/langpacks/' + _config.LANG)
 sys.path.append(_config.INSTALLATION_DIRECTORY + u'/pylib')
 translation = gettext.translation(u'joukahainen', _config.INSTALLATION_DIRECTORY + u'/transl',
-                                  [_config.LANG])
+                                  [_config.LANG], fallback=True)
 
 _ = translation.ugettext
 

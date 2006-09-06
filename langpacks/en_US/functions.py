@@ -17,22 +17,22 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# This file contains the index pages
+# This file contains language specific program code for English (US)
 
-from mod_python import apache
+WCHARS = u"abcdefghijklmnopqrstuvwxyzszèéABCDEFGHIJKLMNOPQRSTUVWXYZÈÉ'"
+# Checks if string looks like a valid word. This is a mandatory function.
+def checkword(string):
+	for c in string:
+		if not c in WCHARS: return False
+	return True
 
-import _apply_config
-import _config
-import joheaders
-import jotools
-import jodb
 
-# No translatable strings
 
-def index(req):
-	db = jodb.connect()
-	(uid, uname, editable) = jotools.get_login_user(req)
-	static_vars = {'UID': uid, 'UNAME': uname, 'EDITABLE': editable}
-	jotools.process_template(req, db, static_vars, 'index_index', _config.LANG, 'joindex')
-	joheaders.page_footer(req)
-	return "</html>"
+# Lists the language specific output types. This is a mandatory function.
+def jooutput_list_supported_types():
+	types = []
+	return types
+
+# Language specific list output. This is a mandatory function.
+def jooutput_call(req, outputtype, db, query):
+	joheaders.error_page(req, _(u'Unsupported output type'))

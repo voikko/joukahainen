@@ -1,0 +1,14 @@
+Word: $$WORD$$ &gt; flags
+
+<div class="topbar">
+<h1>Word: $$WORD$$ &gt; flags</h1>
+<div class="login">$$login_logout(UID,UNAME,WID)$$</div>
+<div class="clear"></div>
+</div>
+<div class="main">
+<p>
+$$word_class(CLASSID)$$
+</p>
+$$flag_edit_form(WID,CLASSID)$$
+<p><a href="edit?wid=$$WID$$">Back to the word editor...</a></p>
+</div>

@@ -88,7 +88,7 @@ def show(req):
 	                   % (_(u'OK'), _(u'Word')))
 	firstword = random.randint(0, max(results.ntuples() - words_per_page, 0))
 	restuples = results.getresult()
-	for i in range(firstword, min(firstword + words_per_page, results.ntuples() - 1)):
+	for i in range(firstword, min(firstword + words_per_page, results.ntuples())):
 		word = restuples[i]
 		jotools.write(req, u'<tr><td><input type="checkbox" name="checked%i" /></td>' \
 		                   % word[0])

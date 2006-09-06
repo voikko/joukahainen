@@ -113,3 +113,15 @@ Creating a language pack
 
 To be done. The instructions should contain an example, and the only available language
 pack (Finnish) is too complicated for that.
+
+Create the password has for the initial user by starting python and entering commands
+
+>>> import sha
+>>> sha.new((u'_config.PW_SALT' + u'INITIAL_PASSWORD').encode('UTF-8')).hexdigest()
+
+(Replace _config.PW_SALT and INITIAL_PASSWORD with proper strings.) You will get the password
+hash, which you can store to the database by using command
+
+joukahainen_private=# update appuser set pwhash='59b3e8d637cf97edbe2384cf59cb7453dfe30789' where uid=2;
+
+(Replace the hash with the correct value.)
