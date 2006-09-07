@@ -99,6 +99,18 @@ svn co https://svn.sourceforge.net/svnroot/hunspell-fi/trunk/joukahainen INSTALL
    \i INSTALLATION_DIRECTORY/joukahainen/sql/schema.sql
    \i INSTALLATION_DIRECTORY/joukahainen/langpacks/LANG/static.sql
 
+  Create the password hash for the initial user by starting python and entering commands
+
+  >>> import sha
+  >>> sha.new((u'_config.PW_SALT' + u'INITIAL_PASSWORD').encode('UTF-8')).hexdigest()
+
+  (Replace _config.PW_SALT and INITIAL_PASSWORD with proper strings.) You will get the password
+  hash, which you can store to the database by using command
+
+  joukahainen_private=# update appuser set pwhash='59b3e8d637cf97edbe2384cf59cb7453dfe30789' where uid=2;
+
+  (Replace the hash with the correct value.)
+
 8) Create the gettext .mo files by entering INSTALLATION_DIRECTORY/joukahainen and running make.
 
 9) Perform any language specific installation tasks that may be specified in the INSTALL file of
@@ -106,22 +118,63 @@ svn co https://svn.sourceforge.net/svnroot/hunspell-fi/trunk/joukahainen INSTALL
 
 10) (Re)start Apache, and you should have a working installation.
 
+You may want to populate your new database with existing information from other sources. Currently
+we only have an importer for the Finnish Suomi-malaga format, but writing a generic Hunspell importer
+that maps affix flags to respective flag attributes having [Hunspell-X] in their description should
+be easy.
+You can also import raw unchecked word lists, like the ones available from http://borel.slu.edu/crubadan/
+to a special table created for that purpose. The table has name raw_word and contains the following
+columns:
+  word: the candidate word
+  info: some classification information for the word
+  notes: free form notes
+  processed: boolean field to mark already checked words, defaults to false.
+The crúbdán data can be imported to this table by using the psql client \copy command and is available
+to the users of Joukahainen through "Add words from a list of suggested words" link from the main page
+of the application.
 
 
 Creating a language pack
 ========================
 
-To be done. The instructions should contain an example, and the only available language
-pack (Finnish) is too complicated for that.
+The language pack should be created by placing the following files under
+langpacks/LANG:
 
-Create the password has for the initial user by starting python and entering commands
+1) messages.po: This file should contain the user interface translation for language
+   LANG. Corresponding template is located at transl/joukahainen.pot after running make
+   as described in the installation instructions, step 8. This file is not needed for English.
 
->>> import sha
->>> sha.new((u'_config.PW_SALT' + u'INITIAL_PASSWORD').encode('UTF-8')).hexdigest()
+2) static.sql: This file contains the SQL commands that are needed to initialise the database
+   for your language. Using langpacks/en_US/static.sql as a reference you can see what is needed
+   there:
+   - Commands to clear the content of the database tables
+   - Commands that define the word classes for your language
+   - Commands that define meta data fields for your language. These will include flag attributes
+     for each Hunspell affix flag if you want to use Joukahainen to directly set the affix flags.
+   - Commands to insert initial application users.
+   - Commands to create review tasks. These are not really necessary, you can safely leave them away.
+     en_US/static.sql contains a review task for words starting with letter 'a' just as an example.
+   - Commands to initialise the private part of the database. You will need to include a copy of your
+     user insertion commands here, but this time with password hashes. Note that you only need to add
+     one user with admin rights: the rest can be added later through the web interface.
 
-(Replace _config.PW_SALT and INITIAL_PASSWORD with proper strings.) You will get the password
-hash, which you can store to the database by using command
+3) functions.py: Language specific program code. Here you will need to supply some Python functions.
+   In practice it is enough to use en_US/function.py as a template, just change WCHARS to contain all
+   valid word characters for your language. Here you will also be able to add your own output filters
+   for exporting word lists and generating inflections. There is currently no English example,
+   see fi/functions.py if you are interested in implementing these. We will at least need to implement
+   output filter for Hunspell dictionary format which is not yet done.
 
-joukahainen_private=# update appuser set pwhash='59b3e8d637cf97edbe2384cf59cb7453dfe30789' where uid=2;
+4) index_index.txt: HTML template for the index page. The first line contains the page title element,
+   the rest will be put inside the <body>...</body> tags. The body may contain any HTML code and
+   additionally certain special "widgets" that are surrounded by $$ signs in the template. See the
+   example from en_US on how to use these, more complete documentation can be written if there is need
+   for it.
 
-(Replace the hash with the correct value.)
+5) word_edit.txt: HTML template for word editor. See 4)
+
+6) word_rwords.txt: HTML template for related words / alternative spellings editor. You may quite safely
+   just translate this from en_US version without any additional changes.
+
+7) word_flags.txt: HTML template for word flag editor. As in 6), just translate this to your own language.
+

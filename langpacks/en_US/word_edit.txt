@@ -20,9 +20,9 @@ $$flag_attributes(WID)$$
 $$main_form_start(EDITABLE)$$
 <p>
 <br /><span class="fheader">Short explanation for the word:</span>
-<span class="fsvalue">$$string_attribute(WID,18,EDITABLE)$$</span>
-<br /><span class="fheader">$$wiki_link(28,WID,WORD)$$:</span>
-<span class="fsvalue">$$string_attribute(WID,28,EDITABLE)$$</span>
+<span class="fsvalue">$$string_attribute(WID,1,EDITABLE)$$</span>
+<br /><span class="fheader">$$wiki_link(4,WID,WORD)$$:</span>
+<span class="fsvalue">$$string_attribute(WID,4,EDITABLE)$$</span>
 </p>
 $$main_form_end(WID,EDITABLE)$$
 <div class="bottominfo">
