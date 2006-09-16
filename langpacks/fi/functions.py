@@ -32,6 +32,16 @@ import hfutils
 import hfconv
 import time
 
+# Returns the vowel type for a word in the database
+def _get_vowel_type(db, wid, word):
+	results = db.query(("SELECT aid FROM flag_attribute_value " +
+	                    "WHERE wid = %i AND aid IN (22, 23)") % wid)
+	if results.ntuples() == 0: return hfutils.vowel_type(word)
+	elif results.ntuples() == 1:
+		if results.getresult()[0][0] == 22: return hfutils.VOWEL_FRONT
+		else: return hfutils.VOWEL_BACK
+	else: return hfutils.VOWEL_BOTH
+
 
 WCHARS = u"abcdefghijklmnopqrstuvwxyzåäöszèéšžABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖŠŽÈÉŠŽ-'|"
 # Checks if string looks like a valid word. This is a mandatory function.
@@ -78,7 +88,8 @@ def word_inflection(db, wid, word, classid):
 	have_only_characteristic = True
 	for word_class in word_classes:
 		if not infclass_main in word_class['smcnames']: continue
-		inflected_words = hfaffix.inflect_word(word, grad_type, word_class)
+		inflected_words = hfaffix.inflect_word(word, grad_type, word_class,
+		                                       _get_vowel_type(db, wid, word))
 		if inflected_words == None: continue
 		form = None
 		inflist = []
@@ -181,7 +192,7 @@ def _malaga_line(db, req, wid, word, classid, hf_class, hf_histclass):
 				jotools.write(req, u"#Malaga class not found for (%s, %i, %s)\n" \
 				              % (word, classid, hf_class))
 				continue
-			vtype = hfutils.vowel_type(word_end)
+			vtype = _get_vowel_type(db, wid, word_end)
 			if vtype == hfutils.VOWEL_FRONT: malaga_vtype = u'ä'
 			elif vtype == hfutils.VOWEL_BACK: malaga_vtype = u'a'
 			elif vtype == hfutils.VOWEL_BOTH: malaga_vtype = u'aä'
