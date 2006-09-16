@@ -189,8 +189,8 @@ def _malaga_line(db, req, wid, word, classid, hf_class, hf_histclass):
 		if classid in [1, 2, 3]:
 			(alku, jatko) = _find_malaga_word_class(word, hf_class, hf_histclass, classid)
 			if alku == None:
-				jotools.write(req, u"#Malaga class not found for (%s, %i, %s)\n" \
-				              % (word, classid, hf_class))
+				req.write(req, (u"#Malaga class not found for (%s, %i, %s)\n" \
+				              % (word, classid, hf_class)).encode('UTF-8'))
 				continue
 			vtype = _get_vowel_type(db, wid, word_end)
 			if vtype == hfutils.VOWEL_FRONT: malaga_vtype = u'ä'
