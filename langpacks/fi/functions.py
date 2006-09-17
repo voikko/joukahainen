@@ -32,18 +32,53 @@ import hfutils
 import hfconv
 import time
 
-# Returns the vowel type for a word in the database
-def _get_vowel_type(db, wid, word):
+# Returns the vowel type for a word in the database.
+def _get_db_vowel_type(db, wid):
 	results = db.query(("SELECT aid FROM flag_attribute_value " +
 	                    "WHERE wid = %i AND aid IN (22, 23)") % wid)
-	if results.ntuples() == 0: return hfutils.vowel_type(word)
+	if results.ntuples() == 0: return hfutils.VOWEL_DEFAULT
 	elif results.ntuples() == 1:
 		if results.getresult()[0][0] == 22: return hfutils.VOWEL_FRONT
 		else: return hfutils.VOWEL_BACK
 	else: return hfutils.VOWEL_BOTH
 
 
-WCHARS = u"abcdefghijklmnopqrstuvwxyzåäöszèéšžABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖŠŽÈÉŠŽ-'|"
+# Returns autodetected vowel type of infection suffixes for a simple word.
+# If word contains character '=', automatic detection is only performed on the
+# trailing part. If word contains character '|', automatic detection is performed
+# on the trailing part and the whole word, and the union of accepted vowel types is returned.
+def _get_wordform_infl_vowel_type(wordform):
+	# Search for last '=', check the trailing part using recursion
+	startind = wordform.rfind(u'=')
+	if startind == len(wordform) - 1: return hfutils.VOWEL_BOTH # Not allowed
+	if startind != -1: return _get_wordform_infl_vowel_type(wordform[startind+1:])
+	
+	# Search for first '|', check the trailing part using recursion
+	startind = wordform.find(u'|')
+	if startind == len(wordform) - 1: return hfutils.VOWEL_BOTH # Not allowed
+	vtype_whole = hfutils.vowel_type(wordform)
+	if startind == -1: return vtype_whole
+	vtype_part = _get_wordform_infl_vowel_type(wordform[startind+1:])
+	if vtype_whole == vtype_part: return vtype_whole
+	else: return hfutils.VOWEL_BOTH
+
+
+# Returns the vowel type of inflection suffixes for a word in the database.
+def _get_infl_vowel_type(db, wid, word):
+	# Check the database
+	dbtype = _get_db_vowel_type(db, wid)
+	if dbtype != hfutils.VOWEL_DEFAULT: return dbtype
+	# Check alternative spellings
+	altforms_res = db.query('SELECT related_word FROM related_word WHERE wid = %i' % wid)
+	for altform_r in altforms_res.getresult():
+		altform = unicode(altform_r[0], 'UTF-8')
+		if altform.replace(u'|', u'').replace(u'=', u'') == word:
+			return _get_wordform_infl_vowel_type(altform)
+	# Return the default
+	return _get_wordform_infl_vowel_type(word)
+
+
+WCHARS = u"abcdefghijklmnopqrstuvwxyzåäöszèéšžABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖŠŽÈÉŠŽ-'|="
 # Checks if string looks like a valid word. This is a mandatory function.
 def checkword(string):
 	for c in string:
@@ -89,7 +124,7 @@ def word_inflection(db, wid, word, classid):
 	for word_class in word_classes:
 		if not infclass_main in word_class['smcnames']: continue
 		inflected_words = hfaffix.inflect_word(word, grad_type, word_class,
-		                                       _get_vowel_type(db, wid, word))
+		                                       _get_infl_vowel_type(db, wid, word))
 		if inflected_words == None: continue
 		form = None
 		inflist = []
@@ -181,18 +216,18 @@ def _malaga_line(db, req, wid, word, classid, hf_class, hf_histclass):
 		altforms = []
 		for res in altforms_res.getresult():
 			altforms.append(unicode(res[0], 'UTF-8'))
+	forced_vtype = _get_db_vowel_type(db, wid)
 	for altform in altforms:
-		word = altform.replace(u'|', u'')
-		sepind = altform.rfind(u'|')
-		if sepind == -1: word_end = word
-		else: word_end = altform[sepind+1:]
+		word = altform.replace(u'|', u'').replace(u'=', u'')
 		if classid in [1, 2, 3]:
 			(alku, jatko) = _find_malaga_word_class(word, hf_class, hf_histclass, classid)
 			if alku == None:
 				req.write((u"#Malaga class not found for (%s, %i, %s)\n" \
 				              % (word, classid, hf_class)).encode('UTF-8'))
 				continue
-			vtype = _get_vowel_type(db, wid, word_end)
+			if forced_vtype == hfutils.VOWEL_DEFAULT:
+				vtype = _get_wordform_infl_vowel_type(altform)
+			else: vtype = forced_vtype
 			if vtype == hfutils.VOWEL_FRONT: malaga_vtype = u'ä'
 			elif vtype == hfutils.VOWEL_BACK: malaga_vtype = u'a'
 			elif vtype == hfutils.VOWEL_BOTH: malaga_vtype = u'aä'
