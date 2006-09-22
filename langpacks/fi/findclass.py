@@ -44,7 +44,6 @@ def classlist(req):
 	jotools.write(req, u'''
 <div class="main">
 <div class="rightinfo">
-<p>
 <h2>Astevaihteluluokat</h2>
 <dl>
 <dt>av1</dt><dd>
@@ -96,24 +95,23 @@ def classlist(req):
 </dd>
 </dl>
 
-</p>
 </div>
 <form method="get" action="classlist"><p>
-<label>Sana: <input type="text" name="word" /><br />
-Sanaluokka: <select name="class">
-<option selected="1" value="1">Nomini</option>
+<label>Sana: <input type="text" name="word" /></label><br />
+<label>Sanaluokka: <select name="class">
+<option selected="selected" value="1">Nomini</option>
 <option value="3">Verbi</option>
-</select><br />
-Astevaihteluluokka: <select name="gclass">
-<option selected="1" value="">ei astevaihtelua</option>
+</select></label><br />
+<label>Astevaihteluluokka: <select name="gclass">
+<option selected="selected" value="">ei astevaihtelua</option>
 <option value="av1">av1</option>
 <option value="av2">av2</option>
 <option value="av3">av3</option>
 <option value="av4">av4</option>
 <option value="av5">av5</option>
 <option value="av6">av6</option>
-</select><br />
-<input type="submit" value="Hae mahdolliset taivutukset"></p>
+</select></label><br />
+<input type="submit" value="Hae mahdolliset taivutukset" /></p>
 </form>''')
 	classid = jotools.toint(jotools.get_param(req, 'class', u'0'))
 	if classid == 1:
