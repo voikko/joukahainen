@@ -120,6 +120,7 @@ def word_inflection(db, wid, word, classid):
 	tableid = u"inftable%i" % wid
 
 	retdata = u''
+	note = u''
 	have_only_characteristic = True
 	for word_class in word_classes:
 		if not infclass_main in word_class['smcnames']: continue
@@ -148,6 +149,7 @@ def word_inflection(db, wid, word, classid):
 			if hfutils.read_option(inflected_word[2], 'ps', '-') != 'r' \
 			   and not inflected_word[1] in inflist:
 				inflist.append(inflected_word[1])
+		note = word_class['note']
 	
 	table_header = u'<table class="inflection" id="%s">\n<tr><th colspan="2">' % tableid
 	if not have_only_characteristic:
@@ -155,7 +157,9 @@ def word_inflection(db, wid, word, classid):
 		               + u'<a href="javascript:switchDetailedDisplay(\'%s\');" id="%s"></a>' \
 			     % (tableid, tableid + u'a')
 	table_header = table_header + u'Taivutus</th></tr>\n'
-	return table_header + retdata + u'</table>\n'
+	if note == u'': notetext = u''
+	else: notetext = u'<p>%s</p>\n' % note
+	return notetext + table_header + retdata + u'</table>\n'
 
 # Returns tuple (alku, jatko) for given word in Joukahainen
 def _find_malaga_word_class(word, hf_class, hf_histclass, hf_wordclass):

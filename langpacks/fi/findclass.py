@@ -150,7 +150,9 @@ def classlist(req):
 		inflist = []
 		inflected_words.append((u'', u'', u''))
 		jotools.write(req, '<h2>' + word_class['smcnames'][0] + grad_type_s + '</h2>')
-		jotools.write(req, u'<br /><table class="border">\n')
+		if word_class['note'] != u'':
+			jotools.write(req, u'<p>%s</p>\n' % word_class['note'])
+		jotools.write(req, u'<table class="border">\n')
 		for inflected_word in inflected_words:
 			if form != inflected_word[0]:
 				if form != None and len(inflist) > 0:
