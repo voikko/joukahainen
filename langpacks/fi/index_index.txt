@@ -1,11 +1,5 @@
 Joukahainen: aloitus
 
-<div class="topbar">
-<h1>Joukahainen: aloitus</h1>
-<div class="login">$$login_logout(UID,UNAME,0)$$</div>
-<div class="clear"></div>
-</div>
-<div class="main">
 <div class="rightinfo">
 <p>Tämä Joukahaisen asennus sisältää Suomi-malagan oikolukuversion ("Voikko edition") substantiivit,
 adjektiivit ja verbit.

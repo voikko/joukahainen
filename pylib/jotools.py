@@ -69,7 +69,7 @@ def errormsg(req, error):
 	write(req, error)
 
 # Processes the given page template and writes the content to request req
-def process_template(req, db, static_vars, template_name, lang, module):
+def process_template(req, db, static_vars, template_name, lang, module, level):
 	tmplfilename = _config.INSTALLATION_DIRECTORY + '/langpacks/' + \
 	               lang + '/' + template_name + '.txt'
 	tmplfile = codecs.open(tmplfilename, 'r', 'utf-8')
@@ -104,7 +104,18 @@ def process_template(req, db, static_vars, template_name, lang, module):
 		else:
 			line_str = line_str + line
 		if first_line:
-			joheaders.page_header(req, line_str.strip())
+			if static_vars.has_key('UID'): uid = static_vars['UID']
+			else: uid = 0
+			if static_vars.has_key('UNAME'): uname = static_vars['UNAME']
+			else: uname = 0
+			if static_vars.has_key('WID'): wid = static_vars['WID']
+			else: wid = 0
+			if level == 0:
+				joheaders.page_header_navbar_level0(req, line_str.strip(),
+				                                    uid, uname)
+			if level == 1:
+				joheaders.page_header_navbar_level1(req, line_str.strip(),
+				                                    uid, uname, wid)
 			first_line = False
 		else: write(req, line_str)
 	tmplfile.close()

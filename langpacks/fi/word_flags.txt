@@ -1,4 +1,6 @@
-Sana: $$WORD$$ &gt; liput
+Sana: $$WORD$$ 
+edit?wid=$$WID$$
+liput
 
 <div class="topbar">
 <h1>Sana: $$WORD$$ &gt; liput</h1>

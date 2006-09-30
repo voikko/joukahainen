@@ -42,6 +42,64 @@ def page_header(req, title):
 <body onload="initPage()">
 """ % (title.encode('UTF-8'), _config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR))
 
+# Outputs the shared html header for ordinary pages
+def _page_header_internal(req, title, h1, uid, uname, wid):
+	req.content_type = "text/html; charset=UTF-8"
+	req.send_http_header()
+	jotools.write(req, u"""<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<title>%s</title>
+<link rel="stylesheet" type="text/css" href="%s/style.css" />
+<script type="text/javascript" src="%s/jscripts.js"></script>
+</head>
+<body onload="initPage()">
+<div class="topbar">""" % (title, _config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR))
+	jotools.write(req, u"\n<h1>%s</h1>" % h1)
+	if uid == None:
+		jotools.write(req, u"""
+<div class="login">
+<form method="post" action="%s/user/login"><p>
+<label>%s: <input type="text" name="username" /></label>&nbsp;
+<label>%s: <input type="password" name="password" /></label>&nbsp;
+<input type="hidden" name="wid" value="%i" />
+<input type="submit" value="%s" />
+</p></form>
+</div>
+""" % (_config.WWW_ROOT_DIR, _(u'Username'), _(u'Password'), wid, _(u'Log in')))
+	else:
+		jotools.write(req, u"""
+<div class="login">
+<form method="post" action="%s/user/logout"><p>
+<input type="hidden" name="wid" value="%i" />
+<input type="submit" value="%s %s" />
+</p></form>
+</div>
+""" % (_config.WWW_ROOT_DIR, wid, _(u'Log out user'), uname))
+	jotools.write(req, u'<div class="clear"></div></div><div class="main">\n')
+
+# Outputs the shared html header for toplevel page
+def page_header_navbar_level0(req, title, uid, uname):
+	title = jotools.escape_html(title)
+	h1 = title
+	_page_header_internal(req, title, h1, uid, uname, 0)
+
+# Outputs the shared html header for level 1 subpage
+def page_header_navbar_level1(req, title, uid, uname, wid = 0):
+	title = jotools.escape_html(title)
+	h1 = u'<a href="..">Joukahainen</a> &gt; %s' % title
+	_page_header_internal(req, title, h1, uid, uname, wid)
+
+# Outputs the shared html header for level 2 subpage
+def page_header_navbar_level2(req, title1, link1, title2, uid, uname, wid = 0):
+	title1 = jotools.escape_html(title1)
+	title2 = jotools.escape_html(title2)
+	title = title1 + u' &gt; ' + title2
+	h1 = u'<a href="..">Joukahainen</a> &gt; <a href="%s">%s</a> &gt; %s' % (link1, title1, title2)
+	_page_header_internal(req, title, h1, uid, uname, wid)
+
 def frame_header(req, title):
 	req.content_type = "text/html; charset=UTF-8"
 	req.send_http_header()

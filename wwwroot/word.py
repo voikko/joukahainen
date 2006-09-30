@@ -27,6 +27,7 @@ import _apply_config
 import _config
 import joheaders
 import jotools
+import joeditors
 import jodb
 
 _ = _apply_config.translation.ugettext
@@ -45,7 +46,7 @@ def edit(req, wid = None):
 	(uid, uname, editable) = jotools.get_login_user(req)
 	static_vars = {'WID': wid_n, 'WORD': unicode(wordinfo[0], 'UTF-8'), 'CLASSID': wordinfo[1],
 	               'UID': uid, 'UNAME': uname, 'EDITABLE': editable}
-	jotools.process_template(req, db, static_vars, u'word_edit', _config.LANG, u'joeditors')
+	jotools.process_template(req, db, static_vars, u'word_edit', _config.LANG, u'joeditors', 1)
 	joheaders.page_footer(req)
 	return "</html>"
 
@@ -137,11 +138,15 @@ def flags(req, wid = None):
 		return '\n'
 	wordinfo = results.getresult()[0]
 	if req.method == 'GET': # show editor
-		static_vars = {'WID': wid_n, 'WORD': unicode(wordinfo[0], 'UTF-8'),
-		               'CLASSID': wordinfo[1], 'UID': uid, 'UNAME': uname,
-		               'EDITABLE': editable}
-		jotools.process_template(req, db, static_vars, u'word_flags', _config.LANG,
-		                         u'joeditors')
+		word = unicode(wordinfo[0], 'UTF-8')
+		classid = wordinfo[1]
+		title1 = _(u'Word') + u': ' + word
+		link1 = u'edit?wid=%i' % wid_n
+		title2 = _(u'flags')
+		joheaders.page_header_navbar_level2(req, title1, link1, title2, uid, uname, wid_n)
+		jotools.write(req, u'<p>%s</p>\n' % joeditors.call(db, u'word_class', [classid]))
+		jotools.write(req, joeditors.call(db, u'flag_edit_form', [wid_n, classid]))
+		jotools.write(req, u'</div>\n')
 		joheaders.page_footer(req)
 		return "</html>"
 	if req.method != 'POST':
@@ -211,11 +216,15 @@ def rwords(req, wid = None):
 		return '\n'
 	wordinfo = results.getresult()[0]
 	if req.method == 'GET': # show editor
-		static_vars = {'WID': wid_n, 'WORD': unicode(wordinfo[0], 'UTF-8'),
-		               'CLASSID': wordinfo[1], 'UID': uid, 'UNAME': uname,
-		               'EDITABLE': editable}
-		jotools.process_template(req, db, static_vars, u'word_rwords', _config.LANG,
-		                         u'joeditors')
+		word = unicode(wordinfo[0], 'UTF-8')
+		classid = wordinfo[1]
+		title1 = _(u'Word') + u': ' + word
+		link1 = u'edit?wid=%i' % wid_n
+		title2 = _(u'related words')
+		joheaders.page_header_navbar_level2(req, title1, link1, title2, uid, uname, wid_n)
+		jotools.write(req, u'<p>%s</p>\n' % joeditors.call(db, u'word_class', [classid]))
+		jotools.write(req, joeditors.call(db, u'rwords_edit_form', [wid_n]))
+		jotools.write(req, u'</div>\n')
 		joheaders.page_footer(req)
 		return "</html>"
 	if req.method != 'POST':
