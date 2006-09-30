@@ -42,6 +42,9 @@ CHARACTERISTIC_VERB_FORMS = ['infinitiivi_1', 'preesens_yks_1', 'imperfekti_yks_
 def classlist(req):
 	joheaders.page_header(req, u'Etsi sanalle taivutusluokka')
 	jotools.write(req, u'''
+<div class="topbar">
+<h1><a href="..">Joukahainen</a> &gt; Etsi sanalle taivutusluokka</h1><br style="clear: both" />
+</div>
 <div class="main">
 <div class="rightinfo">
 <h2>Astevaihteluluokat</h2>
@@ -149,7 +152,8 @@ def classlist(req):
 		form = None
 		inflist = []
 		inflected_words.append((u'', u'', u''))
-		jotools.write(req, '<h2>' + word_class['smcnames'][0] + grad_type_s + '</h2>')
+		jotools.write(req, '<hr /><h2>' + word_class['smcnames'][0] \
+		              + grad_type_s + '</h2>')
 		if word_class['note'] != u'':
 			jotools.write(req, u'<p>%s</p>\n' % word_class['note'])
 		jotools.write(req, u'<table class="border">\n')
