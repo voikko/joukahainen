@@ -79,13 +79,22 @@ def _main_form_end(db, wid, editable):
 		return u''
 
 def _message_log(db, wid):
+	retstr = u""
+	results = db.query("SELECT u.uname, to_char(w.ctime, 'YYYY-MM-DD HH24:MI:SS'), " +
+	                           "coalesce(u.firstname, ''), coalesce(u.lastname, '') " +
+	                           "FROM word w, appuser u WHERE w.cuser = u.uid AND wid = %i" % wid)
+	if results.ntuples() != 0:
+		result = results.getresult()[0]
+		date = result[1]
+		user = jotools.escape_html(unicode(result[2], 'UTF-8')) + u" " + \
+		       jotools.escape_html(unicode(result[3], 'UTF-8')) + u" (" + \
+		       jotools.escape_html(unicode(result[0], 'UTF-8')) + u")"
+		retstr = (u'<div class="logitem"><p class="date">%s %s</p>\n' % (user, date))
+		retstr = retstr + u'<p class="logmsg">%s</p></div>\n' % _(u'Word created')
 	results = db.query(("SELECT u.uname, to_char(e.etime, 'YYYY-MM-DD HH24:MI:SS'), e.message, " +
 	                    "e.comment, coalesce(u.firstname, ''), coalesce(u.lastname, '') " +
 	                    "FROM appuser u, event e " +
 	                    "WHERE u.uid = e.euser AND e.eword = %i ORDER BY e.etime") % wid)
-	if results.ntuples() == 0:
-		return u'<p>(%s)</p>' % _(u'No changelog')
-	retstr = u""
 	for result in results.getresult():
 		date = result[1]
 		user = jotools.escape_html(unicode(result[4], 'UTF-8')) + u" " + \
