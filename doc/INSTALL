@@ -172,9 +172,3 @@ langpacks/LANG:
    for it.
 
 5) word_edit.txt: HTML template for word editor. See 4)
-
-6) word_rwords.txt: HTML template for related words / alternative spellings editor. You may quite safely
-   just translate this from en_US version without any additional changes.
-
-7) word_flags.txt: HTML template for word flag editor. As in 6), just translate this to your own language.
-

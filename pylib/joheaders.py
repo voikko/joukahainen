@@ -102,6 +102,7 @@ def page_header_navbar_level2(req, title1, link1, title2, uid, uname, wid = 0):
 	h1 = u'<a href="..">Joukahainen</a> &gt; <a href="%s">%s</a> &gt; %s' % (link1, title1, title2)
 	_page_header_internal(req, title, h1, uid, uname, wid)
 
+# Outputs the shared frameset header
 def frame_header(req, title):
 	req.content_type = "text/html; charset=UTF-8"
 	req.send_http_header()
@@ -115,9 +116,6 @@ def frame_header(req, title):
 </head>
 """ % (title.encode('UTF-8'), _config.WWW_ROOT_DIR))
 
-def page_footer(req):
-	req.write('\n</body>')
-
 # Ordinary shared page footer
 def page_footer_plain(req):
 	req.write("""
@@ -125,9 +123,11 @@ def page_footer_plain(req):
 </body>
 </html>""")
 
+# Outputs the shared frameset footer
 def frame_footer(req):
 	req.write('\n</html>')
 
+# Outputs a page with automatic redirection to another location
 def redirect_header(req, location):
 	location_s = location.encode('UTF-8')
 	req.headers_out['location'] = location_s
@@ -135,23 +135,16 @@ def redirect_header(req, location):
 	req.send_http_header()
 	jotools.write(req, _(u"Redirecting to %s") % location_s)
 
+# Outputs a page containing error message
 def error_page(req, errortext):
 	page_header_nonavbar(req, u'Joukahainen: %s' % _(u'error'))
 	jotools.write(req, u'<h1>%s</h1><p>%s</p>\n' % (_(u'Error'), errortext))
 	page_footer_plain(req)
 
+# Outputs a page telling about successful operation
 def ok_page(req, message):
 	page_header_nonavbar(req, u'Joukahainen: %s' % _(u'operation succeeded'))
 	jotools.write(req, u'<h1>%s</h1><p>%s</p>\n' % (_(u'operation succeeded'), message))
 	jotools.write(req, u'<p><a href="%s">%s ...</a></p>\n' \
 	           % (_config.WWW_ROOT_DIR + '/', _(u'Back to front page')))
 	page_footer_plain(req)
-
-# Header for a page containing a list
-def list_page_header(req, headertext, uid, uname):
-	page_header_navbar_level1(req, headertext, uid, uname)
-
-
-def list_page_footer(req):
-	jotools.write(req, u"</div>\n")
-	page_footer(req)

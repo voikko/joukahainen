@@ -526,8 +526,8 @@ Make the required changes and mark the words that you still want to add.''') + u
 		jotools.write(req, u'</table>\n<p>' +
 		                   u'<input type="hidden" name="confirm" value="on">' +
 		                   u'<input type="submit" value="%s"></p></form>\n' % _(u'Continue'))
-		joheaders.list_page_footer(req)
-		return '</html>\n'
+		joheaders.page_footer_plain(req)
+		return '\n'
 	else:
 		jotools.write(req, u'<p>%s:</p>' % _(u'The following changes were made'))
 		jotools.write(req,
