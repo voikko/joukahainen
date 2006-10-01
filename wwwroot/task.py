@@ -81,8 +81,7 @@ def show(req):
 	                    "WHERE t.wid = w.wid AND w.wid NOT IN " +
 		          "(SELECT tw.wid FROM task_word tw WHERE tw.tid = %i)" +
 			"ORDER BY %s") % (tasksql, tid, taskorder))
-	joheaders.page_header(req, u"Joukahainen &gt; %s %i" % (_(u'task'), tid))
-	jotools.write(req, u'<div class="main">\n')
+	joheaders.page_header_nonavbar(req, u"%s %i" % (_(u'task'), tid))
 	jotools.write(req, u'<form method="post" action="save">\n')
 	jotools.write(req, u'<table class="border">\n<tr><th>%s</th><th>%s</th></tr>\n' \
 	                   % (_(u'OK'), _(u'Word')))

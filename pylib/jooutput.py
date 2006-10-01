@@ -39,15 +39,16 @@ def _html(req, db, query):
 	
 	results = db.query("%s LIMIT %s OFFSET %s" % (query, limit_s, offset_s))
 	if results.ntuples() == 0:
-		joheaders.page_header(req, _('Search results'))
-		jotools.write(req, u"<p>%s</p>\n" % _(u'No matching words were found'))
+		joheaders.error_page(req, _(u'No matching words were found'))
+		return "\n"
 	elif results.ntuples() == 1:
 		joheaders.redirect_header(req, _config.WWW_ROOT_DIR + "/word/edit?wid=%i" \
 		                               % results.getresult()[0][0])
 		return "\n"
 	else:
-		joheaders.page_header(req, _('Search results'))
-		jotools.write(req, u'<div class="main"><table><tr><th>%s</th><th>%s</th></tr>\n' \
+		(uid, uname, editable) = jotools.get_login_user(req)
+		joheaders.page_header_navbar_level1(req, _('Search results'), uid, uname)
+		jotools.write(req, u'<table><tr><th>%s</th><th>%s</th></tr>\n' \
 		                   % (_("Word"), _("Word class")))
 		for result in results.getresult():
 			jotools.write(req, u"<tr><td><a href=\"../word/edit?wid=%i\">%s</a></td><td>%s</td></tr>\n" %

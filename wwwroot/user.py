@@ -106,9 +106,8 @@ def addform(req):
 	if not jotools.is_admin(uid):
 		joheaders.error_page(req, _(u'You must be an administrator to do this'))
 		return '\n'
-	joheaders.page_header(req, u'Joukahainen -&gt; ' + _(u'Add user'))
+	joheaders.page_header_navbar_level1(req, _(u'Add user'), uid, uname)
 	jotools.write(req, u'''
-<h1>Joukahainen -&gt; %s</h1>
 <form method="post" action="add">
 <table>
 <tr><td>%s</td><td><input type="text" name="firstname" /></td></tr>
@@ -119,7 +118,8 @@ def addform(req):
 </table>
 <input type="submit" value="%s" />
 </form>
-'''        % (_(u'Add user'), _(u'First name'), _(u'Last name'), _(u'Username'), _(u'Email address'),
+</div>
+'''        % (_(u'First name'), _(u'Last name'), _(u'Username'), _(u'Email address'),
               _(u'Password'), _(u'Add user')))
 	joheaders.page_footer(req)
 	return "</html>\n"
@@ -163,9 +163,8 @@ def passwdform(req):
 	if uid == None:
 		joheaders.error_page(req, _(u'You must be logged in to do this'))
 		return '\n'
-	joheaders.page_header(req, u'Joukahainen -&gt; ' + _(u'Change password'))
+	joheaders.page_header_navbar_level1(req, _(u'Change password'), uid, uname)
 	jotools.write(req, u'''
-<h1>Joukahainen -&gt; %s</h1>
 <form method="post" action="changepasswd">
 <table>
 <tr><td>%s</td><td><input type="password" name="oldpw" /></td></tr>
@@ -173,7 +172,8 @@ def passwdform(req):
 </table>
 <input type="submit" value="%s" />
 </form>
-'''        % (_(u'Change password'), _(u'Old password'), _(u'New password'), _(u'Change password')))
+</div>
+'''        % (_(u'Old password'), _(u'New password'), _(u'Change password')))
 	joheaders.page_footer(req)
 	return "</html>\n"
 

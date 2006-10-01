@@ -40,12 +40,9 @@ CHARACTERISTIC_VERB_FORMS = ['infinitiivi_1', 'preesens_yks_1', 'imperfekti_yks_
                              'kondit_yks_3', 'imperatiivi_yks_3', 'partisiippi_2',
                              'imperfekti_pass']
 def classlist(req):
-	joheaders.page_header(req, u'Etsi sanalle taivutusluokka')
+	(uid, uname, editable) = jotools.get_login_user(req)
+	joheaders.page_header_navbar_level1(req, u'Etsi sanalle taivutusluokka', uid, uname)
 	jotools.write(req, u'''
-<div class="topbar">
-<h1><a href="..">Joukahainen</a> &gt; Etsi sanalle taivutusluokka</h1><br style="clear: both" />
-</div>
-<div class="main">
 <div class="rightinfo">
 <h2>Astevaihteluluokat</h2>
 <dl>

@@ -27,7 +27,8 @@ import joindex
 
 _ = _apply_config.translation.ugettext
 
-def page_header(req, title):
+# Outputs the shared header for a page with no navigation bar
+def page_header_nonavbar(req, title):
 	req.content_type = "text/html; charset=UTF-8"
 	req.send_http_header()
 	req.write("""<?xml version="1.0" encoding="UTF-8"?>
@@ -40,6 +41,7 @@ def page_header(req, title):
 <script type="text/javascript" src="%s/jscripts.js"></script>
 </head>
 <body onload="initPage()">
+<div class="main">
 """ % (title.encode('UTF-8'), _config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR))
 
 # Outputs the shared html header for ordinary pages

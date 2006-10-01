@@ -32,8 +32,9 @@ _ = _apply_config.translation.ugettext
 
 def form(req):
 	db = jodb.connect()
-	joheaders.page_header(req, _(u'Search database'))
-	jotools.write(req, u'<div class="main"><form method="get" action="wlist">\n<p>')
+	(uid, uname, editable) = jotools.get_login_user(req)
+	joheaders.page_header_navbar_level1(req, _(u'Search database'), uid, uname)
+	jotools.write(req, u'<form method="get" action="wlist">\n<p>')
 	jotools.write(req, u'<label>%s: <input type="text" name="word" /></label>\n' % _(u'Word'))
 	jotools.write(req, u'<label>%s <input type="checkbox" name="wordre" /></label></p><p>\n' \
 	              % _(u'Use regular expression'))
