@@ -121,6 +121,8 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(30, 'ei mAinen -johdost
 INSERT INTO attribute_class(aid, classid) VALUES(30, 1);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(31, 'yksitekijäinen teonsana', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(31, 3);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(32, 'ei taivu vertailumuodoissa', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(32, 2);
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
 -- Test user, password 'testi'
