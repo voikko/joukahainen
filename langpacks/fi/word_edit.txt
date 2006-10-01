@@ -28,4 +28,3 @@ $$main_form_end(WID,EDITABLE)$$
 <div class="bottominfo">
 $$message_log(WID)$$
 </div>
-</div>

@@ -47,8 +47,8 @@ def edit(req, wid = None):
 	static_vars = {'WID': wid_n, 'WORD': unicode(wordinfo[0], 'UTF-8'), 'CLASSID': wordinfo[1],
 	               'UID': uid, 'UNAME': uname, 'EDITABLE': editable}
 	jotools.process_template(req, db, static_vars, u'word_edit', _config.LANG, u'joeditors', 1)
-	joheaders.page_footer(req)
-	return "</html>"
+	joheaders.page_footer_plain(req)
+	return '\n'
 
 def change(req, wid = None):
 	if req.method != 'POST':
@@ -146,9 +146,8 @@ def flags(req, wid = None):
 		joheaders.page_header_navbar_level2(req, title1, link1, title2, uid, uname, wid_n)
 		jotools.write(req, u'<p>%s</p>\n' % joeditors.call(db, u'word_class', [classid]))
 		jotools.write(req, joeditors.call(db, u'flag_edit_form', [wid_n, classid]))
-		jotools.write(req, u'</div>\n')
-		joheaders.page_footer(req)
-		return "</html>"
+		joheaders.page_footer_plain(req)
+		return '\n'
 	if req.method != 'POST':
 		joheaders.error_page(req, _(u'Only GET and POST requests are allowed'))
 		return '\n'
@@ -224,9 +223,8 @@ def rwords(req, wid = None):
 		joheaders.page_header_navbar_level2(req, title1, link1, title2, uid, uname, wid_n)
 		jotools.write(req, u'<p>%s</p>\n' % joeditors.call(db, u'word_class', [classid]))
 		jotools.write(req, joeditors.call(db, u'rwords_edit_form', [wid_n]))
-		jotools.write(req, u'</div>\n')
-		joheaders.page_footer(req)
-		return "</html>"
+		joheaders.page_footer_plain(req)
+		return '\n'
 	if req.method != 'POST':
 		joheaders.error_page(req, _(u'Only GET and POST requests are allowed'))
 		return '\n'
@@ -438,7 +436,7 @@ def add_from_db(req):
 		          _(u'in category %s') % jotools.escape_html(category))
 		return '\n'
 	class_res = db.query("select classid, name from wordclass").getresult()
-	joheaders.list_page_header(req, u"Joukahainen &gt; " + _(u"Add words"), uid, uname)
+	joheaders.page_header_navbar_level1(req, _(u"Add words"), uid, uname)
 	jotools.write(req, u'<form method="post" action="add">\n')
 	jotools.write(req, u'<table class="border">\n')
 	jotools.write(req, u'<tr><th>%s</th><th>%s</th><th>%s</th></tr>\n' \
@@ -458,8 +456,8 @@ def add_from_db(req):
 		i = i + 1
 	jotools.write(req, u'</table>\n' +
 	                   u'<p><input type="submit" value="%s"></p></form>\n' % _(u"Add words"))
-	joheaders.list_page_footer(req)
-	return '</html>\n'
+	joheaders.page_footer_plain(req)
+	return '\n'
 
 def add_manual(req):
 	(uid, uname, editable) = jotools.get_login_user(req)
@@ -471,15 +469,15 @@ def add_manual(req):
 		return '\n'
 	db = jodb.connect()
 	words_per_page = 15
-	joheaders.list_page_header(req, u"Joukahainen &gt; " + _(u"Add words"), uid, uname)
+	joheaders.page_header_navbar_level1(req, _(u"Add words"), uid, uname)
 	jotools.write(req, u'<form method="post" action="add">\n' +
 	                   u'<table class="border">\n<tr><th>%s</th><th>%s</th></tr>\n' \
 	                   % (_(u'Word'), _(u'Word class')))
 	_add_entry_fields(req, db, None, words_per_page)
 	jotools.write(req, u'</table>\n' +
 	                   u'<p><input type="submit" value="%s"></p></form>\n' % _(u"Add words"))
-	joheaders.list_page_footer(req)
-	return '</html>\n'
+	joheaders.page_footer_plain(req)
+	return '\n'
 
 def add(req):
 	(uid, uname, editable) = jotools.get_login_user(req)
@@ -516,7 +514,7 @@ def add(req):
 		if stored_word['try_again']: need_confirm_count = need_confirm_count + 1
 		nwordlist.append(stored_word)
 	db.query("COMMIT")
-	joheaders.list_page_header(req, u"Joukahainen &gt; " + _(u"Add words"), uid, uname)
+	joheaders.page_header_navbar_level1(req, _(u"Add words"), uid, uname)
 	if need_confirm_count > 0:
 		jotools.write(req, u'<p>' + _(u'''Adding some words failed or requires confirmation.
 Make the required changes and mark the words that you still want to add.''') + u'</p>')
@@ -539,8 +537,8 @@ Make the required changes and mark the words that you still want to add.''') + u
 		jotools.write(req, u'</table>\n')
 		jotools.write(req, u'<p><a href="../">%s ...</a></p>\n' \
 		                   % _(u'Back to main page'))
-		joheaders.list_page_footer(req)
-		return '</html>\n'
+		joheaders.page_footer_plain(req)
+		return '\n'
 
 def categories(req):
 	(uid, uname, editable) = jotools.get_login_user(req)
@@ -555,7 +553,7 @@ def categories(req):
 	if results.ntuples() == 0:
 		joheaders.error_page(req, _(u'There are no words to be added'))
 		return '\n'
-	joheaders.list_page_header(req, u"Joukahainen &gt; " + _(u"Add words"), uid, uname)
+	joheaders.page_header_navbar_level1(req, _(u"Add words"), uid, uname)
 	jotools.write(req, u"<p>%s:</p>\n" \
 	                   % _(u'Choose a category from which you want to add words'))
 	jotools.write(req, u"<table><tr><th>%s</th><th>%s</th></tr>\n" \
@@ -569,5 +567,5 @@ def categories(req):
 		  % (jotools.escape_url(cat), jotools.escape_html(cats), result[1]))
 	jotools.write(req, u"</table>\n")
 	jotools.write(req, u'<p><a href="add_from_db">%s ...</a></p>\n' % _(u'All words'))
-	joheaders.list_page_footer(req)
-	return '</html>\n'
+	joheaders.page_footer_plain(req)
+	return '\n'

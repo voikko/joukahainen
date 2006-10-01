@@ -118,6 +118,13 @@ def frame_header(req, title):
 def page_footer(req):
 	req.write('\n</body>')
 
+# Ordinary shared page footer
+def page_footer_plain(req):
+	req.write("""
+</div>
+</body>
+</html>""")
+
 def frame_footer(req):
 	req.write('\n</html>')
 
@@ -129,26 +136,21 @@ def redirect_header(req, location):
 	jotools.write(req, _(u"Redirecting to %s") % location_s)
 
 def error_page(req, errortext):
-	page_header(req, u'Joukahainen: %s' % _(u'error'))
+	page_header_nonavbar(req, u'Joukahainen: %s' % _(u'error'))
 	jotools.write(req, u'<h1>%s</h1><p>%s</p>\n' % (_(u'Error'), errortext))
-	page_footer(req)
+	page_footer_plain(req)
 
 def ok_page(req, message):
-	page_header(req, u'Joukahainen: %s' % _(u'operation succeeded'))
+	page_header_nonavbar(req, u'Joukahainen: %s' % _(u'operation succeeded'))
 	jotools.write(req, u'<h1>%s</h1><p>%s</p>\n' % (_(u'operation succeeded'), message))
 	jotools.write(req, u'<p><a href="%s">%s ...</a></p>\n' \
 	           % (_config.WWW_ROOT_DIR + '/', _(u'Back to front page')))
-	page_footer(req)
-	req.write('\n</html>')
+	page_footer_plain(req)
 
+# Header for a page containing a list
 def list_page_header(req, headertext, uid, uname):
-	page_header(req, headertext)
-	jotools.write(req, u"""<div class="topbar">
-<h1>%s</h1>
-<div class="login">%s</div>
-<div class="clear"></div>
-</div>
-<div class="main">""" % (headertext, joindex.login_logout(None, uid, uname, 0)))
+	page_header_navbar_level1(req, headertext, uid, uname)
+
 
 def list_page_footer(req):
 	jotools.write(req, u"</div>\n")

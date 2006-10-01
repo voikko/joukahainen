@@ -58,4 +58,3 @@ siihen tallennettua sanastoa vapaasti, mutta muutosten tekeminen vaatii käyttä
 <p>2006-08-03: ohjelmapäivitys SVN:stä, ei muutoksia tietokantaan</p>
 <p>2006-08-02: toinen testiasennus</p>
 <p>2006-06-21: ensimmäinen testiasennus</p>
-</div>

@@ -39,7 +39,7 @@ def list(req):
 	if tasks.ntuples() == 0:
 		joheaders.error_page(req, _(u'There are no tasks.'))
 		return '\n'
-	joheaders.list_page_header(req, u"Joukahainen &gt; %s" % _(u"tasks"), uid, uname)
+	joheaders.page_header_navbar_level1(req, _(u"tasks"), uid, uname)
 	jotools.write(req, u"<p>%s:</p>\n" % _(u'Choose a task'))
 	jotools.write(req, (u'<table class="border"><tr><th>%s</th><th>%s</th>' +
 	                   u'<th>%s *</th><th>%s *</th></tr>\n') \
@@ -57,8 +57,8 @@ def list(req):
 	# "Words left" is an approximation, because all of the checked words may not belong to
 	# this task any more. Calculating the exact numbers is too slow to do here.
 	jotools.write(req, u"<p>*) %s.</p>" % _(u'Number of words left is an estimate'))
-	joheaders.list_page_footer(req)
-	return '</html>\n'
+	joheaders.page_footer_plain(req)
+	return '\n'
 
 def show(req):
 	(uid, uname, editable) = jotools.get_login_user(req)
@@ -97,11 +97,10 @@ def show(req):
 	jotools.write(req, u'</table>')
 	jotools.write(req, u'<p><input type="hidden" name="tid" value="%i" />' % tid)
 	jotools.write(req, u'<input type="submit" value="%s"></form></p>' % _(u'Save checked'))
-	jotools.write(req, u'</div>')
 	jotools.write(req, u'<p><a href="../" target="_top">%s</a></p>\n' \
 	                   %_(u'Back to main page'))
-	joheaders.page_footer(req)
-	return '</html>\n'
+	joheaders.page_footer_plain(req)
+	return '\n'
 
 def work(req):
 	(uid, uname, editable) = jotools.get_login_user(req)

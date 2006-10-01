@@ -57,11 +57,9 @@ def _html(req, db, query):
 		if not limit_s == u'ALL' and results.ntuples() == jotools.toint(limit_s):
 			jotools.write(req, (u'<p><a href="wlist?%soffset=%i&limit=%s">' +
 			              u"%s ...</a></p>\n") % (param_s, int(offset_s)+int(limit_s),
-				    limit_s, _(u'More results')))
-		jotools.write(req, "</div>\n")
-	
-	joheaders.page_footer(req)
-	return '</html>\n'
+				    limit_s, _(u'More results')))	
+	joheaders.page_footer_plain(req)
+	return '\n'
 
 def call(req, outputtype, query):
 	db = jodb.connect()

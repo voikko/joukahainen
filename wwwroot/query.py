@@ -57,9 +57,9 @@ def form(req):
 		                    u'%s</label><br />\n') % (tname, selected, tdesc))
 	jotools.write(req, u'</p><p><input type="submit" value="%s" /><input type="reset" value="%s" /></p>\n' \
 	              % (_(u'Search'), _(u'Reset')))
-	jotools.write(req, u'</form></div>\n')
-	joheaders.page_footer(req)
-	return "</html>"
+	jotools.write(req, u'</form>\n')
+	joheaders.page_footer_plain(req)
+	return '\n'
 
 def wlist(req):
 	qselect = "SELECT w.wid, w.word, c.name AS classname, w.class FROM word w, wordclass c"

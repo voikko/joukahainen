@@ -118,11 +118,10 @@ def addform(req):
 </table>
 <input type="submit" value="%s" />
 </form>
-</div>
 '''        % (_(u'First name'), _(u'Last name'), _(u'Username'), _(u'Email address'),
               _(u'Password'), _(u'Add user')))
-	joheaders.page_footer(req)
-	return "</html>\n"
+	joheaders.page_footer_plain(req)
+	return '\n'
 
 def add(req):
 	(uid, uname, editable) = jotools.get_login_user(req)
@@ -172,10 +171,9 @@ def passwdform(req):
 </table>
 <input type="submit" value="%s" />
 </form>
-</div>
 '''        % (_(u'Old password'), _(u'New password'), _(u'Change password')))
-	joheaders.page_footer(req)
-	return "</html>\n"
+	joheaders.page_footer_plain(req)
+	return '\n'
 
 def changepasswd(req):
 	(uid, uname, editable) = jotools.get_login_user(req)

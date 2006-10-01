@@ -121,18 +121,16 @@ def classlist(req):
 		classdatafile = HF_DATA + "/verb.aff"
 		characteristic_forms = CHARACTERISTIC_VERB_FORMS
 	elif classid == 0:
-		jotools.write(req, "</div>\n")
-		joheaders.page_footer(req)
-		return "</html>"
+		joheaders.page_footer_plain(req)
+		return '\n'
 	else:
 		joheaders.error_page(req, u'Sanaluokkaa ei ole olemassa')
 		return '\n'
 	
 	word = jotools.get_param(req, 'word', u'')
 	if len(word) == 0:
-		jotools.write(req, "</div>\n")
-		joheaders.page_footer(req)
-		return "</html>"
+		joheaders.page_footer_plain(req)
+		return '\n'
 	grad_type = jotools.get_param(req, 'gclass', u'')
 	if grad_type == u'':
 		grad_type_s = u''
@@ -169,6 +167,5 @@ def classlist(req):
 			   and not inflected_word[1] in inflist:
 				inflist.append(inflected_word[1])
 		jotools.write(req, u'</table>\n')
-	jotools.write(req, "</div>\n")
-	joheaders.page_footer(req)
-	return "</html>"
+	joheaders.page_footer_plain(req)
+	return '\n'
