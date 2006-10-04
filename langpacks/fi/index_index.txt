@@ -31,6 +31,7 @@ ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki
  </ul>
 </li>
 <li><a href="findclass/classlist">Etsi sanalle taivutusluokka</a></li>
+<li><a href="query/listchanges">Viimeisimmät muutokset</a></li>
 </ul>
 <h2>Lisää sanoja</h2>
 <ul>
