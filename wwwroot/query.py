@@ -141,14 +141,14 @@ def listchanges(req, sdate = None, edate = None):
 	SELECT u.uname, to_char(w.ctime, 'YYYY-MM-DD HH24:MI:SS'),
 	       coalesce(u.firstname, ''), coalesce(u.lastname, ''),
 	       '%s', NULL, w.wid, w.word
-	FROM word w, appuser u WHERE w.cuser = u.uid AND w.ctime > '%s'
+	FROM word w, appuser u WHERE w.cuser = u.uid AND w.ctime BETWEEN '%s' AND '%s'
 	UNION
 	SELECT u.uname, to_char(e.etime, 'YYYY-MM-DD HH24:MI:SS'),
 	       coalesce(u.firstname, ''), coalesce(u.lastname, ''),
 	       e.message, e.comment, w.wid, w.word
 	FROM appuser u, event e, word w WHERE u.uid = e.euser AND e.eword = w.wid
-	AND e.etime > '%s'
-	ORDER BY 2 DESC""" % (_(u'Word created'), sdate_s, sdate_s));
+	AND e.etime BETWEEN '%s' AND '%s'
+	ORDER BY 2 DESC""" % (_(u'Word created'), sdate_s, edate_s, sdate_s, edate_s));
 	
 	retstr = u''
 	for result in results.getresult():
