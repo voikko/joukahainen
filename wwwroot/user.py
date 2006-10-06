@@ -49,13 +49,16 @@ def login(req, wid = None):
 	
 	pwhash = sha.new((_config.PW_SALT + password).encode('UTF-8')).hexdigest()
 	db = jodb.connect_private()
-	results = db.query(("select uid from appuser where uname = '%s' and pwhash = '%s' " +
+	results = db.query(("select uid, isadmin from appuser where uname = '%s' and pwhash = '%s' " +
 	                    "and disabled = FALSE") % (username.encode('UTF-8'), pwhash))
 	if results.ntuples() == 0:
 		joheaders.error_page(req, _(u"Incorrect username or password"))
 		return '\n'
 	
-	uid = results.getresult()[0][0]
+	(uid, isadmin) = results.getresult()[0]
+	if isadmin == 'f' and _config.ONLY_ADMIN_LOGIN_ALLOWED:
+		joheaders.error_page(req, _(u"Only administrator logins are allowed at the moment"))
+		return '\n'
 	
 	# Generate session key
 	sesssha = sha.new()

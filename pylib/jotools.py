@@ -26,6 +26,7 @@ import time
 import urllib
 import jodb
 import joheaders
+import _pg
 import _config
 import _apply_config
 from xml.sax import saxutils
@@ -139,10 +140,12 @@ def get_login_user(req):
 	session = get_session(req)
 	if session == '': return (None, None, False)
 	db = jodb.connect_private()
-	results = db.query(("select uid, uname from appuser where session_key = '%s' " +
+	results = db.query(("select uid, uname, isadmin from appuser where session_key = '%s' " +
 	                   "and session_exp > CURRENT_TIMESTAMP") % session)
 	if results.ntuples() != 1: return (None, None, False)
 	result = results.getresult()[0]
+	if result[2] == 'f' and _config.ONLY_ADMIN_LOGIN_ALLOWED: return (None, None, False)
+	
 	db.query("update appuser set session_exp = CURRENT_TIMESTAMP + interval '%i seconds' where uid = %i" \
 	         % (_config.SESSION_TIMEOUT, result[0]))
 	return (result[0], unicode(result[1], 'UTF-8'), True)
@@ -173,7 +176,7 @@ def decode_form_value(string):
 
 # Converts an unicode string to a form that is suitable for use in a SQL statement
 def escape_sql_string(string):
-	return string.replace(u"'", u"''").encode('UTF-8')
+	return _pg.escape_string(string.encode('UTF-8'))
 
 # Returns a list that has all unique elements of the argument list. The returned list is sorted
 # according to element values. The original list must be sortable

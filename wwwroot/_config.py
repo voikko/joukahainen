@@ -20,6 +20,10 @@ SESSION_TIMEOUT = 7200
 # User interface language
 LANG = u'fi'
 
+# This option can be used to prevent non-admin users from logging in when
+# maintenance work is being done
+ONLY_ADMIN_LOGIN_ALLOWED = False
+
 # Database connection parameters
 DBHOST = 'localhost'
 DB_PORT = 5432
