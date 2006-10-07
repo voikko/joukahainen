@@ -244,10 +244,12 @@ def _malaga_line(db, req, wid, word, classid, hf_class, hf_histclass):
 def _jooutput_malaga(req, db, query):
 	req.content_type = "text/plain"
 	req.send_http_header()
-	req.write(("""# This file is generated for use in Suomi-malaga by
-# vocabulary management application Joukahainen. For information about
-# authors of the program and the data see the application introduction page at
-# http://joukahainen.lokalisointi.org
+	req.write((u"""# This file is generated for use in Suomi-malaga by
+# vocabulary management application Joukahainen.
+# This data is based on Suomi-malaga 0.7 by Hannu Väisänen, and includes
+# modifications from Harri Pitkänen, Teemu Likonen and others. For information
+# about authors of the program and the data see the application introduction
+# page at http://joukahainen.lokalisointi.org
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
