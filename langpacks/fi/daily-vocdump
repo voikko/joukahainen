@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Run this script once a day from cron to produce up to date
+# downloadable malaga vocabulary files.
+
+# URLs and dump directories
+JOUKAHAINEN_URL=http://localhost/joukahainen
+VOC_DUMP_DIR=/tmp/d/voc
+
+# Special vocabularies
+AID[0]=15
+ANAME[0]=atk
+AID[1]=19
+ANAME[1]=kasvatustiede
+AID[2]=33
+ANAME[2]=laaketiede
+
+
+DATE=`date +%Y-%m-%d`
+
+wget -q "$JOUKAHAINEN_URL/malaga/default" -O "$VOC_DUMP_DIR/default-$DATE.lex"
+i="0"
+while [ $i -lt ${#AID[*]} ] ; do
+  wget -q "$JOUKAHAINEN_URL/malaga/special?aid=${AID[$i]}" -O "$VOC_DUMP_DIR/${ANAME[$i]}-$DATE.lex"
+  i=$[$i+1]
+done
+
