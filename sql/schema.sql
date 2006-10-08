@@ -118,7 +118,12 @@ CREATE TABLE task_word (
 );
 
 -- Grant privileges
-GRANT SELECT ON language, wordclass, attribute, attribute_class TO joukahainen;
+GRANT SELECT ON language, wordclass, attribute, attribute_class, attribute_type TO joukahainen;
 GRANT SELECT, UPDATE on word_wid_seq, related_word_rwid_seq, event_eid_seq TO joukahainen;
 GRANT ALL ON word, string_attribute_value, flag_attribute_value, appuser,
   related_word, event, raw_word, task, task_word TO joukahainen;
+-- If you have an automated backup system, it can back up the main database using following privileges:
+-- GRANT SELECT ON language, wordclass, attribute, attribute_class, attribute_type,
+--                 word_wid_seq, related_word_rwid_seq, event_eid_seq,
+--                 word, string_attribute_value, flag_attribute_value, appuser,
+--                 related_word, event, raw_word, task, task_word TO joukahainenbackup;
