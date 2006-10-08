@@ -1,3 +1,4 @@
+# translation of fi.po to Finnish
 # Translation of Joukahainen to Finnish
 # Copyright (C) 2006 Harri Pitkänen
 # This file is distributed under the same license as the Joukahainen package.
@@ -7,130 +8,138 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joukahainen\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-24 13:57+0300\n"
-"PO-Revision-Date: 2006-08-24 14:00+0300\n"
+"POT-Creation-Date: 2006-10-08 20:22+0300\n"
+"PO-Revision-Date: 2006-10-08 20:24+0300\n"
 "Last-Translator: Harri Pitkänen <hatapitk@iki.fi>\n"
 "Language-Team: Finnish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.2\n"
+"X-Generator: KBabel 1.11.4\n"
 
-#: wwwroot/word.py:36 wwwroot/word.py:61 wwwroot/word.py:130
-#: wwwroot/word.py:204 wwwroot/task.py:70 wwwroot/task.py:114
-#: wwwroot/task.py:134
+#: wwwroot/word.py:37 wwwroot/word.py:62 wwwroot/word.py:131
+#: wwwroot/word.py:208 wwwroot/task.py:70 wwwroot/task.py:112
+#: wwwroot/task.py:132
 #, python-format
 msgid "Parameter %s is required"
 msgstr "Parametri %s on pakollinen"
 
-#: wwwroot/word.py:42 wwwroot/word.py:69 wwwroot/word.py:136
-#: wwwroot/word.py:210
+#: wwwroot/word.py:43 wwwroot/word.py:70 wwwroot/word.py:137
+#: wwwroot/word.py:214
 #, python-format
 msgid "Word %i does not exist"
 msgstr "Sanaa %i ei ole olemassa"
 
-#: wwwroot/word.py:54 wwwroot/word.py:482 wwwroot/user.py:40
-#: wwwroot/user.py:89 wwwroot/task.py:130
+#: wwwroot/word.py:55 wwwroot/word.py:489 wwwroot/user.py:40
+#: wwwroot/user.py:92 wwwroot/task.py:128
 msgid "Only POST requests are allowed"
 msgstr "Vain POST-pyynnöt ovat sallittuja"
 
-#: wwwroot/word.py:58 wwwroot/word.py:127 wwwroot/word.py:201
-#: wwwroot/word.py:404 wwwroot/word.py:458 wwwroot/word.py:478
-#: wwwroot/word.py:539 wwwroot/task.py:66 wwwroot/task.py:110
-#: wwwroot/task.py:127
+#: wwwroot/word.py:59 wwwroot/word.py:128 wwwroot/word.py:205
+#: wwwroot/word.py:411 wwwroot/word.py:465 wwwroot/word.py:485
+#: wwwroot/word.py:546 wwwroot/task.py:66 wwwroot/task.py:108
+#: wwwroot/task.py:125
 msgid "You are not allowed to edit data"
 msgstr "Sinulla ei ole oikeutta tietojen muuttamiseen"
 
-#: wwwroot/word.py:148 wwwroot/word.py:222
+#: wwwroot/word.py:143 wwwroot/word.py:220 wwwroot/word.py:443
+#: wwwroot/word.py:475 wwwroot/word.py:524 wwwroot/word.py:535
+#: wwwroot/task.py:87 wwwroot/query.py:40 pylib/jooutput.py:52
+msgid "Word"
+msgstr "Sana"
+
+#: wwwroot/word.py:145
+msgid "flags"
+msgstr "liput"
+
+#: wwwroot/word.py:152 wwwroot/word.py:229
 msgid "Only GET and POST requests are allowed"
 msgstr "Vain GET- ja POST-pyynnöt ovat sallittuja"
 
-#: wwwroot/word.py:176
+#: wwwroot/word.py:180
 #, python-format
 msgid "Flag removed: '%s'"
 msgstr "Lippu poistettu: '%s'"
 
-#: wwwroot/word.py:180
+#: wwwroot/word.py:184
 #, python-format
 msgid "Flag added: '%s'"
 msgstr "Lippu lisätty: '%s'"
 
-#: wwwroot/word.py:243
+#: wwwroot/word.py:222
+msgid "related words"
+msgstr "kirjoitusasut"
+
+#: wwwroot/word.py:250
 #, python-format
 msgid "Alternative spelling removed: '%s'"
 msgstr "Kirjoitusasu poistettu: '%s'"
 
-#: wwwroot/word.py:261
+#: wwwroot/word.py:268
 #, python-format
 msgid "Alternative spelling added: '%s'"
 msgstr "Kirjoitusasu lisätty: '%s'"
 
-#: wwwroot/word.py:292
+#: wwwroot/word.py:299
 msgid "incorrect word"
 msgstr "virheellinen sana"
 
-#: wwwroot/word.py:357
+#: wwwroot/word.py:364
 msgid "Homonyms"
 msgstr "Homonyymit"
 
-#: wwwroot/word.py:371
+#: wwwroot/word.py:378
 msgid "Forbidden characters in the word"
 msgstr "Sanassa on kiellettyjä merkkejä"
 
-#: wwwroot/word.py:376
+#: wwwroot/word.py:383
 msgid "Word class must be set"
 msgstr "Sanaluokka on asetettava"
 
-#: wwwroot/word.py:391
+#: wwwroot/word.py:398
 msgid "Word added"
 msgstr "Sana lisätty"
 
-#: wwwroot/word.py:396
+#: wwwroot/word.py:403
 msgid "Word removed from the list of candidate words"
 msgstr "Sana poistettu ehdotettujen sanojen listalta"
 
-#: wwwroot/word.py:398
+#: wwwroot/word.py:405
 msgid "Nothing was done"
 msgstr "Mitään ei tehty"
 
-#: wwwroot/word.py:407 wwwroot/word.py:461
+#: wwwroot/word.py:414 wwwroot/word.py:468
 msgid "Only GET requests are allowed"
 msgstr "Vain GET-pyynnöt ovat sallittuja"
 
-#: wwwroot/word.py:425 wwwroot/word.py:428 wwwroot/word.py:547
+#: wwwroot/word.py:432 wwwroot/word.py:435 wwwroot/word.py:554
 msgid "There are no words to be added"
 msgstr "Lisäystä odottavia sanoja ei ole"
 
-#: wwwroot/word.py:429
+#: wwwroot/word.py:436
 #, python-format
 msgid "in category %s"
 msgstr "kategoriassa %s"
 
-#: wwwroot/word.py:432 wwwroot/word.py:451 wwwroot/word.py:465
-#: wwwroot/word.py:471 wwwroot/word.py:510 wwwroot/word.py:549
+#: wwwroot/word.py:439 wwwroot/word.py:458 wwwroot/word.py:472
+#: wwwroot/word.py:478 wwwroot/word.py:517 wwwroot/word.py:556
 msgid "Add words"
 msgstr "Lisää sanoja"
 
-#: wwwroot/word.py:436 wwwroot/word.py:468 wwwroot/word.py:517
-#: wwwroot/word.py:528 wwwroot/task.py:88 wwwroot/query.py:37
-#: pylib/jooutput.py:46
-msgid "Word"
-msgstr "Sana"
-
-#: wwwroot/word.py:436 wwwroot/word.py:468 wwwroot/word.py:517
-#: wwwroot/word.py:528 pylib/jooutput.py:47 pylib/joeditors.py:33
+#: wwwroot/word.py:443 wwwroot/word.py:475 wwwroot/word.py:524
+#: wwwroot/word.py:535 pylib/jooutput.py:52 pylib/joeditors.py:33
 msgid "Word class"
 msgstr "Sanaluokka"
 
-#: wwwroot/word.py:436 wwwroot/word.py:517 wwwroot/word.py:528
+#: wwwroot/word.py:443 wwwroot/word.py:524 wwwroot/word.py:535
 msgid "Notes"
 msgstr "Huomioita"
 
-#: wwwroot/word.py:502
+#: wwwroot/word.py:509
 msgid "Word was not added"
 msgstr "Sanaa ei lisätty"
 
-#: wwwroot/word.py:512
+#: wwwroot/word.py:519
 msgid ""
 "Adding some words failed or requires confirmation.\n"
 "Make the required changes and mark the words that you still want to add."
@@ -139,39 +148,39 @@ msgstr ""
 "Tee tarvittavat korjaukset ja merkitse sanat, jotka edelleen haluat "
 "lisättäviksi."
 
-#: wwwroot/word.py:517
+#: wwwroot/word.py:524
 msgid "Confirm addition"
 msgstr "Vahvista lisäys"
 
-#: wwwroot/word.py:521
+#: wwwroot/word.py:528
 msgid "Continue"
 msgstr "Jatka"
 
-#: wwwroot/word.py:525
+#: wwwroot/word.py:532
 msgid "The following changes were made"
 msgstr "Seuraavat muutokset tehtiin"
 
-#: wwwroot/word.py:532 wwwroot/task.py:103
+#: wwwroot/word.py:539 wwwroot/task.py:101
 msgid "Back to main page"
 msgstr "Takaisin aloitussivulle"
 
-#: wwwroot/word.py:551
+#: wwwroot/word.py:558
 msgid "Choose a category from which you want to add words"
 msgstr "Valitse kategoria, josta haluat lisätä sanoja"
 
-#: wwwroot/word.py:553
+#: wwwroot/word.py:560
 msgid "Category"
 msgstr "Kategoria"
 
-#: wwwroot/word.py:553 wwwroot/task.py:46
+#: wwwroot/word.py:560 wwwroot/task.py:46
 msgid "Words left"
 msgstr "Sanoja jäljellä"
 
-#: wwwroot/word.py:556
+#: wwwroot/word.py:563
 msgid "no category"
 msgstr "ei kategoriaa"
 
-#: wwwroot/word.py:562
+#: wwwroot/word.py:569
 msgid "All words"
 msgstr "Kaikki sanat"
 
@@ -183,72 +192,76 @@ msgstr "Käyttäjätunnus tai salasana on väärin tai puuttuu"
 msgid "Incorrect username or password"
 msgstr "Käyttäjätunnus tai salasana on väärin"
 
-#: wwwroot/user.py:107 wwwroot/user.py:130
+#: wwwroot/user.py:60
+msgid "Only administrator logins are allowed at the moment"
+msgstr "Kirjautuminen on sallittu tällä hetkellä vain pääkäyttäjälle"
+
+#: wwwroot/user.py:110 wwwroot/user.py:132
 msgid "You must be an administrator to do this"
 msgstr "Tämä toiminto vaatii pääkäyttäjän oikeudet"
 
-#: wwwroot/user.py:109 wwwroot/user.py:122 wwwroot/user.py:123
+#: wwwroot/user.py:112 wwwroot/user.py:125
 msgid "Add user"
 msgstr "Lisää käyttäjä"
 
-#: wwwroot/user.py:122
+#: wwwroot/user.py:124
 msgid "First name"
 msgstr "Etunimi"
 
-#: wwwroot/user.py:122
+#: wwwroot/user.py:124
 msgid "Last name"
 msgstr "Sukunimi"
 
-#: wwwroot/user.py:122 pylib/joindex.py:39
+#: wwwroot/user.py:124 pylib/joindex.py:37 pylib/joheaders.py:73
 msgid "Username"
 msgstr "Käyttäjätunnus"
 
-#: wwwroot/user.py:122
+#: wwwroot/user.py:124
 msgid "Email address"
 msgstr "Sähköpostiosoite"
 
-#: wwwroot/user.py:123 pylib/joindex.py:39
+#: wwwroot/user.py:125 pylib/joindex.py:37 pylib/joheaders.py:73
 msgid "Password"
 msgstr "Salasana"
 
-#: wwwroot/user.py:139 wwwroot/user.py:142
+#: wwwroot/user.py:141 wwwroot/user.py:144
 #, python-format
 msgid "Required field %s is missing"
 msgstr "Pakollinen kenttä %s puuttuu"
 
-#: wwwroot/user.py:152
+#: wwwroot/user.py:154
 msgid "User name is already in use"
 msgstr "Käyttäjänimi on jo käytössä"
 
-#: wwwroot/user.py:158
+#: wwwroot/user.py:160
 msgid "New user was added succesfully"
 msgstr "Uuden käyttäjän lisäys onnistui"
 
-#: wwwroot/user.py:164 wwwroot/user.py:183
+#: wwwroot/user.py:166 wwwroot/user.py:184
 msgid "You must be logged in to do this"
 msgstr "Tämä toiminto toimii vain kirjautuneilla käyttäjillä"
 
-#: wwwroot/user.py:166 wwwroot/user.py:176
+#: wwwroot/user.py:168 wwwroot/user.py:177
 msgid "Change password"
 msgstr "Vaihda salasana"
 
-#: wwwroot/user.py:176
+#: wwwroot/user.py:177
 msgid "Old password"
 msgstr "Vanha salasana"
 
-#: wwwroot/user.py:176
+#: wwwroot/user.py:177
 msgid "New password"
 msgstr "Uusi salasana"
 
-#: wwwroot/user.py:188
+#: wwwroot/user.py:189
 msgid "Required field is missing"
 msgstr "Pakollinen kenttä puuttuu"
 
-#: wwwroot/user.py:195
+#: wwwroot/user.py:196
 msgid "Incorrect old password"
 msgstr "Vanha salasana on väärin"
 
-#: wwwroot/user.py:199
+#: wwwroot/user.py:200
 msgid "Password was changed succesfully"
 msgstr "Salasanan vaihto onnistui"
 
@@ -280,71 +293,95 @@ msgstr "Valmiina"
 msgid "Number of words left is an estimate"
 msgstr "Jäljellä olevien sanojen määrä on arvio"
 
-#: wwwroot/task.py:84 wwwroot/task.py:116
+#: wwwroot/task.py:84 wwwroot/task.py:114
 msgid "task"
 msgstr "tehtävä"
 
-#: wwwroot/task.py:88
+#: wwwroot/task.py:87
 msgid "OK"
 msgstr "OK"
 
-#: wwwroot/task.py:100
+#: wwwroot/task.py:99
 msgid "Save checked"
 msgstr "Tallenna tarkistetut"
 
-#: wwwroot/query.py:35
+#: wwwroot/query.py:38
 msgid "Search database"
 msgstr "Hae tietokannasta"
 
-#: wwwroot/query.py:39
+#: wwwroot/query.py:42
 msgid "Use regular expression"
 msgstr "Käytä säännöllistä lauseketta"
 
-#: wwwroot/query.py:42
+#: wwwroot/query.py:45
 msgid "select attribute"
 msgstr "valitse attribuutti"
 
-#: wwwroot/query.py:45
+#: wwwroot/query.py:48
 msgid "is"
 msgstr "on"
 
-#: wwwroot/query.py:47
+#: wwwroot/query.py:50
 msgid "Flags set"
 msgstr "Asetetut liput"
 
-#: wwwroot/query.py:58
+#: wwwroot/query.py:61
 msgid "Search"
 msgstr "Hae"
 
-#: wwwroot/query.py:58
+#: wwwroot/query.py:61
 msgid "Reset"
 msgstr "Tyhjennä"
 
-#: wwwroot/query.py:69
+#: wwwroot/query.py:72
 msgid "Word has forbidden characters in it"
 msgstr "Sanassa on kiellettyjä merkkejä"
 
-#: wwwroot/_apply_config.py:41
+#: wwwroot/query.py:112
+msgid "List changes"
+msgstr "Listaa muutokset"
+
+#: wwwroot/query.py:121
+msgid "Invalid start date"
+msgstr "Virheellinen aloituspäivä"
+
+#: wwwroot/query.py:127
+msgid "Invalid end date"
+msgstr "Virheellinen lopetuspäivä"
+
+#: wwwroot/query.py:137
+msgid "Start date"
+msgstr "Aloituspäivä"
+
+#: wwwroot/query.py:137
+msgid "End date"
+msgstr "Lopetuspäivä"
+
+#: wwwroot/query.py:151 pylib/joeditors.py:93
+msgid "Word created"
+msgstr "Sana lisätty"
+
+#: wwwroot/_apply_config.py:40
 msgid "Inflections are not available for this language"
 msgstr "Taivutustietoja ei ole saatavilla tälle kielelle"
 
-#: pylib/jooutput.py:31
-msgid "Search results"
-msgstr "Hakutulokset"
-
-#: pylib/jooutput.py:44
+#: pylib/jooutput.py:42
 msgid "No matching words were found"
 msgstr "Hakua vastaavia sanoja ei löytynyt"
 
-#: pylib/jooutput.py:55
+#: pylib/jooutput.py:50
+msgid "Search results"
+msgstr "Hakutulokset"
+
+#: pylib/jooutput.py:60
 msgid "More results"
 msgstr "Lisää tuloksia"
 
-#: pylib/jooutput.py:69
+#: pylib/jooutput.py:73
 msgid "Output as page with links"
 msgstr "Tulosta linkkilistana"
 
-#: pylib/jotools.py:42
+#: pylib/jotools.py:43
 msgid "Error: unknown module"
 msgstr "Virhe: tuntematon moduuli"
 
@@ -361,83 +398,82 @@ msgstr "Ei asetettuja lippuja"
 msgid "Not set"
 msgstr "Ei asetettu"
 
-#: pylib/joeditors.py:77 pylib/joeditors.py:125 pylib/joeditors.py:147
+#: pylib/joeditors.py:77 pylib/joeditors.py:134 pylib/joeditors.py:156
 msgid "Add a comment"
 msgstr "Lisää kommentti"
 
-#: pylib/joeditors.py:77 pylib/joeditors.py:125 pylib/joeditors.py:147
+#: pylib/joeditors.py:77 pylib/joeditors.py:134 pylib/joeditors.py:156
 msgid "Save changes"
 msgstr "Tallenna muutokset"
 
-#: pylib/joeditors.py:77 pylib/joeditors.py:125 pylib/joeditors.py:148
+#: pylib/joeditors.py:77 pylib/joeditors.py:134 pylib/joeditors.py:157
 msgid "Cancel changes"
 msgstr "Peruuta muutokset"
 
-#: pylib/joeditors.py:87
-msgid "No changelog"
-msgstr "Ei muutostietoja"
-
-#: pylib/joeditors.py:113
+#: pylib/joeditors.py:122
 msgid "No flags available"
 msgstr "Lippuja ei ole olemassa"
 
-#: pylib/joeditors.py:133
+#: pylib/joeditors.py:142
 msgid "Remove alternative forms"
 msgstr "Poista kirjoitusasuja"
 
-#: pylib/joeditors.py:147
+#: pylib/joeditors.py:156
 msgid "Add alternative forms"
 msgstr "Lisää kirjoitusasuja"
 
-#: pylib/joeditors.py:157
+#: pylib/joeditors.py:166
 msgid "Word in Wiki"
 msgstr "Sana Wikissä"
 
-#: pylib/joeditors.py:161 pylib/joeditors.py:168 pylib/joeditors.py:174
-#: pylib/joeditors.py:180 pylib/joeditors.py:186 pylib/joeditors.py:192
+#: pylib/joeditors.py:170 pylib/joeditors.py:177 pylib/joeditors.py:183
+#: pylib/joeditors.py:189 pylib/joeditors.py:195 pylib/joeditors.py:201
 msgid "Error: 1 parameter expected"
 msgstr "Virhe: tarvitaan 1 parametri"
 
-#: pylib/joeditors.py:164 pylib/joeditors.py:171 pylib/joeditors.py:177
-#: pylib/joeditors.py:183 pylib/joeditors.py:189 pylib/joeditors.py:195
+#: pylib/joeditors.py:173 pylib/joeditors.py:180 pylib/joeditors.py:186
+#: pylib/joeditors.py:192 pylib/joeditors.py:198 pylib/joeditors.py:204
 #, python-format
 msgid "Error: %i parameters expected"
 msgstr "Virhe: tarvitaan %i parametriä"
 
-#: pylib/joeditors.py:197 pylib/joindex.py:51
+#: pylib/joeditors.py:206 pylib/joindex.py:49
 msgid "Error: unknown function"
 msgstr "Virhe: tuntematon funktio"
 
-#: pylib/joindex.py:39
+#: pylib/joindex.py:37 pylib/joheaders.py:73
 msgid "Log in"
 msgstr "Kirjaudu sisään"
 
-#: pylib/joindex.py:45
+#: pylib/joindex.py:43 pylib/joheaders.py:82
 msgid "Log out user"
 msgstr "Kirjaa ulos käyttäjä"
 
-#: pylib/joindex.py:49
+#: pylib/joindex.py:47
 msgid "Error: % parameters expected"
 msgstr "Virhe: tarvitaan %i parametriä"
 
-#: pylib/joheaders.py:69
+#: pylib/joheaders.py:136
 #, python-format
 msgid "Redirecting to %s"
 msgstr "Uudelleenohjataan osoitteeseen %s"
 
-#: pylib/joheaders.py:72
+#: pylib/joheaders.py:140
 msgid "error"
 msgstr "virhe"
 
-#: pylib/joheaders.py:73
+#: pylib/joheaders.py:141
 msgid "Error"
 msgstr "Virhe"
 
-#: pylib/joheaders.py:77 pylib/joheaders.py:78
+#: pylib/joheaders.py:146 pylib/joheaders.py:147
 msgid "operation succeeded"
 msgstr "toiminto suoritettu"
 
-#: pylib/joheaders.py:80
+#: pylib/joheaders.py:149
 msgid "Back to front page"
 msgstr "Takaisin aloitussivulle"
+
+#~ msgid "No changelog"
+#~ msgstr "Ei muutostietoja"
 
