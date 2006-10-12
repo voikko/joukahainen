@@ -48,14 +48,6 @@ ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki
 </div>
 
 <div class="bottominfo">
-<p>Tervetuloa käyttämään sanastonhallintasovellus Joukahaista! Tämä asennus on osittaisessa
-tuotantokäytössä, dokumentaatiota ja
-ominaisuuksia lisätään kuitenkin edelleen. Sovelluksen kautta voi kuka tahansa selata
-siihen tallennettua sanastoa vapaasti, mutta muutosten tekeminen vaatii käyttäjätunnuksen.</p>
-<h2>Muutoshistoria</h2>
-<p>2006-09-25: neljäs testiasennus</p>
-<p>2006-08-25: ohjelmapäivitys SVN:stä, ei muutoksia tietokantaan</p>
-<p>2006-08-20: kolmas testiasennus, osa ominaisuuksista on jo tuotantokäytössä</p>
-<p>2006-08-03: ohjelmapäivitys SVN:stä, ei muutoksia tietokantaan</p>
-<p>2006-08-02: toinen testiasennus</p>
-<p>2006-06-21: ensimmäinen testiasennus</p>
+<p>
+
+</p>
