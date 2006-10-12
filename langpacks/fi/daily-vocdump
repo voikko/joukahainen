@@ -6,6 +6,7 @@
 # URLs and dump directories
 JOUKAHAINEN_URL=http://localhost/joukahainen
 VOC_DUMP_DIR=/tmp/d/voc
+DB_DUMP_DIR=/tmp/d/db
 
 # Special vocabularies
 AID[0]=15
@@ -24,4 +25,6 @@ while [ $i -lt ${#AID[*]} ] ; do
   wget -q "$JOUKAHAINEN_URL/malaga/special?aid=${AID[$i]}" -O "$VOC_DUMP_DIR/${ANAME[$i]}-$DATE.lex"
   i=$[$i+1]
 done
+
+pg_dump -F c joukahainen > "$DB_DUMP_DIR/joukahainen-$DATE.pgdump"
 
