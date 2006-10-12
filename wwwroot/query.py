@@ -148,8 +148,12 @@ def listchanges(req, sdate = None, edate = None):
 	       e.message, e.comment, w.wid, w.word
 	FROM appuser u, event e, word w WHERE u.uid = e.euser AND e.eword = w.wid
 	AND e.etime BETWEEN '%s' AND '%s'
-	ORDER BY 2 DESC""" % (_(u'Word created'), sdate_s, edate_s, sdate_s, edate_s));
+	ORDER BY 2 DESC""" % (_(u'Word created').encode('UTF-8'), sdate_s, edate_s, sdate_s, edate_s));
 	
+	if results.ntuples() > 500:
+		jotools.write(req, u'<p>%s</p>' % _(u'Too many changes, use narrower date interval.'))
+		joheaders.page_footer_plain(req)
+		return '\n'
 	retstr = u''
 	for result in results.getresult():
 		wordlink = u'<a href="../word/edit?wid=%i">%s</a>' \
