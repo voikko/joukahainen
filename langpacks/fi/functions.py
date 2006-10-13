@@ -48,8 +48,8 @@ def _get_db_vowel_type(db, wid):
 # trailing part. If word contains character '|', automatic detection is performed
 # on the trailing part and the whole word, and the union of accepted vowel types is returned.
 def _get_wordform_infl_vowel_type(wordform):
-	# Search for last '=', check the trailing part using recursion
-	startind = wordform.rfind(u'=')
+	# Search for last '=' or '-', check the trailing part using recursion
+	startind = max(wordform.rfind(u'='), wordform.rfind(u'-'))
 	if startind == len(wordform) - 1: return hfutils.VOWEL_BOTH # Not allowed
 	if startind != -1: return _get_wordform_infl_vowel_type(wordform[startind+1:])
 	
