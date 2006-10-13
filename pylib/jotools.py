@@ -50,7 +50,7 @@ def toint(string):
 checkword = _apply_config.jotools_checkword
 
 # Checks if string is safe to be used as a SQL standard regular expression
-RECHARS = u"abcdefghijklmnopqrstuvwxyzåäöszèéšžABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖŠŽÈÉŠŽ-'|_%*()[]+."
+RECHARS = u"abcdefghijklmnopqrstuvwxyzåäöszèéšžáóABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖŠŽÈÉŠŽ-'|_%*()[]+."
 def checkre(string):
 	for c in string:
 		if not c in RECHARS: return False
