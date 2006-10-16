@@ -61,11 +61,11 @@ def checkre(string):
 # None
 def expandre(string):
 	if not checkre(string): return None
-	pattern = string.replace(u'V', u'(?:a|e|i|o|u|y|ä|ö|é|è|á|ó|â)')
-	pattern = string.replace(u'C', u'(?:b|c|d|f|g|h|j|k|l|m|n|p|q|r|s|t|v|w|x|z|š|ž)')
-	pattern = string.replace(u'A', u'(?:a|ä)')
-	pattern = string.replace(u'O', u'(?:o|ö)')
-	pattern = string.replace(u'U', u'(?:u|y)')
+	string = string.replace(u'V', u'(?:a|e|i|o|u|y|ä|ö|é|è|á|ó|â)')
+	string = string.replace(u'C', u'(?:b|c|d|f|g|h|j|k|l|m|n|p|q|r|s|t|v|w|x|z|š|ž)')
+	string = string.replace(u'A', u'(?:a|ä)')
+	string = string.replace(u'O', u'(?:o|ö)')
+	string = string.replace(u'U', u'(?:u|y)')
 	return string
 
 UNAMECHARS = u'abcdefghijklmnopqrstuvwxyz'
