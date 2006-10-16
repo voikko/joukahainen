@@ -12,7 +12,7 @@ johon ei liity aineiston kopioimista, on sallittu ilman rajoituksia. Tietokannan
 muuntamisessa käytetyt apuohjelmat löytyvät Hunspell-fi -projektin
 <a href="http://svn.sourceforge.net/viewcvs.cgi/hunspell-fi/trunk/">versionhallintajärjestelmästä</a>
 (alihakemistot joukahainen, tools ja data).</p>
-<p>Bugeista ja muista ongelmista voi raportoida joko Joukahaisen kehittäjälle ja tämän testiasennuksen
+<p>Bugeista ja muista ongelmista voi raportoida joko Joukahaisen kehittäjälle ja tämän asennuksen
 ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki.fi</a>) tai Hunspell-fi -projektin
 <a href="http://hunspell-fi.org/mailman/listinfo/devel_hunspell-fi.org">postituslistalle</a>.</p>
 </div>

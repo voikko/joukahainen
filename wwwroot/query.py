@@ -136,6 +136,10 @@ def listchanges(req, sdate = None, edate = None):
 </form>
 	""" % (_(u'Start date'), sdate_s, _(u'End date'), edate_s))
 	
+	# Increase edt by one day to make the the SQL between operator act on timestamps
+	# in a more intuitive way.
+	edt = edt + datetime.timedelta(days=1)
+	edate_s = edt.strftime('%Y-%m-%d')
 	
 	results = db.query("""
 	SELECT u.uname, to_char(w.ctime, 'YYYY-MM-DD HH24:MI:SS'),
