@@ -21,9 +21,14 @@ ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki
 <li><a href="query/wlist">Kaikki sanat (200 sanaa kerrallaan)</a></li>
 <li>Hae sana
  <ul>
- <li><form method="get" action="query/wlist"><p>Tarkka haku <input type="text" name="word" />
+ <li><form method="get" action="query/wlist"><p>Perushaku
+    <input type="text" name="word" />
+    <input type="hidden" name="wordsimplere" value="on" />
     <input type="submit" value="Hae" /></p></form></li>
- <li><form method="get" action="query/wlist"><p>SQL-standardin säännöllinen lauseke
+ <li><form method="get" action="query/wlist"><p>Tarkka haku
+    <input type="text" name="word" />
+    <input type="submit" value="Hae" /></p></form></li>
+ <li><form method="get" action="query/wlist"><p>Säännöllinen lauseke
     <input type="text" name="word" />
     <input type="hidden" name="wordre" value="on" />
     <input type="submit" value="Hae" /></p></form></li>

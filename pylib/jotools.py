@@ -49,12 +49,24 @@ def toint(string):
 # Checks if string looks like a valid word
 checkword = _apply_config.jotools_checkword
 
-# Checks if string is safe to be used as a SQL standard regular expression
-RECHARS = u"abcdefghijklmnopqrstuvwxyzåäöszèéšžáóABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖŠŽÈÉŠŽ-'|_%*()[]+."
+# Checks if string is safe to be used as a Posix regular expression
+RECHARS = u"abcdefghijklmnopqrstuvwxyzåäöszèéšžáóâABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖŠŽÈÉŠŽ-'|_%*()[]+.:?$^"
 def checkre(string):
 	for c in string:
 		if not c in RECHARS: return False
 	return True
+
+# Performs basic validity check for a Posix regular expression, replacing certain captial letters
+# with useful character classes to simplify searching. If the expression is not valid, returns
+# None
+def expandre(string):
+	if not checkre(string): return None
+	pattern = string.replace(u'V', u'(?:a|e|i|o|u|y|ä|ö|é|è|á|ó|â)')
+	pattern = string.replace(u'C', u'(?:b|c|d|f|g|h|j|k|l|m|n|p|q|r|s|t|v|w|x|z|š|ž)')
+	pattern = string.replace(u'A', u'(?:a|ä)')
+	pattern = string.replace(u'O', u'(?:o|ö)')
+	pattern = string.replace(u'U', u'(?:u|y)')
+	return string
 
 UNAMECHARS = u'abcdefghijklmnopqrstuvwxyz'
 # Checks if string looks like a valid user name

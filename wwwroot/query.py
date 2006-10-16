@@ -71,9 +71,16 @@ def wlist(req):
 		if not jotools.checkre(word):
 			joheaders.error_page(req, _(u'Word has forbidden characters in it'))
 			return "\n"
-		if jotools.get_param(req, 'wordre', u'') == u'on': compop = 'SIMILAR TO'
-		else: compop = '='
-		conditions.append("w.word %s '%s'" % (compop, jotools.escape_sql_string(word)))
+		if jotools.get_param(req, 'wordre', u'') == u'on':
+			compop = '~*'
+			compword = jotools.expandre(word)
+		elif jotools.get_param(req, 'wordsimplere', u'') == u'on':
+			compop = 'ILIKE'
+			compword = word
+		else:
+			compop = '='
+			compword = word
+		conditions.append("w.word %s '%s'" % (compop, jotools.escape_sql_string(compword)))
 	aid = jotools.toint(jotools.get_param(req, 'textaid', u''))
 	if aid != 0:
 		value = jotools.get_param(req, 'textvalue', u'')
