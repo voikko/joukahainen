@@ -212,6 +212,32 @@ def _get_class_and_flags(db, hf_wclass, wid):
 	else: flag_s = flag_s[:-2]
 	return (class_s, flag_s)
 
+# Returns a string describing the structure of a word, if necessary for the spellchecker
+# or hyphenator
+def _get_structure(wordform, malaga_class_s):
+	needstructure = False
+	if malaga_class_s in [u'nimi', u'etunimi', u'sukunimi', 'paikannimi']: ispropernoun = True
+	else: ispropernoun = False
+	structstr = u', rakenne: "='
+	for i in range(len(wordform)):
+		c = wordform[i]
+		if c == u'-':
+			structstr = structstr + u"-="
+			needstructure = True
+		elif c == u'|': structstr = structstr
+		elif c == u'=':
+			structstr = structstr + u"="
+			needstructure = True
+		elif c == u':':
+			structstr = structstr + u":"
+			needstructure = True
+		elif c.isupper():
+			structstr = structstr + u"i"
+			if not (ispropernoun and i == 0): needstructure = True
+		else: structstr = structstr + u"p"
+	if needstructure: return structstr + u'"'
+	else: return u""
+
 # Prints a line or lines to be added to Suomi-malaga lexicon for given word
 def _malaga_line(db, req, wid, word, classid, hf_class, hf_histclass):
 	altforms_res = db.query('SELECT related_word FROM related_word WHERE wid = %i' % wid)
@@ -238,8 +264,9 @@ def _malaga_line(db, req, wid, word, classid, hf_class, hf_histclass):
 			(wclass_s, flags) = _get_class_and_flags(db, classid, wid)
 			if flags == None: flags = u''
 			else: flags = u', tiedot: <%s>' % flags
-			req.write((u'[perusmuoto: "%s", alku: "%s", luokka: %s, jatko: <%s>, äs: %s%s];\n' \
-			          % (word, alku, wclass_s, jatko, malaga_vtype, flags)).encode('UTF-8'))
+			req.write((u'[perusmuoto: "%s", alku: "%s", luokka: %s, jatko: <%s>, äs: %s%s%s];\n' \
+			          % (word, alku, wclass_s, jatko, malaga_vtype, flags,
+				   _get_structure(altform, wclass_s))).encode('UTF-8'))
 
 def _jooutput_malaga(req, db, query):
 	req.content_type = "text/plain"

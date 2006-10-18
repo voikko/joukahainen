@@ -1,11 +1,5 @@
 Joukahainen: start
 
-<div class="topbar">
-<h1>Joukahainen: start</h1>
-<div class="login">$$login_logout(UID,UNAME,0)$$</div>
-<div class="clear"></div>
-</div>
-<div class="main">
 <div class="rightinfo">
 <p>This is an example installation of Joukahainen for English language. This section should contain
 general information about the data in this installation, for example its license.</p>
@@ -41,4 +35,4 @@ general information about the data in this installation, for example its license
 
 <div class="bottominfo">
 <p>This section is meant to contain news and information about recent changes to the installation.</p>
-</div>
+<div>
