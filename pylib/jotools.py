@@ -207,5 +207,5 @@ def unique(oldlist):
 def get_param(req, name, default):
 	for field in req.form.list:
 		if field.name == name:
-			return decode_form_value(field.value)
+			return unicode(field.value, 'UTF-8')
 	return default
