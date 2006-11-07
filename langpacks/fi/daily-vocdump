@@ -19,12 +19,19 @@ ANAME[2]=laaketiede
 
 DATE=`date +%Y-%m-%d`
 
-wget -q "$JOUKAHAINEN_URL/malaga/default" -O "$VOC_DUMP_DIR/default-$DATE.lex"
+wget -q "$JOUKAHAINEN_URL/malaga/default" -O "$VOC_DUMP_DIR/joukahainen-$DATE.lex"
+rm "$VOC_DUMP_DIR/joukahainen.lex"
+ln -s "$VOC_DUMP_DIR/joukahainen-$DATE.lex" "$VOC_DUMP_DIR/joukahainen.lex"
+
 i="0"
 while [ $i -lt ${#AID[*]} ] ; do
   wget -q "$JOUKAHAINEN_URL/malaga/special?aid=${AID[$i]}" -O "$VOC_DUMP_DIR/${ANAME[$i]}-$DATE.lex"
+  rm "$VOC_DUMP_DIR/${ANAME[$i]}.lex"
+  ln -s "$VOC_DUMP_DIR/${ANAME[$i]}-$DATE.lex" "$VOC_DUMP_DIR/${ANAME[$i]}.lex"
   i=$[$i+1]
 done
 
 pg_dump -F c joukahainen > "$DB_DUMP_DIR/joukahainen-$DATE.pgdump"
+rm "$DB_DUMP_DIR/joukahainen.pgdump"
+ln -s "$DB_DUMP_DIR/joukahainen-$DATE.pgdump" "$DB_DUMP_DIR/joukahainen.pgdump"
 
