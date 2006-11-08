@@ -36,7 +36,7 @@ SELECT wd.wid, wd.class, wd.word
 FROM word wd
 WHERE wd.wid NOT IN (
   SELECT wid FROM flag_attribute_value
-  WHERE aid IN (15, 19, 33, 24, 26)
+  WHERE aid IN (15, 19, 33, 24, 26, 35)
 )"""
 	db = jodb.connect()
 	functions.jooutput_call(req, 'malaga', db, query)

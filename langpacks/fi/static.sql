@@ -132,6 +132,10 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(34, 'ala: vanhaa kielt√
 INSERT INTO attribute_class(aid, classid) VALUES(34, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(34, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(34, 3);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(35, 'ala: vieraskielinen sana', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(35, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(35, 2);
+INSERT INTO attribute_class(aid, classid) VALUES(35, 3);
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
 -- Test user, password 'testi'
