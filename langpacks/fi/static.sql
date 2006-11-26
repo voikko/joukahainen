@@ -136,6 +136,12 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(35, 'ala: vieraskieline
 INSERT INTO attribute_class(aid, classid) VALUES(35, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(35, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(35, 3);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(36, 'ala: matematiikka, fysiikka ja kemia', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(36, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(36, 2);
+INSERT INTO attribute_class(aid, classid) VALUES(36, 3);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(37, 'ei yksikkömuotoja', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(37, 1);
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
 -- Test user, password 'testi'

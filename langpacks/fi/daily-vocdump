@@ -17,6 +17,8 @@ AID[2]=33
 ANAME[2]=laaketiede
 AID[3]=35
 ANAME[3]=vieraskieliset
+AID[4]=36
+ANAME[4]=matluonnontiede
 
 
 DATE=`date +%Y-%m-%d`
