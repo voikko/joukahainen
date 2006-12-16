@@ -109,6 +109,7 @@ def _message_log(db, wid):
 		if result[3] != None:
 			comment = jotools.escape_html(unicode(result[3], 'UTF-8')).strip()
 			comment = comment.replace(u'\n', u'<br />\n')
+			comment = jotools.comment_links(comment)
 			retstr = retstr + u'<p class="comment">%s</p>\n' % comment
 		retstr = retstr + u"</div>\n"
 	return retstr
@@ -173,6 +174,9 @@ def call(db, funcname, paramlist):
 		if len(paramlist) != 3: return _(u"Error: %i parameters expected" % 3)
 		return _apply_config.joeditors_word_inflection(db, paramlist[0],
 		                                               paramlist[1], paramlist[2])
+	if funcname == 'kotus_class':
+		if len(paramlist) != 2: return _(u"Error: %i parameters expected" % 2)
+		return _apply_config.joeditors_kotus_class(db, paramlist[0], paramlist[1])
 	if funcname == 'flag_attributes':
 		if len(paramlist) != 1: return _(u"Error: 1 parameter expected")
 		return _flag_attributes(db, paramlist[0])

@@ -182,6 +182,7 @@ def listchanges(req, sdate = None, edate = None):
 		if result[5] != None:
 			comment = jotools.escape_html(unicode(result[5], 'UTF-8')).strip()
 			comment = comment.replace(u'\n', u'<br />\n')
+			comment = jotools.comment_links(comment)
 			retstr = retstr + u'<p class="comment">%s</p>\n' % comment
 		retstr = retstr + u"</div>\n"
 	

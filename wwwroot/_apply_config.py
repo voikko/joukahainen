@@ -41,3 +41,9 @@ def _default_word_inflection(db, wid, word, classid):
 
 if hasattr(functions, 'word_inflection'): joeditors_word_inflection = functions.word_inflection
 else: joeditors_word_inflection = _default_word_inflection
+
+def _default_kotus_class(db, wid):
+	return u"(%s)" % _(u"Kotus class is not available for this language")
+
+if hasattr(functions, 'kotus_class'): joeditors_kotus_class = functions.kotus_class
+else: joeditors_kotus_class = _default_kotus_class

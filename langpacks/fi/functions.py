@@ -92,21 +92,14 @@ CHARACTERISTIC_NOUN_FORMS = ['nominatiivi', 'genetiivi', 'partitiivi', 'illatiiv
 CHARACTERISTIC_VERB_FORMS = ['infinitiivi_1', 'preesens_yks_1', 'imperfekti_yks_3',
                              'kondit_yks_3', 'imperatiivi_yks_3', 'partisiippi_2',
                              'imperfekti_pass']
-# Inflection table for a Finnish noun or verb.
-def word_inflection(db, wid, word, classid):
-	if classid in [1, 2]:
-		classdatafile = HF_DATA + "/subst.aff"
-		characteristic_forms = CHARACTERISTIC_NOUN_FORMS
-	elif classid == 3:
-		classdatafile = HF_DATA + "/verb.aff"
-		characteristic_forms = CHARACTERISTIC_VERB_FORMS
-	else: return u"(taivutuksia ei ole saatavissa tämän sanaluokan sanoille)"
-	
+
+# Returns the inflection class and gradation class for a word in Joukahainen
+# Returns tuple (inflclass_main, grad_type) or None, if no inflection was available
+def _get_inflection_gradation(db, wid):
 	results = db.query(("SELECT value FROM string_attribute_value " +
 	                    "WHERE wid = %i AND aid = 1") % wid)
-	if results.ntuples() != 1: return "(taivutuksia ei ole saatavilla, tarkista taivutusluokka)"
+	if results.ntuples() != 1: return None
 	result = results.getresult()[0]
-	
 	infclass_parts = unicode(result[0], 'UTF-8').split('-')
 	if len(infclass_parts) == 1:
 		infclass_main = unicode(result[0], 'UTF-8')
@@ -114,42 +107,68 @@ def word_inflection(db, wid, word, classid):
 	elif len(infclass_parts) == 2:
 		infclass_main = infclass_parts[0]
 		grad_type = infclass_parts[1]
-	else: return u"(virheellinen taivutusluokka)"
+	else: return None
+	return (infclass_main, grad_type)
+
+
+# Returns the correct hfutils class structure for given word.
+# classid is the word class identifier in Joukahainen.
+# Returns None if no class information could be retrieved
+def _get_hfutils_class(wid, classid, infclass_main):
+	if classid in [1, 2]: classdatafile = HF_DATA + "/subst.aff"
+	elif classid == 3: classdatafile = HF_DATA + "/verb.aff"
+	else: return None
 	
 	word_classes = hfaffix.read_word_classes(classdatafile)
-	tableid = u"inftable%i" % wid
+	for word_class in word_classes:
+		if not infclass_main in word_class['smcnames']: continue
+		else: return word_class
+	return None
 
+
+# Inflection table for a Finnish noun or verb.
+def word_inflection(db, wid, word, classid):
+	if classid in [1, 2]: characteristic_forms = CHARACTERISTIC_NOUN_FORMS
+	elif classid == 3: characteristic_forms = CHARACTERISTIC_VERB_FORMS
+	else: return "(ei taivutuksia tämän sanaluokan sanoille)"
+	
+	infclass_parts = _get_inflection_gradation(db, wid)
+	if infclass_parts == None: return u"(ei taivutusluokkaa)"
+	(infclass_main, grad_type) = infclass_parts
+	
+	word_class = _get_hfutils_class(wid, classid, infclass_main)
+	if word_class == None: return "(taivutuksia ei ole saatavilla tai virheellinen taivutusluokka)"
+	
+	tableid = u"inftable%i" % wid
 	retdata = u''
 	note = u''
 	have_only_characteristic = True
-	for word_class in word_classes:
-		if not infclass_main in word_class['smcnames']: continue
-		inflected_words = hfaffix.inflect_word(word, grad_type, word_class,
-		                                       _get_infl_vowel_type(db, wid, word))
-		if inflected_words == None: continue
-		form = None
-		inflist = []
-		inflected_words.append((u'', u'', u''))
-		for inflected_word in inflected_words:
-			if form != inflected_word[0]:
-				if form != None and len(inflist) > 0:
-					if form in characteristic_forms:
-						htmlclass = u' class="characteristic"'
-					elif form[0] == u'!':
-						htmlclass = u' class="characteristic"'
-						form = form[1:]
-					else:
-						htmlclass = ''
-						have_only_characteristic = False
-					infs = reduce(lambda x, y: u"%s, %s" % (x, y), inflist)
-					retdata = retdata + (u"<tr%s><td>%s</td><td>%s</td></tr>\n" %
-					          (htmlclass, form, infs))
-				inflist = []
-				form = inflected_word[0]
-			if hfutils.read_option(inflected_word[2], 'ps', '-') != 'r' \
-			   and not inflected_word[1] in inflist:
-				inflist.append(inflected_word[1])
-		note = word_class['note']
+	inflected_words = hfaffix.inflect_word(word, grad_type, word_class,
+	                                       _get_infl_vowel_type(db, wid, word))
+	if inflected_words == None: return "(virhe taivutusten muodostuksessa)"
+	form = None
+	inflist = []
+	inflected_words.append((u'', u'', u''))
+	for inflected_word in inflected_words:
+		if form != inflected_word[0]:
+			if form != None and len(inflist) > 0:
+				if form in characteristic_forms:
+					htmlclass = u' class="characteristic"'
+				elif form[0] == u'!':
+					htmlclass = u' class="characteristic"'
+					form = form[1:]
+				else:
+					htmlclass = ''
+					have_only_characteristic = False
+				infs = reduce(lambda x, y: u"%s, %s" % (x, y), inflist)
+				retdata = retdata + (u"<tr%s><td>%s</td><td>%s</td></tr>\n" %
+				          (htmlclass, form, infs))
+			inflist = []
+			form = inflected_word[0]
+		if hfutils.read_option(inflected_word[2], 'ps', '-') != 'r' \
+		   and not inflected_word[1] in inflist:
+			inflist.append(inflected_word[1])
+	note = word_class['note']
 	
 	table_header = u'<table class="inflection" id="%s">\n<tr><th colspan="2">' % tableid
 	if not have_only_characteristic:
@@ -322,3 +341,16 @@ def jooutput_call(req, outputtype, db, query):
 		_jooutput_malaga(req, db, query)
 	else:
 		joheaders.error_page(req, _(u'Unsupported output type'))
+
+# Returns information about the classification of the word in the format used by
+# the Research Institute for the Languages of Finland
+def kotus_class(db, wid, classid):
+	infclass_parts = _get_inflection_gradation(db, wid)
+	if infclass_parts == None: return u""
+	(infclass_main, grad_type) = infclass_parts
+	
+	word_class = _get_hfutils_class(wid, classid, infclass_main)
+	if word_class == None: return ""
+	
+	return u'<span class="fheader">Kotus-luokka:</span> <span class="fsvalue">%s</span>' \
+	       % word_class['cname']

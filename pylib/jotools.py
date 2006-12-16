@@ -209,3 +209,31 @@ def get_param(req, name, default):
 		if field.name == name:
 			return unicode(field.value, 'UTF-8')
 	return default
+
+# Returns the integer prefix of the given string or 0, if no such prefix was found
+def integer_prefix(string):
+	i = 0
+	while i < len(string) and string[i].isdigit(): i = i + 1
+	if i == 0: return 0
+	elif i == len(string): return int(string)
+	else: return int(string[0:i])
+
+# Returns a link matching the given comment string
+def _comment_link(comment):
+	if comment.startswith(u'#'):
+		wid = integer_prefix(comment[1:])
+		if wid == 0: return comment
+		return u'<a href="%s/word/edit?wid=%i">%s</a>' % (_config.WWW_ROOT_DIR, wid, comment)
+	elif comment.startswith(u'wid#'):
+		wid = integer_prefix(comment[4:])
+		if wid == 0: return comment
+		return u'<a href="%s/word/edit?wid=%i">%s</a>' % (_config.WWW_ROOT_DIR, wid, comment)
+	else: return comment
+
+# Turn special identifiers in word comments into links
+def comment_links(comment):
+	comment_parts = comment.split()
+	newcomment = u''
+	for part in comment_parts:
+		newcomment = newcomment + _comment_link(part) + u' '
+	return newcomment

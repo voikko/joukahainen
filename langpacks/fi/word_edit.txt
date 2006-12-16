@@ -6,6 +6,9 @@ $$word_inflection(WID,WORD,CLASSID)$$
 <p>
 $$word_class(CLASSID)$$
 </p>
+<p>
+$$kotus_class(WID,CLASSID)$$
+</p>
 <h2>Kirjoitusasut</h2>
 $$related_words(WID)$$
 
