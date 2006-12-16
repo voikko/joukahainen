@@ -161,7 +161,7 @@ def listchanges(req, sdate = None, edate = None):
 	AND e.etime BETWEEN '%s' AND '%s'
 	ORDER BY 2 DESC""" % (_(u'Word created').encode('UTF-8'), sdate_s, edate_s, sdate_s, edate_s));
 	
-	if results.ntuples() > 500:
+	if results.ntuples() > 1000:
 		jotools.write(req, u'<p>%s</p>' % _(u'Too many changes, use narrower date interval.'))
 		joheaders.page_footer_plain(req)
 		return '\n'
