@@ -214,20 +214,31 @@ def get_param(req, name, default):
 def integer_prefix(string):
 	i = 0
 	while i < len(string) and string[i].isdigit(): i = i + 1
-	if i == 0: return 0
-	elif i == len(string): return int(string)
-	else: return int(string[0:i])
+	if i == 0: return (0, 0)
+	elif i == len(string): return (i, int(string))
+	else: return (i, int(string[0:i]))
 
 # Returns a link matching the given comment string
 def _comment_link(comment):
-	if comment.startswith(u'#'):
-		wid = integer_prefix(comment[1:])
-		if wid == 0: return comment
-		return u'<a href="%s/word/edit?wid=%i">%s</a>' % (_config.WWW_ROOT_DIR, wid, comment)
-	elif comment.startswith(u'wid#'):
-		wid = integer_prefix(comment[4:])
-		if wid == 0: return comment
-		return u'<a href="%s/word/edit?wid=%i">%s</a>' % (_config.WWW_ROOT_DIR, wid, comment)
+	if comment.startswith(u'('):
+		leading_chars = 1
+		lead = u'('
+	else:
+		leading_chars = 0
+		lead = u''
+	cstr = comment[leading_chars:]
+	if cstr.startswith(u'#'):
+		(nlen, wid) = integer_prefix(cstr[1:])
+		if nlen == 0: return comment
+		return lead + u'<a href="%s/word/edit?wid=%i">%s</a>' \
+		       % (_config.WWW_ROOT_DIR, wid, cstr[:nlen+1]) \
+		       + cstr[nlen+1:]
+	elif cstr.startswith(u'wid#'):
+		(nlen, wid) = integer_prefix(cstr[4:])
+		if nlen == 0: return comment
+		return lead + u'<a href="%s/word/edit?wid=%i">%s</a>' \
+		       % (_config.WWW_ROOT_DIR, wid, cstr[:nlen+4]) \
+		       + cstr[nlen+4:]
 	else: return comment
 
 # Turn special identifiers in word comments into links
