@@ -177,6 +177,12 @@ def call(db, funcname, paramlist):
 	if funcname == 'kotus_class':
 		if len(paramlist) != 2: return _(u"Error: %i parameters expected" % 2)
 		return _apply_config.joeditors_kotus_class(db, paramlist[0], paramlist[1])
+	if funcname == 'find_infclass':
+		if len(paramlist) != 2: return _(u"Error: %i parameters expected" % 2)
+		target = _apply_config.joeditors_find_infclass(db, paramlist[0], paramlist[1])
+		if target == None: return u''
+		return u'<a href="%s%s">%s</a>' \
+		       % (_config.WWW_ROOT_DIR, target, _(u'Find inflection class...'))
 	if funcname == 'flag_attributes':
 		if len(paramlist) != 1: return _(u"Error: 1 parameter expected")
 		return _flag_attributes(db, paramlist[0])

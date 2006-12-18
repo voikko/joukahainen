@@ -36,14 +36,23 @@ jotools_checkword = functions.checkword
 jooutput_list_supported_types = functions.jooutput_list_supported_types
 jooutput_call = functions.jooutput_call
 
+
 def _default_word_inflection(db, wid, word, classid):
 	return u"(%s)" % _(u"Inflections are not available for this language")
 
 if hasattr(functions, 'word_inflection'): joeditors_word_inflection = functions.word_inflection
 else: joeditors_word_inflection = _default_word_inflection
 
-def _default_kotus_class(db, wid):
+
+def _default_kotus_class(db, wid, classid):
 	return u"(%s)" % _(u"Kotus class is not available for this language")
 
 if hasattr(functions, 'kotus_class'): joeditors_kotus_class = functions.kotus_class
 else: joeditors_kotus_class = _default_kotus_class
+
+
+def _default_find_infclass(db, word, classid):
+	return None
+
+if hasattr(functions, 'find_infclass'): joeditors_find_infclass = functions.find_infclass
+else: joeditors_find_infclass = _default_find_infclass

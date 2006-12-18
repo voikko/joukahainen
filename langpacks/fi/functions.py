@@ -354,3 +354,11 @@ def kotus_class(db, wid, classid):
 	
 	return u'<span class="fheader">Kotus-luokka:</span> <span class="fsvalue">%s</span>' \
 	       % word_class['cname']
+
+# Returns a link target of the inflection class finder for a word or None,
+# if no finder is available
+def find_infclass(db, word, classid):
+	if classid in [1, 2]: finderclass = 1
+	elif classid == 3: finderclass = 3
+	else: return None
+	return u'/findclass/classlist?word=%s&class=%i' % (word, finderclass)
