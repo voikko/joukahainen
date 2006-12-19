@@ -59,7 +59,7 @@ def _int_attribute(db, wid, aid, editable):
 	if editable:
 		if results.ntuples() == 0: oldval = u''
 		else: oldval = `results.getresult()[0][0]`
-		return u'<input type="text" value="%s" size="60" name="int%i" />' % (oldval, aid)
+		return u'<input type="text" value="%s" size="10" name="int%i" />' % (oldval, aid)
 	else:
 		if results.ntuples() == 0 : return u"(%s)" % _(u'Not set')
 		return `results.getresult()[0][0]`

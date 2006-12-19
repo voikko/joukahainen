@@ -315,11 +315,16 @@ def _jooutput_malaga(req, db, query):
 # Time of generation: %s
 
 """ % time.strftime("%Y-%m-%d %H:%M:%S %Z")).encode('UTF-8'))
-	results = db.query(("SELECT w.word, w.class, sa.value, w.wid, hc.value FROM string_attribute_value sa, " +
+	results = db.query(("SELECT w.word, w.class, sa.value, w.wid, hc.value, fc.value, cf.aid " +
+	"FROM string_attribute_value sa, " +
 	"(%s) w LEFT JOIN string_attribute_value hc ON (w.wid = hc.wid AND hc.aid = 16) " +
+	"LEFT JOIN int_attribute_value fc ON (w.wid = fc.wid AND fc.aid = 38) " +
+	"LEFT JOIN flag_attribute_value cf ON (w.wid = cf.wid AND cf.aid = 39) " +
 	"WHERE w.wid = sa.wid AND sa.aid = 1 AND sa.value != 'poikkeava' " +
 	"ORDER BY w.word, w.class, w.wid") % query)
 	for result in results.getresult():
+		# drop too rare words
+		if result[5] > 9 or (result[5] == 9 and result[6] == 39): continue
 		wid = result[3]
 		word = unicode(result[0], 'UTF-8')
 		classid = result[1]
