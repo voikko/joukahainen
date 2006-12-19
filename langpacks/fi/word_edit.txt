@@ -27,6 +27,8 @@ $$find_infclass(WORD,CLASSID)$$
 <span class="fsvalue">$$string_attribute(WID,18,EDITABLE)$$</span>
 <br /><span class="fheader">$$wiki_link(28,WID,WORD)$$:</span>
 <span class="fsvalue">$$string_attribute(WID,28,EDITABLE)$$</span>
+<br /><span class="fheader">Yleisyysluokka:</span>
+<span class="fsvalue">$$int_attribute(WID,38,EDITABLE)$$</span>
 </p>
 $$main_form_end(WID,EDITABLE)$$
 <div class="bottominfo">

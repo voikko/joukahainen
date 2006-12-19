@@ -53,6 +53,17 @@ def _string_attribute(db, wid, aid, editable):
 		if results.ntuples() == 0 : return u"(%s)" % _(u'Not set')
 		return unicode(results.getresult()[0][0], 'UTF-8')
 
+def _int_attribute(db, wid, aid, editable):
+	results = db.query(("SELECT i.value FROM int_attribute_value i " +
+	                    "WHERE i.wid = %i AND i.aid = %i") % (wid, aid))
+	if editable:
+		if results.ntuples() == 0: oldval = u''
+		else: oldval = `results.getresult()[0][0]`
+		return u'<input type="text" value="%s" size="60" name="int%i" />' % (oldval, aid)
+	else:
+		if results.ntuples() == 0 : return u"(%s)" % _(u'Not set')
+		return `results.getresult()[0][0]`
+
 def _related_words(db, wid):
 	results = db.query("SELECT related_word FROM related_word WHERE wid = %i" % wid)
 	if results.ntuples() == 0: return u"<p>(%s)</p>" % _(u'Not set')
@@ -189,6 +200,9 @@ def call(db, funcname, paramlist):
 	if funcname == 'string_attribute':
 		if len(paramlist) != 3: return _(u"Error: %i parameters expected" % 3)
 		return _string_attribute(db, paramlist[0], paramlist[1], paramlist[2])
+	if funcname == 'int_attribute':
+		if len(paramlist) != 3: return _(u"Error: %i parameters expected" % 3)
+		return _int_attribute(db, paramlist[0], paramlist[1], paramlist[2])
 	if funcname == 'related_words':
 		if len(paramlist) != 1: return _(u"Error: 1 parameter expected")
 		return _related_words(db, paramlist[0])

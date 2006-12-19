@@ -24,6 +24,7 @@ INSERT INTO wordclass(classid, name) VALUES(2, 'adjektiivi');
 INSERT INTO wordclass(classid, name) VALUES(3, 'verbi');
 INSERT INTO attribute_type(type, descr) VALUES(1, 'string');
 INSERT INTO attribute_type(type, descr) VALUES(2, 'flag');
+INSERT INTO attribute_type(type, descr) VALUES(3, 'integer');
 INSERT INTO attribute(aid, descr, type, editable) VALUES(1, 'taivutusluokka', 1, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(1, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(1, 2);
@@ -143,6 +144,10 @@ INSERT INTO attribute_class(aid, classid) VALUES(36, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(36, 3);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(37, 'ei yksikkömuotoja', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(37, 1);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(38, 'yleisyysluokka', 3, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(38, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(38, 2);
+INSERT INTO attribute_class(aid, classid) VALUES(38, 3);
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
 -- Test user, password 'testi'

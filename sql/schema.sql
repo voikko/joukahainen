@@ -77,6 +77,15 @@ CREATE TABLE string_attribute_value (
   PRIMARY KEY (wid, aid)
 );
 
+-- Word attribute value (integer). Dynamic.
+CREATE TABLE int_attribute_value (
+  wid integer NOT NULL REFERENCES word, -- word
+  aid integer NOT NULL REFERENCES attribute, -- attribute
+  value integer NOT NULL, -- value
+  eevent integer REFERENCES event, -- last edit event
+  PRIMARY KEY (wid, aid)
+);
+
 -- Word attribute value (flag). Dynamic.
 CREATE TABLE flag_attribute_value (
   wid integer NOT NULL REFERENCES word, -- word
@@ -120,10 +129,10 @@ CREATE TABLE task_word (
 -- Grant privileges
 GRANT SELECT ON language, wordclass, attribute, attribute_class, attribute_type TO joukahainen;
 GRANT SELECT, UPDATE on word_wid_seq, related_word_rwid_seq, event_eid_seq TO joukahainen;
-GRANT ALL ON word, string_attribute_value, flag_attribute_value, appuser,
+GRANT ALL ON word, string_attribute_value, int_attribute_value, flag_attribute_value, appuser,
   related_word, event, raw_word, task, task_word TO joukahainen;
 -- If you have an automated backup system, it can back up the main database using following privileges:
 -- GRANT SELECT ON language, wordclass, attribute, attribute_class, attribute_type,
 --                 word_wid_seq, related_word_rwid_seq, event_eid_seq,
---                 word, string_attribute_value, flag_attribute_value, appuser,
+--                 word, string_attribute_value, int_attribute_value, flag_attribute_value, appuser,
 --                 related_word, event, raw_word, task, task_word TO joukahainenbackup;

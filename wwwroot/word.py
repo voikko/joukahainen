@@ -105,6 +105,46 @@ def change(req, wid = None):
 					(jotools.escape_sql_string(newval), eid, wid_n, attribute[1]))
 			messages.append(u"%s: '%s' -> '%s'" % (unicode(attribute[2], 'UTF-8'),
 			                oldval, newval))
+		if attribute[0] == 3: # integer attribute
+			html_att = 'int%i' % attribute[1]
+			newval_s = jotools.get_param(req, html_att, None)
+			if newval_s == None: continue
+			newval_s = newval_s.strip()
+			if newval_s == u'':
+				newval = None
+			else:
+				try: newval = int(newval_s)
+				except ValueError: continue
+				# Limit value range to prevent troubles with storing the
+				# value into the database
+				if newval < -1000000 or newval > 1000000: continue
+			
+			vresults = db.query(("select i.value from int_attribute_value i where " +
+			                     "i.wid = %i and i.aid = %i") % (wid_n, attribute[1]))
+			if vresults.ntuples() == 0: oldval = None
+			else: oldval = vresults.getresult()[0][0]
+			if oldval == newval: continue
+			if not event_inserted:
+				db.query("insert into event(eid, eword, euser) values(%i, %i, %i)" % \
+				         (eid, wid_n, uid))
+				event_inserted = True
+			if newval == None:
+				db.query(("delete from int_attribute_value where wid = %i " +
+				          "and aid = %i") % (wid_n, attribute[1]))
+			elif oldval == None:
+				db.query(("insert into int_attribute_value(wid, aid, value, eevent) " +
+				          "values(%i, %i, %i, %i)") % (wid_n, attribute[1],
+					                             newval, eid))
+			else:
+				db.query(("update int_attribute_value set value=%i, eevent=%i " +
+				          "where wid=%i and aid=%i") %
+					(newval, eid, wid_n, attribute[1]))
+			if oldval == None: oldval_s = _(u'(None)')
+			else: oldval_s = `oldval`
+			if newval == None: newval_s = _(u'(None)')
+			else: newval_s = `newval`
+			messages.append(u"%s: %s -> %s" % (unicode(attribute[2], 'UTF-8'),
+			                oldval_s, newval_s))
 	
 	comment = jotools.get_param(req, 'comment', u'')
 	
