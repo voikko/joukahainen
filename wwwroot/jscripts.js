@@ -16,6 +16,10 @@ function switchDetailedDisplay(tableid) {
 
 	var toggle = document.getElementById(tableid + "a");
 	var table = document.getElementById(tableid);
+
+	// IE is buggy and does not understand style.display = "table-cell"
+	var tableCellStyle = "table-cell";
+	if (navigator.appName == "Microsoft Internet Explorer") tableCellStyle = "";
 	
 	if (toggle.innerHTML == "" || toggle.innerHTML == "[-]") {
 		toggle.innerHTML = "[+]";
@@ -25,7 +29,7 @@ function switchDetailedDisplay(tableid) {
 	else {
 		toggle.innerHTML = "[-]";
 		toggle.title = "Piilota ylimääräiset taivutusmuodot";
-		setRowDisplay(table, "table-cell");
+		setRowDisplay(table, tableCellStyle);
 	}
 
 }
