@@ -152,7 +152,7 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(39, 'sekoittuu helposti
 INSERT INTO attribute_class(aid, classid) VALUES(39, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(39, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(39, 3);
-INSERT INTO attribute(aid, descr, type, editable) VALUES(40, 'tyypillinen kirjoitusvirhe', 2, TRUE);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(40, 'tyypillinen kielivirhe', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(40, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(40, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(40, 3);

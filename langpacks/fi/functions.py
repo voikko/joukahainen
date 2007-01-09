@@ -86,7 +86,9 @@ def checkword(string):
 	return True
 
 
-
+SINGULAR_FORMS = ['nominatiivi', 'genetiivi', 'partitiivi', 'translatiivi', 'essiivi',
+                  'inessiivi', 'elatiivi', 'illatiivi', 'adessiivi', 'ablatiivi',
+	        'allatiivi', 'abessiivi']
 CHARACTERISTIC_NOUN_FORMS = ['nominatiivi', 'genetiivi', 'partitiivi', 'illatiivi',
                              'genetiivi_mon', 'partitiivi_mon', 'illatiivi_mon']
 CHARACTERISTIC_VERB_FORMS = ['infinitiivi_1', 'preesens_yks_1', 'imperfekti_yks_3',
@@ -146,10 +148,17 @@ def word_inflection(db, wid, word, classid):
 	inflected_words = hfaffix.inflect_word(word, grad_type, word_class,
 	                                       _get_infl_vowel_type(db, wid, word))
 	if inflected_words == None: return "(virhe taivutusten muodostuksessa)"
+	
+	if classid in [1, 2] and \
+	   db.query("SELECT count(*) FROM flag_attribute_value WHERE aid = 37 AND wid = %i" \
+	   % wid).getresult()[0][0] == 1: no_singular = True
+	else: no_singular = False
+	
 	form = None
 	inflist = []
 	inflected_words.append((u'', u'', u''))
 	for inflected_word in inflected_words:
+		if no_singular and inflected_word[0] in SINGULAR_FORMS: continue
 		if form != inflected_word[0]:
 			if form != None and len(inflist) > 0:
 				if form in characteristic_forms:
