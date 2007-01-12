@@ -116,7 +116,7 @@ def _display_form(req, classid, grad_type, word):
 		jotools.write(req, u'<option selected="selected" value="-">ei astevaihtelua</option>')
 	else:
 		jotools.write(req, u'<option value="-">ei astevaihtelua</option>')
-	for i in range(1, 6):
+	for i in range(1, 7):
 		if grad_type == (u'av%i' % i):
 			jotools.write(req, u'<option selected="selected" ' \
 			              + (u'value="av%i">av%i</option>' % (i, i)))
