@@ -169,12 +169,12 @@ def _rwords_edit_form(db, wid):
               _(u'Cancel changes'))
 	return retstr
 
-def _wiki_link(db, wikiattr, wid, word):
+def _wiki_link(db, wikiattr, wid):
 	results = db.query(("SELECT value FROM string_attribute_value WHERE " +
 	                    "aid = %i and wid = %i") % (wikiattr, wid))
-	if results.ntuples() > 0: wikiword = unicode(results.getresult()[0][0], 'UTF-8')
-	else: wikiword = word
-	wikiurl = _config.WIKI_URL + wikiword
+	if results.ntuples() == 0: return _(u'Word in Wiki')
+	wikiurl = unicode(results.getresult()[0][0], 'UTF-8')
+	if not wikiurl.startswith(u'http://'): return _(u'Word in Wiki')
 	return u'<a href=%s>%s</a>' % (jotools.escape_form_value(wikiurl), _(u'Word in Wiki')) 
 
 def call(db, funcname, paramlist):
@@ -225,6 +225,6 @@ def call(db, funcname, paramlist):
 		if len(paramlist) != 1: return _(u"Error: 1 parameter expected")
 		return _rwords_edit_form(db, paramlist[0])
 	if funcname == 'wiki_link':
-		if len(paramlist) != 3: return _(u"Error: %i parameters expected" % 3)
-		return _wiki_link(db, paramlist[0], paramlist[1], paramlist[2])
+		if len(paramlist) != 2: return _(u"Error: %i parameters expected" % 2)
+		return _wiki_link(db, paramlist[0], paramlist[1])
 	return _(u"Error: unknown function")
