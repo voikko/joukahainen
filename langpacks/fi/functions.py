@@ -34,6 +34,7 @@ import hfaffix
 import hfutils
 import hfconv
 import voikkoutils
+import xml.sax.saxutils
 import time
 
 # Returns the vowel type for a word in the database.
@@ -382,7 +383,7 @@ def _write_xml_classes(req, wid, classid, flags):
 	elif classid == 3: req.write(u'\t\t<class>verb</class>\n')
 	req.write('\t</classes>\n')
 
-def _write_xml_inflection(req, wid, flags, strings, flaglist):
+def _write_xml_inflection(req, flags, strings, flaglist):
 	elements = []
 	
 	for s in strings:
@@ -401,6 +402,45 @@ def _write_xml_inflection(req, wid, flags, strings, flaglist):
 		for element in elements:
 			req.write('\t\t%s\n' % element.encode('UTF-8'))
 		req.write('\t</inflection>\n')
+
+def _write_xml_flagset(req, flags, flaglist, flagname):
+	elements = _get_xml_flags(flags, flagname, flaglist)
+	if len(elements) > 0:
+		req.write('\t<%s>\n' % flagname)
+		for element in elements:
+			req.write('\t\t%s\n' % element.encode('UTF-8'))
+		req.write('\t</%s>\n' % flagname)
+
+def _write_xml_frequency(req, flags, integers, flaglist):
+	elements = []
+	
+	for i in integers:
+		if i[0] == 38: elements.append(u'<fclass>%i</fclass>' % i[1])
+	
+	for f in _get_xml_flags(flags, 'frequency', flaglist): elements.append(f)
+	
+	if len(elements) > 0:
+		req.write('\t<frequency>\n')
+		for element in elements:
+			req.write('\t\t%s\n' % element.encode('UTF-8'))
+		req.write('\t</frequency>\n')
+
+def _write_xml_info(req, strings):
+	elements = []
+	
+	for s in strings:
+		if s[0] == 18:
+			elements.append(u'<description>%s</description>' \
+			                % xml.sax.saxutils.escape(s[1]))
+		if s[0] == 28:
+			elements.append(u'<link>%s</link>' \
+			                % xml.sax.saxutils.escape(s[1]))
+	
+	if len(elements) > 0:
+		req.write('\t<info>\n')
+		for element in elements:
+			req.write('\t\t%s\n' % element.encode('UTF-8'))
+		req.write('\t</info>\n')
 
 def _write_xml_word(db, req, wid, flaglist):
 	req.write('<word id="w%i">\n' % wid)
@@ -424,9 +464,20 @@ def _write_xml_word(db, req, wid, flaglist):
 	strings = []
 	for s in results: strings.append((s[0], unicode(s[1], 'UTF-8')))
 	
+	# Information from table int_attribute_value
+	integers = db.query("SELECT aid, value FROM int_attribute_value " \
+	                    + "WHERE wid = %i ORDER BY aid" % wid).getresult()
+	
 	_write_xml_forms(db, req, wid, word)
 	_write_xml_classes(req, wid, classid, flags)
-	_write_xml_inflection(req, wid, flags, strings, flaglist)
+	_write_xml_inflection(req, flags, strings, flaglist)
+	_write_xml_flagset(req, flags, flaglist, 'usage')
+	_write_xml_flagset(req, flags, flaglist, 'compounding')
+	_write_xml_flagset(req, flags, flaglist, 'derivation')
+	_write_xml_flagset(req, flags, flaglist, 'style')
+	_write_xml_flagset(req, flags, flaglist, 'application')
+	_write_xml_frequency(req, flags, integers, flaglist)
+	_write_xml_info(req, strings)
 	
 	req.write('</word>\n')
 
