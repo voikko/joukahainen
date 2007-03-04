@@ -51,7 +51,7 @@ def _string_attribute(db, wid, aid, editable):
 		return u'<input type="text" value=%s size="60" name="string%i" />' % (oldval, aid)
 	else:
 		if results.ntuples() == 0 : return u"(%s)" % _(u'Not set')
-		return unicode(results.getresult()[0][0], 'UTF-8')
+		return jotools.escape_html(unicode(results.getresult()[0][0], 'UTF-8'))
 
 def _int_attribute(db, wid, aid, editable):
 	results = db.query(("SELECT i.value FROM int_attribute_value i " +

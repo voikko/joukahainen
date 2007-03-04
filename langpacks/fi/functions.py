@@ -372,15 +372,15 @@ def _write_xml_classes(req, wid, classid, flags):
 	req.write('\t<classes>\n')
 	if classid == 1:
 		if len(set(flags) & set([11, 12, 13, 14])) > 0:
-			if 11 in flags: req.write('\t\t<class>pnoun_firstname</class>\n')
-			if 12 in flags: req.write('\t\t<class>pnoun_lastname</class>\n')
-			if 13 in flags: req.write('\t\t<class>pnoun_place</class>\n')
-			if 14 in flags: req.write('\t\t<class>pnoun_misc</class>\n')
-		else: req.write(u'\t\t<class>noun</class>\n')
+			if 11 in flags: req.write('\t\t<wclass>pnoun_firstname</wclass>\n')
+			if 12 in flags: req.write('\t\t<wclass>pnoun_lastname</wclass>\n')
+			if 13 in flags: req.write('\t\t<wclass>pnoun_place</wclass>\n')
+			if 14 in flags: req.write('\t\t<wclass>pnoun_misc</wclass>\n')
+		else: req.write(u'\t\t<wclass>noun</wclass>\n')
 	elif classid == 2:
-		if 10 in flags: req.write(u'\t\t<class>noun</class>\n')
-		req.write(u'\t\t<class>adjective</class>\n')
-	elif classid == 3: req.write(u'\t\t<class>verb</class>\n')
+		if 10 in flags: req.write(u'\t\t<wclass>noun</wclass>\n')
+		req.write(u'\t\t<wclass>adjective</wclass>\n')
+	elif classid == 3: req.write(u'\t\t<wclass>verb</wclass>\n')
 	req.write('\t</classes>\n')
 
 def _write_xml_inflection(req, flags, strings, flaglist):
@@ -442,34 +442,27 @@ def _write_xml_info(req, strings):
 			req.write('\t\t%s\n' % element.encode('UTF-8'))
 		req.write('\t</info>\n')
 
-def _write_xml_word(db, req, wid, flaglist):
+def _write_xml_word(db, req, wid, word, wclass, flaglist):
 	req.write('<word id="w%i">\n' % wid)
 	
-	# Information from table word
-	results = db.query("SELECT w.word, w.class FROM word w WHERE w.wid = %i" % wid).getresult()
-	if len(results) == 0: return
-	result = results[0]
-	word = unicode(result[0], 'UTF-8')
-	classid = result[1]
-	
-	# Information from table flag_attribute_value
-	results = db.query("SELECT aid FROM flag_attribute_value " \
-	                   + "WHERE wid = %i ORDER BY aid" % wid).getresult()
-	flags = []
-	for r in results: flags.append(r[0])
-	
-	# Information from table string_attribute_value
-	results = db.query("SELECT aid, value FROM string_attribute_value " \
-	                   + "WHERE wid = %i ORDER BY aid" % wid).getresult()
+	# Read attribute values. We use this strange union query because it is faster
+	# than querying different attribute types separately.
+	results = db.query("SELECT s.aid, s.value, NULL FROM string_attribute_value s " \
+	                 + "WHERE s.wid = %i UNION " % wid \
+		       + "SELECT i.aid, NULL, i.value FROM int_attribute_value i " \
+		       + "WHERE i.wid = %i UNION " % wid \
+		       + "SELECT f.aid, NULL, NULL FROM flag_attribute_value f " \
+		       + "WHERE f.wid = %i ORDER BY 1" % wid).getresult()
 	strings = []
-	for s in results: strings.append((s[0], unicode(s[1], 'UTF-8')))
-	
-	# Information from table int_attribute_value
-	integers = db.query("SELECT aid, value FROM int_attribute_value " \
-	                    + "WHERE wid = %i ORDER BY aid" % wid).getresult()
+	integers = []
+	flags = []
+	for r in results:
+		if r[1] != None: strings.append((r[0], unicode(r[1], 'UTF-8')))
+		elif r[2] != None: integers.append((r[0], r[2]))
+		else: flags.append(r[0])
 	
 	_write_xml_forms(db, req, wid, word)
-	_write_xml_classes(req, wid, classid, flags)
+	_write_xml_classes(req, wid, wclass, flags)
 	_write_xml_inflection(req, flags, strings, flaglist)
 	_write_xml_flagset(req, flags, flaglist, 'usage')
 	_write_xml_flagset(req, flags, flaglist, 'compounding')
@@ -515,12 +508,15 @@ def _jooutput_xml(req, db, query):
 	
 	flaglist = voikkoutils.readFlagAttributes(VOIKKO_DATA + "/words/flags.txt")
 	
-	results = db.query(("SELECT w.wid FROM (%s) w " +
+	results = db.query(("SELECT w.wid, w.word, w.class FROM (%s) w " +
 	"WHERE w.wid NOT IN (SELECT f.wid FROM flag_attribute_value f " +
 	" WHERE f.aid IN (24, 26)) " +
 	"ORDER BY w.wid") % query)
 	for result in results.getresult():
-		_write_xml_word(db, req, result[0], flaglist)
+		wid = result[0]
+		word = unicode(result[1], 'UTF-8')
+		wclass = result[2]
+		_write_xml_word(db, req, wid, word, wclass, flaglist)
 	
 	req.write("</wordlist>\n")
 
