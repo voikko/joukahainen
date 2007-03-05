@@ -93,9 +93,9 @@ def checkword(string):
 
 SINGULAR_FORMS = ['nominatiivi', 'genetiivi', 'partitiivi', 'translatiivi', 'essiivi',
                   'inessiivi', 'elatiivi', 'illatiivi', 'adessiivi', 'ablatiivi',
-	        'allatiivi', 'abessiivi']
+                  'allatiivi', 'abessiivi']
 CHARACTERISTIC_NOUN_FORMS = ['nominatiivi', 'genetiivi', 'partitiivi', 'illatiivi',
-                             'genetiivi_mon', 'partitiivi_mon', 'illatiivi_mon']
+                             'nominatiivi_mon', 'genetiivi_mon', 'partitiivi_mon', 'illatiivi_mon']
 CHARACTERISTIC_VERB_FORMS = ['infinitiivi_1', 'preesens_yks_1', 'imperfekti_yks_3',
                              'kondit_yks_3', 'imperatiivi_yks_3', 'partisiippi_2',
                              'imperfekti_pass']
