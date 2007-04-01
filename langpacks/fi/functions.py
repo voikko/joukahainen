@@ -359,10 +359,15 @@ def _get_xml_flags(flags, flagtype, flaglist):
 def _write_xml_forms(db, req, wid, word):
 	altforms_res = db.query('SELECT related_word FROM related_word ' \
 	                        + 'WHERE wid = %i ORDER BY related_word' % wid)
-	altforms = [word]
+	altforms = []
+	base_word = None
 	for res in altforms_res.getresult():
 		altform = unicode(res[0], 'UTF-8')
-		if altform != word:	altforms.append(altform)
+		if altform.replace(u"=", u"").replace(u"|", u"") == word: base_word = altform
+		else: altforms.append(unicode(res[0], 'UTF-8'))
+	if base_word == None and len(altforms) > 0: req.write(u'<!-- ERROR: base form missing -->')
+	if base_word != None: altforms = [base_word] + altforms
+	if len(altforms) == 0: altforms.append(word)
 	req.write('\t<forms>\n')
 	for form in altforms:
 		req.write((u'\t\t<form>%s</form>\n' % form).encode('UTF-8'))
