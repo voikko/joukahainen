@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright 2006 Harri Pitkänen (hatapitk@iki.fi)
+# Copyright 2006 - 2007 Harri Pitkänen (hatapitk@iki.fi)
 # This file is part of Joukahainen, a vocabulary management application
 
 # This program is free software; you can redistribute it and/or modify
@@ -34,7 +34,7 @@
 # ====== Settings ======
 
 # URLs and dump directories
-JOUKAHAINEN_URL = u'http://joukahainen.lokalisointi.org'
+JOUKAHAINEN_URL = u'http://localhost/joukahainen'
 JOUKAHAINEN_VOC_URL = u'http://localhost/joukahainen/sanastot'
 VOC_DUMP_DIR = u'/tmp/d/voc'
 DB_DUMP_DIR = u'/tmp/d/db'
@@ -74,12 +74,8 @@ def dump_database(filename):
 
 # Dumps the contents of the default vocabulary to a file
 def dump_default_vocabulary(filename):
-	subprocess.call([WGET_COMMAND, u'-q', JOUKAHAINEN_URL + u'/malaga/default', u'-O', filename])
-
-# Dumps the contents of a special vocabulary with specific id to a file
-def dump_special_vocabulary(voc_id, filename):
-	subprocess.call([WGET_COMMAND, u'-q', JOUKAHAINEN_URL + (u'/malaga/special?aid=%i' % voc_id),
-	                 u'-O', filename])
+	subprocess.call(u'"%s" -q "%s/query/wlist?listtype=xml" -O - | gzip > "%s"' % \
+	                (WGET_COMMAND, JOUKAHAINEN_URL, filename), shell=True)
 
 # The date for new files
 def current_date():
@@ -113,28 +109,17 @@ def remove(filename):
 
 # ====== Main program ======
 
-indexfile = codecs.open(VOCABULARY_INDEX, 'w', 'UTF-8')
+#indexfile = codecs.open(VOCABULARY_INDEX, 'w', 'UTF-8')
 cdate = current_date()
 
-indexfile.write(u'[version]\n1\n\n')
+#indexfile.write(u'[version]\n1\n\n')
 
 # The default vocabulary
-new_dvoc_name = VOC_DUMP_DIR + u'/' + DB_NAME + u'-' + cdate + u'.lex'
-dvoc_link_name = VOC_DUMP_DIR + u'/' + DB_NAME + u'.lex'
+new_dvoc_name = VOC_DUMP_DIR + u'/' + DB_NAME + u'-' + cdate + u'.xml.gz'
+dvoc_link_name = VOC_DUMP_DIR + u'/' + DB_NAME + u'.xml.gz'
 dump_default_vocabulary(new_dvoc_name)
 remove(dvoc_link_name)
 os.symlink(new_dvoc_name, dvoc_link_name)
-write_index_entry(indexfile, DB_NAME + u'.lex', u'sanat/' + DB_NAME + u'.lex', u'Perussanasto', cdate)
-
-# The special vocabularies
-for (voc_id, name, description) in SPECIAL_VOCS:
-	new_svoc_name = VOC_DUMP_DIR + u'/' + name + u'-' + cdate + u'.lex'
-	svoc_link_name = VOC_DUMP_DIR + u'/' + name + u'.lex'
-	dump_special_vocabulary(voc_id, new_svoc_name)
-	remove(svoc_link_name)
-	os.symlink(new_svoc_name, svoc_link_name)
-	write_index_entry(indexfile, name + u'.lex', u'sanat/erikoisalat/' + name + u'.lex',
-	                  description, cdate)
 
 # Database dumps
 new_dbdump_name = DB_DUMP_DIR + u'/' + DB_NAME + u'-' + cdate + u'.pgdump'
@@ -143,11 +128,9 @@ dump_database(new_dbdump_name)
 remove(dbdump_link_name)
 os.symlink(new_dbdump_name, dbdump_link_name)
 
-indexfile.close()
+#indexfile.close()
 
 # Old file cleanup
 for cldate in cleanup_dates():
-	remove(VOC_DUMP_DIR + u'/' + DB_NAME + u'-' + cldate + u'.lex')
-	for (voc_id, name, description) in SPECIAL_VOCS:
-		remove(VOC_DUMP_DIR + u'/' + name + u'-' + cldate + u'.lex')
+	remove(VOC_DUMP_DIR + u'/' + DB_NAME + u'-' + cldate + u'.xml.gz')
 	remove(DB_DUMP_DIR + u'/' + DB_NAME + u'-' + cldate + u'.pgdump')
