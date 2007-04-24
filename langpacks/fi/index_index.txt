@@ -3,19 +3,20 @@ Joukahainen: aloitus
 <div class="rightinfo">
 <p>Tämä Joukahaisen asennus sisältää Suomi-malagan oikolukuversion ("Voikko edition") substantiivit,
 adjektiivit ja verbit.
-Aineiston tekijänoikeudet kuuluvat Hannu Väisäselle ja muille Hunspell-fi -projektiin osallistuneille,
+Aineiston tekijänoikeudet kuuluvat Hannu Väisäselle ja muille Voikko-projektiin osallistuneille,
 ja sitä voi käyttää ja levittää
 <a href="http://www.gnu.org/licenses/gpl.html">GPL-lisenssin</a> ehdoilla. Sovelluksen sellainen käyttö,
-johon ei liity aineiston kopioimista, on sallittu ilman rajoituksia. Tietokannan sisältö on ladattavissa
-<a href="pgdumps">tästä hakemistosta</a>.</p>
+johon ei liity aineiston kopioimista, on sallittu ilman rajoituksia.</p>
 <p>Myös Joukahaista itseään voi käyttää ja levittää GPL-lisenssillä. Sovelluksen lähdekoodi ja aineiston
-muuntamisessa käytetyt apuohjelmat löytyvät Hunspell-fi -projektin
-<a href="http://svn.sourceforge.net/viewcvs.cgi/hunspell-fi/trunk/">versionhallintajärjestelmästä</a>
+muuntamisessa käytetyt apuohjelmat löytyvät Voikko-projektin
+<a href="http://voikko.svn.sourceforge.net/viewcvs.cgi/voikko/trunk/">versionhallintajärjestelmästä</a>
 (alihakemistot joukahainen, tools ja data).</p>
 <p>Bugeista ja muista ongelmista voi raportoida joko Joukahaisen kehittäjälle ja tämän asennuksen
-ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki.fi</a>) tai Hunspell-fi -projektin
+ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki.fi</a>) tai Voikko-projektin
 <a href="http://hunspell-fi.org/mailman/listinfo/devel_hunspell-fi.org">postituslistalle</a>.</p>
+<p>Lisää tietoa Voikosta löytyy <a href="http://voikko.sourceforge.net">projektin kotisivulta</a>.</p>
 </div>
+<h2><a href="/docs/">Ohjeita</a></h2>
 <h2>Etsi ja käsittele sanoja</h2>
 <ul>
 <li><a href="query/wlist">Kaikki sanat (200 sanaa kerrallaan)</a></li>
@@ -49,10 +50,52 @@ ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki
 <li><a href="user/addform">Lisää käyttäjä</a></li>
 <li><a href="user/passwdform">Vaihda salasanasi</a></li>
 </ul>
+<h2>Ladattavat tiedostot</h2>
+<ul>
+<li><a href="sanastot/joukahainen.xml.gz">Uusin sanastotiedosto</a> (päivitetään kerran vuorokaudessa),
+    <a href="sanastot/">arkistoidut sanastot</a></li>
+<li><a href="pgdumps/joukahainen.pgdump">Tietokannan koko sisältö</a> (päivitetään kerran vuorokaudessa),
+    <a href="pgdumps/">arkistoidut versiot</a></li>
+</ul>
+<h2>Apuvälineitä</h2>
+<ul>
+<li><a href="ehdotasanoja">Ehdota uusia sanoja lisättäväksi sanastoon</a> (ei vaadi käyttäjätunnusta)</li>
+<li><a href="webvoikko">Webvoikko</a></li>
+<li><a href="kotus-diff.html">Kotus-diff</a></li>
+</ul>
+
 <div class="clear"></div>
 </div>
 
 <div class="bottominfo">
 <p>
-
+2007-04-14: XML-muotoinen sanasto on nyt kokonaan korvannut vanhan Voikon käyttämän sanaston.
+</p>
+<p>
+2007-03-04: Sanaston haku sovellusriippumattomassa XML-muodossa on nyt mahdollista. Toistaiseksi tämä toimii
+vain hakutoiminnon kautta, mutta myöhemmin myös öisin koottava valmis sanasto tuotetaan tässä muodossa.
+Jatkossa XML-muoto korvaa käytössä olleen, vain Voikossa toimineen tiedostomuodon.
+</p>
+<p>
+2007-01-06: Kotimaisten kielten tutkimukeskuksen <a href="http://kaino.kotus.fi">Kaino-aineistopalvelussa</a>
+julkaistun nykysuomen sanalistan ja Joukahaisen sanalistan eroihin voi tutustua
+<a href="kotus-diff.html">päivittäin päivittyvän listan</a> avulla. Lista ei ole täydellinen, eikä se myöskään
+sisällä tietoja eroavaisuuksista jotka ovat tarkoituksellisesti jätetty tietokantaan. Kiitämme Kotimaisten
+kielten tutkimuskeskusta listan julkaisusta. Sitä tullaan hyödyntämään laajasti, mutta toisaalta Joukahaisen
+sanastoa kehitetään hiukan eri periaatteella joten varsinaisesti näitä sanastoja ei tulla yhdistämään.
+</p>
+<p>
+2006-11-25: Joukahaisen käyttämä PostgreSQL-tietokantaohjelmisto on päivitetty versiosta
+7.4 versioon 8.1. Tämän johdosta tietokantakopioiden käyttö omalla koneella vaatii myös ohjelmistosta
+version 8.1 tai uudemman.
+</p>
+<p>
+2006-11-15: Erityisesti sanaston muokkaajia varten on nyt olemassa <a href="/docs/">ohjeita</a>.
+Tutustukaa niihin huolella ennen kuin teette muutoksia Joukahaisen kautta.
+</p>
+<p>
+2006-10-13: Joukahainen on otettu virallisesti käyttöön. Testimuutosten teko
+tietokantaan on kielletty. Tälle sivulle linkitetään jatkossa ohjeita sanaston
+kehittäjien avuksi. Toistaiseksi muutoksia saa tehdä vain Voikko-oikolukuprojektin
+postituslistalla annettujen ohjeiden mukaan.
 </p>

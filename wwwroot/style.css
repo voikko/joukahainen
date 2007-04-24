@@ -139,6 +139,18 @@ p.comment {
 	margin-left: 2em;
 }
 
+p.error {
+	background-color: #EE4444;
+	color: #000000;
+	font-weight: bold;
+}
+
+p.ok {
+	background-color: #44DD44;
+	color: #000000;
+	font-weight: bold;
+}
+
 li p {
 	margin: 0;
 	padding: 0;

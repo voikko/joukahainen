@@ -604,7 +604,7 @@ def categories(req):
 		else: cats = cat
 		jotools.write(req, (u'<tr><td><a href="add_from_db?category=%s">%s</a></td>' +
 		                    u'<td>%i</td></tr>\n') \
-		  % (jotools.escape_url(cat), jotools.escape_html(cats), result[1]))
+		  % (jotools.escape_url(result[0]), jotools.escape_html(cats), result[1]))
 	jotools.write(req, u"</table>\n")
 	jotools.write(req, u'<p><a href="add_from_db">%s ...</a></p>\n' % _(u'All words'))
 	joheaders.page_footer_plain(req)

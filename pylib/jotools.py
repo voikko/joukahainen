@@ -175,6 +175,7 @@ def escape_form_value(string):
 	return saxutils.quoteattr(string)
 
 # Converts a string to a form that is suitable for use in a URL
+# The input should be ordinary (not Unicode) string
 def escape_url(string):
 	return urllib.quote_plus(string)
 
