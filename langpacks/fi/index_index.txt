@@ -69,6 +69,10 @@ ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki
 
 <div class="bottominfo">
 <p>
+2007-04-25: Lisätty lomake <a href="ehdotasanoja">puuttuvista tai virheellisistä sanoista</a>
+huomauttamista varten.
+</p>
+<p>
 2007-04-14: XML-muotoinen sanasto on nyt kokonaan korvannut vanhan Voikon käyttämän sanaston.
 </p>
 <p>

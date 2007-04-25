@@ -26,6 +26,7 @@ import _config
 import joheaders
 import jotools
 import jodb
+import datetime
 
 def _get_special_vocabularies(db):
 	"Returns a list of special vocabularies"
@@ -38,7 +39,36 @@ def _get_special_vocabularies(db):
 
 def _allow_new_word(req, privdb, substract_from_quota):
 	"Checks if a guest user is allowed to add new suggestions"
-	return False
+	current_ip = req.connection.remote_ip
+	new_date = datetime.date.today().isoformat()
+	if substract_from_quota: privdb.query("BEGIN")
+	results = privdb.query("SELECT last_access_date, access_count FROM guestaccess " +
+	                       "WHERE ip = '%s'" % current_ip)
+	
+	if results.ntuples() > 0:
+		add_record = False
+		last_access_date = results.getresult()[0][0]
+		access_count = results.getresult()[0][1]
+		if last_access_date == new_date:
+			if access_count >= 20:
+				if substract_from_quota: privdb.query("COMMIT")
+				return False
+			else:
+				new_access_count = access_count + 1
+		else:
+			new_access_count = 1
+	else:
+		add_record = True
+	
+	if substract_from_quota:
+		if results.ntuples() == 0:
+			privdb.query("INSERT INTO guestaccess(ip) VALUES('%s')" % current_ip)
+		else:
+			privdb.query(("UPDATE guestaccess SET last_access_date = '%s', " + \
+			              "access_count = %i WHERE ip = '%s'") % \
+				   (new_date, new_access_count, current_ip))
+		privdb.query("COMMIT")
+	return True
 
 def _is_old_word(req, db, word):
 	"Checks if given word should be rejected"

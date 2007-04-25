@@ -22,6 +22,14 @@ CREATE TABLE appuser (
   session_exp timestamp -- session expiration time
 );
 
+-- Guest user access control. Dynamic.
+CREATE TABLE guestaccess (
+  ip inet PRIMARY KEY, -- ip address of the guest system
+  last_access_date date NOT NULL DEFAULT CURRENT_DATE, -- date of the last access
+  access_count integer NOT NULL DEFAULT 1 -- number of times the guest has used a
+                                          -- protected resource within last_access_date
+);
+
 -- Grant privileges
-GRANT ALL on appuser TO joukahainen;
+GRANT ALL on appuser, guestaccess TO joukahainen;
 GRANT SELECT, UPDATE on appuser_uid_seq TO joukahainen;
