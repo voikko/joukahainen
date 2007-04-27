@@ -7,8 +7,8 @@ Aineiston tekijänoikeudet kuuluvat Hannu Väisäselle ja muille Voikko-projekti
 ja sitä voi käyttää ja levittää
 <a href="http://www.gnu.org/licenses/gpl.html">GPL-lisenssin</a> ehdoilla. Sovelluksen sellainen käyttö,
 johon ei liity aineiston kopioimista, on sallittu ilman rajoituksia.</p>
-<p>Myös Joukahaista itseään voi käyttää ja levittää GPL-lisenssillä. Sovelluksen lähdekoodi ja aineiston
-muuntamisessa käytetyt apuohjelmat löytyvät Voikko-projektin
+<p>Myös Joukahaista itseään voi käyttää ja levittää GPL-lisenssillä. Sovelluksen lähdekoodi löytyy
+Voikko-projektin
 <a href="http://voikko.svn.sourceforge.net/viewcvs.cgi/voikko/trunk/">versionhallintajärjestelmästä</a>
 (alihakemistot joukahainen, tools ja data).</p>
 <p>Bugeista ja muista ongelmista voi raportoida joko Joukahaisen kehittäjälle ja tämän asennuksen
@@ -39,6 +39,7 @@ ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki
 <li><a href="findclass/classlist">Etsi sanalle taivutusluokka</a></li>
 <li><a href="query/listchanges">Viimeisimmät muutokset</a></li>
 </ul>
+@BEGIN IF_EDIT_ALLOWED
 <h2>Lisää sanoja</h2>
 <ul>
 <li><a href="word/add_manual">Lisää omia sanoja</a></li>
@@ -50,6 +51,7 @@ ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki
 <li><a href="user/addform">Lisää käyttäjä</a></li>
 <li><a href="user/passwdform">Vaihda salasanasi</a></li>
 </ul>
+@END IF_EDIT_ALLOWED
 <h2>Ladattavat tiedostot</h2>
 <ul>
 <li><a href="sanastot/joukahainen.xml.gz">Uusin sanastotiedosto</a> (päivitetään kerran vuorokaudessa),
@@ -59,8 +61,8 @@ ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki
 </ul>
 <h2>Apuvälineitä</h2>
 <ul>
-<li><a href="ehdotasanoja">Ehdota uusia sanoja lisättäväksi sanastoon</a> (ei vaadi käyttäjätunnusta)</li>
-<li><a href="webvoikko">Webvoikko</a></li>
+<li><a href="ehdotasanoja">Ehdota uusia sanoja lisättäväksi sanastoon</a></li>
+<li><a href="webvoikko">Webvoikko</a> (www-pohjainen oikoluku- ja tavutuspalvelu)</li>
 <li><a href="kotus-diff.html">Kotus-diff</a></li>
 </ul>
 

@@ -97,6 +97,7 @@ svn co https://svn.sourceforge.net/svnroot/hunspell-fi/trunk/joukahainen INSTALL
    populate it with static data:
    
    \i INSTALLATION_DIRECTORY/joukahainen/sql/schema.sql
+   \i INSTALLATION_DIRECTORY/joukahainen/sql/schema_private.sql
    \i INSTALLATION_DIRECTORY/joukahainen/langpacks/LANG/static.sql
 
   Create the password hash for the initial user by starting python and entering commands

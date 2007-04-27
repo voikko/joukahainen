@@ -94,6 +94,13 @@ def process_template(req, db, static_vars, template_name, lang, module, level):
 		# FIXME: only one variable/function allowed on one line
 		line = tmplfile.readline()
 		file_cont = line.endswith('\n')
+		
+		if line == u"@BEGIN IF_EDIT_ALLOWED\n":
+			if not static_vars.has_key('EDITABLE') or not static_vars['EDITABLE']:
+				while line.endswith('\n') and line != u"@END IF_EDIT_ALLOWED\n": line = tmplfile.readline()
+			continue
+		if line == u"@END IF_EDIT_ALLOWED\n": continue
+		
 		var_match = var_re.match(line)
 		line_str = u''
 		if var_match != None:

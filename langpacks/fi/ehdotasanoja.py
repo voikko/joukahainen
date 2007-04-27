@@ -71,20 +71,27 @@ def _allow_new_word(req, privdb, substract_from_quota):
 	return True
 
 def _is_old_word(req, db, word):
-	"Checks if given word should be rejected"
+	"Checks if given word should be rejected. Returns an error message or None, if word is OK."
 	results = db.query("SELECT word FROM raw_word WHERE word = '%s'" \
 	                   % jotools.escape_sql_string(word))
-	if results.ntuples() > 0: return True
-	else: return False
+	if results.ntuples() > 0: return u"Sanaa on jo ehdotettu lisättäväksi."
+	results = db.query("SELECT word FROM word WHERE word = '%s'" \
+	                   % jotools.escape_sql_string(word))
+	if results.ntuples() > 0: return u'<a href="query/wlist?word=%s">Sana on jo tietokannassa</a>.' \
+	                          % jotools.escape_url(word.encode('UTF-8'))
+	return None
 
 def _print_entry_form(req, db):
 	"Prints an entry form for word suggestions"
 	jotools.write(req, u'''<p>Jos Voikko ei tunnista jotain sanaa, voit ehdottaa sen lisäämistä
 alla olevan lomakkeen avulla. Sanaa ei lisätä sanastoon automaattisesti, vaan jonkun Joukahaisen
 rekisteröityneistä käyttäjistä on ensin käsiteltävä ehdotus.</p>
+
+<p>Sanaston puutteista ja muista ongelmista voi ilmoittaa myös sähköpostitse osoitteeseen hatapitk@iki.fi.</p>
+
 <form method="post" action="ehdotasanoja">
 
-<p><label>Lisättävä sana: <input type="text" name="word" size=30" /></label><br />
+<p><label>Lisättävä sana: <input type="text" name="word" size="30" /></label><br />
 <i>Lisättävä sana on parasta kirjoittaa perusmuodossaan. Tämä ei kuitenkaan ole välttämätöntä,
 jos olet epävarma sanan oikeasta perusmuodosta.</i></p>
 
@@ -102,7 +109,7 @@ jos Voikko hyväksyy sanan, jota sen ei mielestäsi pitäisi hyväksyä.</i></p>
 <i>Tähän voit kirjoittaa sanaan liittyviä lisätietoja. Jos sana on vaikkapa jonkin
 erikoisalan termi, kirjoita tähän sille lyhyt selitys.</i></p>
 
-<input type="submit" value="Lähetä ehdotus" />
+<p><input type="submit" value="Lähetä ehdotus" /></p>
 </form>''')
 
 def _print_error_forbidden(req):
@@ -142,8 +149,9 @@ def index(req):
 			_print_entry_form(req, db)
 		else:
 			db.query("BEGIN")
-			if _is_old_word(req, db, word):
-				jotools.write(req, u'<p class="error">Sanaa on jo ehdotettu.</p>')
+			error = _is_old_word(req, db, word)
+			if error != None:
+				jotools.write(req, u'<p class="error">%s</p>' % error)
 				_print_entry_form(req, db)
 			elif not (editable or _allow_new_word(req, privdb, True)):
 				_print_error_forbidden(req)

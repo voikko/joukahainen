@@ -12,15 +12,21 @@ $$kotus_class(WID,CLASSID)$$
 <h2>Kirjoitusasut</h2>
 $$related_words(WID)$$
 
+@BEGIN IF_EDIT_ALLOWED
 <p><a href="rwords?wid=$$WID$$">Muokkaa kirjoitusasuja...</a></p>
+@END IF_EDIT_ALLOWED
 <h2>Asetetut liput</h2>
 $$flag_attributes(WID)$$
 
+@BEGIN IF_EDIT_ALLOWED
 <p><a href="flags?wid=$$WID$$">Muokkaa lippuja...</a></p>
+@END IF_EDIT_ALLOWED
 $$main_form_start(EDITABLE)$$
 <p>
 <span class="fheader">Taivutusluokka:</span> <span class="fsvalue">$$string_attribute(WID,1,EDITABLE)$$</span>
+@BEGIN IF_EDIT_ALLOWED
 $$find_infclass(WORD,CLASSID)$$
+@END IF_EDIT_ALLOWED
 <br /><span class="fheader">Historiallinen taivutusluokka:</span>
 <span class="fsvalue">$$string_attribute(WID,16,EDITABLE)$$</span>
 <br /><span class="fheader">Lyhyt sanan selitys:</span>
