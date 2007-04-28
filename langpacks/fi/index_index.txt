@@ -1,20 +1,19 @@
 Joukahainen: aloitus
 
 <div class="rightinfo">
-<p>Tämä Joukahaisen asennus sisältää Suomi-malagan oikolukuversion ("Voikko edition") substantiivit,
-adjektiivit ja verbit.
-Aineiston tekijänoikeudet kuuluvat Hannu Väisäselle ja muille Voikko-projektiin osallistuneille,
-ja sitä voi käyttää ja levittää
+<p>Joukahainen on www-pohjainen suomen kielen sanastotietokanta. Se on kehitetty palvelemaan
+vapaita kieliteknologian sovelluksia, erityisesti <a href="http://voikko.sourceforge.net">Voikkoa</a>.
+Tietokannan sisältöä voi vapaasti selata, jos tarvitsee tietoa suomen sanojen oikeinkirjoituksesta.
+Sanaston kehittäminen on kuitenkin jatkuva projekti, ja nykyisellään se sisältää vielä
+jonkin verran virheitä.</p>
+
+<p>Aineiston tekijänoikeudet kuuluvat useille henkilöille ja yhteisöille. Sitä voi levittää edelleen
 <a href="http://www.gnu.org/licenses/gpl.html">GPL-lisenssin</a> ehdoilla. Sovelluksen sellainen käyttö,
 johon ei liity aineiston kopioimista, on sallittu ilman rajoituksia.</p>
-<p>Myös Joukahaista itseään voi käyttää ja levittää GPL-lisenssillä. Sovelluksen lähdekoodi löytyy
-Voikko-projektin
-<a href="http://voikko.svn.sourceforge.net/viewcvs.cgi/voikko/trunk/">versionhallintajärjestelmästä</a>
-(alihakemistot joukahainen, tools ja data).</p>
-<p>Bugeista ja muista ongelmista voi raportoida joko Joukahaisen kehittäjälle ja tämän asennuksen
-ylläpitäjälle (Harri Pitkänen, <a href="mailto:hatapitk@iki.fi">hatapitk@iki.fi</a>) tai Voikko-projektin
-<a href="http://hunspell-fi.org/mailman/listinfo/devel_hunspell-fi.org">postituslistalle</a>.</p>
-<p>Lisää tietoa Voikosta löytyy <a href="http://voikko.sourceforge.net">projektin kotisivulta</a>.</p>
+<p>Sovelluksen käytössä esiintyvistä ongelmista ja kehitysideoista voi kertoa Joukahaisen kehittäjälle ja
+tämän asennuksen ylläpitäjälle (Harri Pitkänen,
+<a href="mailto:hatapitk@iki.fi">hatapitk@iki.fi</a>) tai Voikko-projektin
+<a href="http://voikko.sourceforge.net/mail.html">postituslistalle</a>.</p>
 </div>
 <h2><a href="/docs/">Ohjeita</a></h2>
 <h2>Etsi ja käsittele sanoja</h2>

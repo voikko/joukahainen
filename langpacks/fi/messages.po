@@ -1,15 +1,16 @@
-# translation of fi.po to Finnish
+# translation of messages.po to Finnish
+# translation of messages.po to
 # Translation of Joukahainen to Finnish
 # Copyright (C) 2006 Harri Pitkänen
 # This file is distributed under the same license as the Joukahainen package.
 #
-# Harri Pitkänen <hatapitk@iki.fi>, 2006.
+# Harri Pitkänen <hatapitk@iki.fi>, 2006, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: Joukahainen\n"
+"Project-Id-Version: messages\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-19 14:46+0200\n"
-"PO-Revision-Date: 2006-12-19 14:48+0200\n"
+"POT-Creation-Date: 2007-04-28 15:32+0300\n"
+"PO-Revision-Date: 2007-04-28 15:41+0300\n"
 "Last-Translator: Harri Pitkänen <hatapitk@iki.fi>\n"
 "Language-Team: Finnish\n"
 "MIME-Version: 1.0\n"
@@ -85,8 +86,8 @@ msgid "Alternative spelling added: '%s'"
 msgstr "Kirjoitusasu lisätty: '%s'"
 
 #: wwwroot/word.py:339
-msgid "incorrect word"
-msgstr "virheellinen sana"
+msgid "reject"
+msgstr "hylkää"
 
 #: wwwroot/word.py:404
 msgid "Homonyms"
@@ -434,7 +435,7 @@ msgstr "Poista kirjoitusasuja"
 msgid "Add alternative forms"
 msgstr "Lisää kirjoitusasuja"
 
-#: pylib/joeditors.py:178
+#: pylib/joeditors.py:175 pylib/joeditors.py:177 pylib/joeditors.py:178
 msgid "Word in Wiki"
 msgstr "Sana Wikissä"
 
@@ -490,7 +491,4 @@ msgstr "toiminto suoritettu"
 #: pylib/joheaders.py:149
 msgid "Back to front page"
 msgstr "Takaisin aloitussivulle"
-
-#~ msgid "No changelog"
-#~ msgstr "Ei muutostietoja"
 

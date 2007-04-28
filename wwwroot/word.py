@@ -336,7 +336,7 @@ def _get_class_selector(classlist, cid, row, include_no_class):
 			         % (row, res[0], jotools.escape_html(unicode(res[1], 'UTF-8')))
 		if include_no_class:
 			retstr = retstr + (u'<label><input type="radio" name="class%i" ' +
-			    'value="0">%s</input></label>') % (row, _(u'incorrect word'))
+			    'value="0">%s</input></label>') % (row, _(u'reject'))
 		return retstr
 	else:
 		for res in classlist:

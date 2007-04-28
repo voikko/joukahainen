@@ -72,13 +72,24 @@ def _allow_new_word(req, privdb, substract_from_quota):
 
 def _is_old_word(req, db, word):
 	"Checks if given word should be rejected. Returns an error message or None, if word is OK."
+	
+	# Previously suggested words
 	results = db.query("SELECT word FROM raw_word WHERE word = '%s'" \
 	                   % jotools.escape_sql_string(word))
 	if results.ntuples() > 0: return u"Sanaa on jo ehdotettu lisättäväksi."
+	
+	# Words in database
 	results = db.query("SELECT word FROM word WHERE word = '%s'" \
 	                   % jotools.escape_sql_string(word))
 	if results.ntuples() > 0: return u'<a href="query/wlist?word=%s">Sana on jo tietokannassa</a>.' \
 	                          % jotools.escape_url(word.encode('UTF-8'))
+	
+	# Alternative spellings
+	results = db.query("SELECT wid FROM related_word WHERE replace(replace(related_word, " +
+	                   "'=', ''), '|', '') LIKE '%s'" % jotools.escape_sql_string(word))
+	if results.ntuples() > 0: return u'<a href="word/edit?wid=%i">Sana on jo tietokannassa</a>.' \
+	                          % results.getresult()[0][0]
+	
 	return None
 
 def _print_entry_form(req, db):
