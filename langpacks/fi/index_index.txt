@@ -14,8 +14,10 @@ johon ei liity aineiston kopioimista, on sallittu ilman rajoituksia.</p>
 tämän asennuksen ylläpitäjälle (Harri Pitkänen,
 <a href="mailto:hatapitk@iki.fi">hatapitk@iki.fi</a>) tai Voikko-projektin
 <a href="http://voikko.sourceforge.net/mail.html">postituslistalle</a>.</p>
+
+<p>Joukahaisen rekisteröityneille käyttäjille on kirjoitettu <a href="docs/">ohjeita</a>. Jos haluat
+osallistua sanaston kehittämiseen, tutustu näihin ohjeisiin ennen kuin pyydät käyttäjätunnusta.</p>
 </div>
-<h2><a href="/docs/">Ohjeita</a></h2>
 <h2>Etsi ja käsittele sanoja</h2>
 <ul>
 <li><a href="query/wlist">Kaikki sanat (200 sanaa kerrallaan)</a></li>
@@ -35,7 +37,6 @@ tämän asennuksen ylläpitäjälle (Harri Pitkänen,
  <li><a href="query/form">Hakulomake</a></li>
  </ul>
 </li>
-<li><a href="findclass/classlist">Etsi sanalle taivutusluokka</a></li>
 <li><a href="query/listchanges">Viimeisimmät muutokset</a></li>
 </ul>
 @BEGIN IF_EDIT_ALLOWED
@@ -62,7 +63,10 @@ tämän asennuksen ylläpitäjälle (Harri Pitkänen,
 <ul>
 <li><a href="ehdotasanoja">Ehdota uusia sanoja lisättäväksi sanastoon</a></li>
 <li><a href="webvoikko">Webvoikko</a> (www-pohjainen oikoluku- ja tavutuspalvelu)</li>
+@BEGIN IF_EDIT_ALLOWED
+<li><a href="findclass/classlist">Etsi sanalle taivutusluokka</a></li>
 <li><a href="kotus-diff.html">Kotus-diff</a></li>
+@END IF_EDIT_ALLOWED
 </ul>
 
 <div class="clear"></div>

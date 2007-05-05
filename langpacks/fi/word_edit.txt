@@ -37,6 +37,7 @@ $$find_infclass(WORD,CLASSID)$$
 <span class="fsvalue">$$int_attribute(WID,38,EDITABLE)$$</span>
 </p>
 $$main_form_end(WID,EDITABLE)$$
+</div>
 <div class="bottominfo">
 $$message_log(WID)$$
-</div>
+

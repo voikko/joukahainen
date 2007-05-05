@@ -78,6 +78,7 @@ svn co https://svn.sourceforge.net/svnroot/hunspell-fi/trunk/joukahainen INSTALL
 
 4) Configure your web server. The following configuration snippet should be enough:
 
+  PythonOption mod_python.legacy.importer *    # This is only needed for mod_python 3.3 or later
   <Directory WWW_LOCAL_ROOT> # Change this
     AddHandler python-program .py
     PythonHandler mod_python.publisher
