@@ -49,8 +49,8 @@ div.topbar {
 	padding: 0.5em;
 	-moz-border-radius-bottomleft: 1em;
 	-moz-border-radius-bottomright: 1em;
-	border-radius-bottomleft: 1em;
-	border-radius-bottomright: 1em;
+	-webkit-border-radius-bottomleft: 1em;
+	-webkit-border-radius-bottomright: 1em;
 	border-right: 2px solid black;
 	border-bottom: 2px solid black;
 }
@@ -84,7 +84,7 @@ div.rightinfo {
 	max-width: 40%;
 	padding: 0.5em;
 	-moz-border-radius: 1em;
-	border-radius: 1em;
+	-webkit-border-radius: 1em;
 	border-right: 2px solid black;
 	border-bottom: 2px solid black;
 }
@@ -95,7 +95,7 @@ div.bottominfo {
 	clear: both;
 	padding: 0.5em;
 	-moz-border-radius: 1em;
-	border-radius: 1em;
+	-webkit-border-radius: 1em;
 	border-right: 2px solid black;
 	border-bottom: 2px solid black;
 }
