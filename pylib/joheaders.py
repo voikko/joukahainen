@@ -34,7 +34,7 @@ def page_header_nonavbar(req, title):
 	req.write("""<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fi" lang="fi">
 <head>
 <title>%s</title>
 <link rel="stylesheet" type="text/css" href="%s/style.css" />
@@ -51,7 +51,7 @@ def _page_header_internal(req, title, h1, uid, uname, wid):
 	jotools.write(req, u"""<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fi" lang="fi">
 <head>
 <title>%s</title>
 <link rel="stylesheet" type="text/css" href="%s/style.css" />
@@ -109,7 +109,7 @@ def frame_header(req, title):
 	req.write("""<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fi" lang="fi">
 <head>
 <title>%s</title>
 <link rel="stylesheet" type="text/css" href="%s/style.css" />
