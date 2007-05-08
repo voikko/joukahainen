@@ -23,15 +23,15 @@ osallistua sanaston kehittämiseen, tutustu näihin ohjeisiin ennen kuin pyydät
 <li><a href="query/wlist">Kaikki sanat (200 sanaa kerrallaan)</a></li>
 <li>Hae sana
  <ul>
- <li><form method="get" action="query/wlist"><p>Perushaku
-    <input type="text" name="word" />
+ <li><form method="get" action="query/wlist"><p><label>Perushaku
+    <input type="text" name="word" /></label>
     <input type="hidden" name="wordsimplere" value="on" />
     <input type="submit" value="Hae" /></p></form></li>
- <li><form method="get" action="query/wlist"><p>Tarkka haku
-    <input type="text" name="word" />
+ <li><form method="get" action="query/wlist"><p><label>Tarkka haku
+    <input type="text" name="word" /></label>
     <input type="submit" value="Hae" /></p></form></li>
- <li><form method="get" action="query/wlist"><p>Säännöllinen lauseke
-    <input type="text" name="word" />
+ <li><form method="get" action="query/wlist"><p><label>Säännöllinen lauseke
+    <input type="text" name="word" /></label>
     <input type="hidden" name="wordre" value="on" />
     <input type="submit" value="Hae" /></p></form></li>
  <li><a href="query/form">Hakulomake</a></li>
