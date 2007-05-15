@@ -1,4 +1,4 @@
--- Sample dynamic data for testing purposes (Joukahainen/Hunspell-fi)
+-- Sample dynamic data for testing purposes (Joukahainen/Voikko)
 
 -- Delete old data
 DELETE FROM related_word;

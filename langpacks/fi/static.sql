@@ -1,4 +1,4 @@
--- Static database data for Joukahainen/Hunspell-fi (public data)
+-- Static database data for Joukahainen/Voikko (public data)
 
 \c joukahainen
 
