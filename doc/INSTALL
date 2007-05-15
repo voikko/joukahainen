@@ -53,7 +53,7 @@ and WWW_LOCAL_ROOT is the directory on the local filesystem that contains
 the files visible through the http server (for example "/var/www/joukahainen").
 
 1) Check out the application from SVN:
-svn co https://svn.sourceforge.net/svnroot/hunspell-fi/trunk/joukahainen INSTALLATION_DIRECTORY/joukahainen
+svn co https://voikko.svn.sourceforge.net/svnroot/voikko/trunk/joukahainen INSTALLATION_DIRECTORY/joukahainen
 
 2) Create WWW_LOCAL_ROOT and add symbolic links from INSTALLATION_DIRECTORY/joukahainen/wwwroot
    to WWW_LOCAL_ROOT for the following files:
