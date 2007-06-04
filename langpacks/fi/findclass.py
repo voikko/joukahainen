@@ -81,6 +81,8 @@ def _display_form(req, classid, grad_type, word):
   d->t: sa<em>d</em>e->sa<em>t</em>een<br />
   ng->nk: ka<em>ng</em>as->ka<em>nk</em>aan
 
+  b->bb: lo<em>b</em>ata->lo<em>bb</em>aan<br />
+  g->gg: di<em>g</em>ata->di<em>gg</em>aan<br />
 </dd>
 <dt>av3 (L)</dt><dd>
   k->j: jär<em>k</em>i->jär<em>j</em>en
