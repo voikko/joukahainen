@@ -22,10 +22,10 @@
 import os
 
 # Path to module directory (Hunspell-fi tools)
-MODULE_PATH_HFTOOLS = '/home/harri/hunspell-fi/svn/trunk/tools/pylib'
+MODULE_PATH_HFTOOLS = '/home/harri/svn/voikko/trunk/tools/pylib'
 
 # Path to Hunspell-fi data directory
-HF_DATA = '/home/harri/hunspell-fi/svn/trunk/data'
+HF_DATA = '/home/harri/svn/voikko/trunk/data'
 VOIKKO_DATA = "/home/harri/svn/voikko/trunk/data"
 
 import sys

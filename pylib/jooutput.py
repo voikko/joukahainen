@@ -32,10 +32,10 @@ def _html(req, db, query):
 	limit_s = `jotools.toint(jotools.get_param(req, 'limit', u'200'))`
 	if limit_s == u'0': limit_s = u'ALL'
 	
-	param_s = ''
+	param_s = u''
 	for field in req.form.list:
-		if not field.name in ['offset', 'limit']:
-			param_s = param_s + field.name + '=' + field.value + '&'
+		if not field.name in ['limit', 'offset'] and jotools.checkid(field.name):
+			param_s = param_s + field.name + u'=' + jotools.get_param(req, field.name, u'') + u'&'
 	
 	results = db.query("%s LIMIT %s OFFSET %s" % (query, limit_s, offset_s))
 	if results.ntuples() == 0:

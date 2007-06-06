@@ -75,6 +75,15 @@ def checkuname(string):
 		if not c in UNAMECHARS: return False
 	return True
 
+IDCHARS = 'abcdefghijklmnopqrstuvwxyz'
+# Checks if string looks like a valid identifier
+def checkid(string):
+	if len(string) == 0: return False
+	if not string[0] in IDCHARS: return False
+	for c in string:
+		if not c in IDCHARS and not c in '1234567890': return False
+	return True
+
 def write(req, string):
 	req.write(string.encode("UTF-8"))
 
