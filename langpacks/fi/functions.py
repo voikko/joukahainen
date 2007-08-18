@@ -25,8 +25,7 @@ MODULE_PATH_VOIKKOTOOLS = '/home/harri/svn/voikko/trunk/tools/pylib'
 import sys
 sys.path.append(MODULE_PATH_VOIKKOTOOLS)
 import voikkoutils
-import hfaffix
-import hfutils
+import voikkoinfl
 import xml.sax.saxutils
 import time
 
@@ -94,18 +93,18 @@ def _get_inflection_gradation(db, wid):
 	return (infclass_main, grad_type)
 
 
-# Returns the correct hfutils class structure for given word.
+# Returns the correct InflectionType for given word.
 # classid is the word class identifier in Joukahainen.
 # Returns None if no class information could be retrieved
-def _get_hfutils_class(wid, classid, infclass_main):
+def _get_inflection_type(classid, infclass_main):
 	if classid in [1, 2]: classdatafile = VOIKKO_DATA + "/subst.aff"
 	elif classid == 3: classdatafile = VOIKKO_DATA + "/verb.aff"
 	else: return None
 	
-	word_classes = hfaffix.read_word_classes(classdatafile)
-	for word_class in word_classes:
-		if not infclass_main in word_class['smcnames']: continue
-		else: return word_class
+	word_types = voikkoinfl.readInflectionTypes(classdatafile)
+	for word_type in word_types:
+		if not infclass_main in word_type.joukahainenClasses: continue
+		else: return word_type
 	return None
 
 
@@ -119,46 +118,42 @@ def word_inflection(db, wid, word, classid):
 	if infclass_parts == None: return u"(ei taivutusluokkaa)"
 	(infclass_main, grad_type) = infclass_parts
 	
-	word_class = _get_hfutils_class(wid, classid, infclass_main)
+	word_class = _get_inflection_type(classid, infclass_main)
 	if word_class == None: return "(taivutuksia ei ole saatavilla tai virheellinen taivutusluokka)"
 	
 	tableid = u"inftable%i" % wid
 	retdata = u''
 	note = u''
 	have_only_characteristic = True
-	inflected_words = hfaffix.inflect_word(word, grad_type, word_class,
-	                                       _get_infl_vowel_type(db, wid, word))
-	if inflected_words == None: return "(virhe taivutusten muodostuksessa)"
+	inflected_words = voikkoinfl.inflectWordWithType(word, word_class, infclass_main, grad_type,
+	                                                 _get_infl_vowel_type(db, wid, word))
+	if inflected_words == []: return "(virhe taivutusten muodostuksessa)"
 	
 	if classid in [1, 2] and \
 	   db.query("SELECT count(*) FROM flag_attribute_value WHERE aid = 37 AND wid = %i" \
 	   % wid).getresult()[0][0] == 1: no_singular = True
 	else: no_singular = False
 	
-	form = None
+	previous_inflected = voikkoinfl.InflectedWord()
 	inflist = []
-	inflected_words.append((u'', u'', u''))
+	inflected_words.append(voikkoinfl.InflectedWord())
 	for inflected_word in inflected_words:
-		if no_singular and inflected_word[0] in SINGULAR_FORMS: continue
-		if form != inflected_word[0]:
-			if form != None and len(inflist) > 0:
-				if form in characteristic_forms:
+		if no_singular and inflected_word.formName in SINGULAR_FORMS: continue
+		if previous_inflected.formName != inflected_word.formName:
+			if previous_inflected.formName != u"" and len(inflist) > 0:
+				if previous_inflected.isCharacteristic:
 					htmlclass = u' class="characteristic"'
-				elif form[0] == u'!':
-					htmlclass = u' class="characteristic"'
-					form = form[1:]
 				else:
 					htmlclass = ''
 					have_only_characteristic = False
 				infs = reduce(lambda x, y: u"%s, %s" % (x, y), inflist)
 				retdata = retdata + (u"<tr%s><td>%s</td><td>%s</td></tr>\n" %
-				          (htmlclass, form, infs))
+				          (htmlclass, previous_inflected.formName, infs))
 			inflist = []
-			form = inflected_word[0]
-		if hfutils.read_option(inflected_word[2], 'ps', '-') != 'r' \
-		   and not inflected_word[1] in inflist:
-			inflist.append(inflected_word[1])
-	note = word_class['note']
+			previous_inflected = inflected_word
+		if not inflected_word.inflectedWord in inflist:
+			inflist.append(inflected_word.inflectedWord)
+	note = word_class.note
 	
 	table_header = u'<table class="inflection" id="%s">\n<tr><th colspan="2">' % tableid
 	if not have_only_characteristic:
@@ -367,11 +362,11 @@ def kotus_class(db, wid, classid):
 	if infclass_parts == None: return u""
 	(infclass_main, grad_type) = infclass_parts
 	
-	word_class = _get_hfutils_class(wid, classid, infclass_main)
+	word_class = _get_inflection_type(classid, infclass_main)
 	if word_class == None: return ""
 	
 	return u'<span class="fheader">Kotus-luokka:</span> <span class="fsvalue">%s</span>' \
-	       % word_class['cname']
+	       % reduce(lambda x, y: u"%s, %s" % (x, y), word_class.kotusClasses)
 
 # Returns a link target of the inflection class finder for a word or None,
 # if no finder is available

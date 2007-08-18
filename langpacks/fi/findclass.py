@@ -25,8 +25,7 @@ import sys
 import _config
 import _apply_config
 import voikkoutils
-import hfaffix
-import hfutils
+import voikkoinfl
 import joheaders
 import jotools
 import jooutput
@@ -34,12 +33,6 @@ import jodb
 
 # Path to Voikko data directory
 VOIKKO_DATA = voikkoutils.get_preference('voikko_data_dir')
-
-CHARACTERISTIC_NOUN_FORMS = ['nominatiivi', 'genetiivi', 'partitiivi', 'illatiivi',
-                             'genetiivi_mon', 'partitiivi_mon', 'illatiivi_mon']
-CHARACTERISTIC_VERB_FORMS = ['infinitiivi_1', 'preesens_yks_1', 'imperfekti_yks_3',
-                             'kondit_yks_3', 'imperatiivi_yks_3', 'partisiippi_2',
-                             'imperfekti_pass']
 
 def _display_form(req, classid, grad_type, word):
 	jotools.write(req, u'''
@@ -148,10 +141,8 @@ def classlist(req):
 	classid = jotools.toint(jotools.get_param(req, 'class', u'0'))
 	if classid == 1:
 		classdatafile = VOIKKO_DATA + "/subst.aff"
-		characteristic_forms = CHARACTERISTIC_NOUN_FORMS
 	elif classid == 3:
 		classdatafile = VOIKKO_DATA + "/verb.aff"
-		characteristic_forms = CHARACTERISTIC_VERB_FORMS
 	elif classid == 0:
 		joheaders.page_footer_plain(req)
 		return '\n'
@@ -170,35 +161,34 @@ def classlist(req):
 	
 	_display_form(req, classid, grad_type, word)
 	
-	word_classes = hfaffix.read_word_classes(classdatafile)
+	word_classes = voikkoinfl.readInflectionTypes(classdatafile)
 	
 	for word_class in word_classes:
-		if len(word_class['smcnames']) == 0: continue
-		inflected_words = hfaffix.inflect_word(word, grad_type, word_class)
-		if inflected_words == None: continue
-		form = None
+		if len(word_class.joukahainenClasses) == 0: continue
+		infclass_main = word_class.joukahainenClasses[0]
+		inflected_words = voikkoinfl.inflectWordWithType(word, word_class, infclass_main, grad_type)
+		if inflected_words == []: continue
+		
+		previous_inflected = voikkoinfl.InflectedWord()
 		inflist = []
-		inflected_words.append((u'', u'', u''))
-		jotools.write(req, '<hr /><h2>' + word_class['smcnames'][0] \
-		              + grad_type_s + '</h2>')
-		if word_class['note'] != u'':
-			jotools.write(req, u'<p>%s</p>\n' % word_class['note'])
-		jotools.write(req, u'<p>Kotus-luokka: %s</p>' % word_class['cname'])
+		inflected_words.append(voikkoinfl.InflectedWord())
+		jotools.write(req, '<hr /><h2>' + infclass_main + grad_type_s + '</h2>')
+		if word_class.note != u'':
+			jotools.write(req, u'<p>%s</p>\n' % word_class.note)
+		jotools.write(req, u'<p>Kotus-luokka: %s</p>' % \
+		              reduce(lambda x, y: u"%s, %s" % (x, y), word_class.kotusClasses))
 		jotools.write(req, u'<table class="border">\n')
 		for inflected_word in inflected_words:
-			if form != inflected_word[0]:
-				if form != None and len(inflist) > 0:
-					if form in characteristic_forms or form[0] == u'!':
-						if form[0] == u'!':
-							form = form[1:]
+			if previous_inflected.formName != inflected_word.formName:
+				if previous_inflected.formName != u"" and len(inflist) > 0:
+					if previous_inflected.isCharacteristic:
 						infs = reduce(lambda x, y: u"%s, %s" % (x, y), inflist)
 						jotools.write(req, (u"<tr><td>%s</td><td>%s</td></tr>\n" %
-						          (form, infs)))
+						          (previous_inflected.formName, infs)))
 				inflist = []
-				form = inflected_word[0]
-			if hfutils.read_option(inflected_word[2], 'ps', '-') != 'r' \
-			   and not inflected_word[1] in inflist:
-				inflist.append(inflected_word[1])
+				previous_inflected = inflected_word
+			if not inflected_word.inflectedWord in inflist:
+				inflist.append(inflected_word.inflectedWord)
 		jotools.write(req, u'</table>\n')
 	joheaders.page_footer_plain(req)
 	return '\n'
