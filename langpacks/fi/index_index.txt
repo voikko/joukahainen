@@ -8,7 +8,7 @@ Sanaston kehittäminen on kuitenkin jatkuva projekti, ja nykyisellään se sisä
 jonkin verran virheitä.</p>
 
 <p>Aineiston tekijänoikeudet kuuluvat useille henkilöille ja yhteisöille. Sitä voi levittää edelleen
-<a href="http://www.gnu.org/licenses/gpl.html">GPL-lisenssin</a> ehdoilla. Sovelluksen sellainen käyttö,
+<a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL-lisenssin</a> ehdoilla. Sovelluksen sellainen käyttö,
 johon ei liity aineiston kopioimista, on sallittu ilman rajoituksia.</p>
 <p>Sovelluksen käytössä esiintyvistä ongelmista ja kehitysideoista voi kertoa Joukahaisen kehittäjälle ja
 tämän asennuksen ylläpitäjälle (Harri Pitkänen,

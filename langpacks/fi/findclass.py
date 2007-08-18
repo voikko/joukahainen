@@ -24,6 +24,7 @@ from mod_python import apache
 import sys
 import _config
 import _apply_config
+import voikkoutils
 import hfaffix
 import hfutils
 import joheaders
@@ -31,8 +32,8 @@ import jotools
 import jooutput
 import jodb
 
-# Path to Hunspell-fi data directory
-HF_DATA = '/home/harri/hunspell-fi/svn/trunk/data'
+# Path to Voikko data directory
+VOIKKO_DATA = voikkoutils.get_preference('voikko_data_dir')
 
 CHARACTERISTIC_NOUN_FORMS = ['nominatiivi', 'genetiivi', 'partitiivi', 'illatiivi',
                              'genetiivi_mon', 'partitiivi_mon', 'illatiivi_mon']
@@ -146,10 +147,10 @@ def classlist(req):
 	
 	classid = jotools.toint(jotools.get_param(req, 'class', u'0'))
 	if classid == 1:
-		classdatafile = HF_DATA + "/subst.aff"
+		classdatafile = VOIKKO_DATA + "/subst.aff"
 		characteristic_forms = CHARACTERISTIC_NOUN_FORMS
 	elif classid == 3:
-		classdatafile = HF_DATA + "/verb.aff"
+		classdatafile = VOIKKO_DATA + "/verb.aff"
 		characteristic_forms = CHARACTERISTIC_VERB_FORMS
 	elif classid == 0:
 		joheaders.page_footer_plain(req)

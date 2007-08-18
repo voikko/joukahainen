@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2006 Harri Pitkänen (hatapitk@iki.fi)
+# Copyright 2006 - 2007 Harri Pitkänen (hatapitk@iki.fi)
 # This file is part of Joukahainen, a vocabulary management application
 
 # This program is free software; you can redistribute it and/or modify
@@ -19,22 +19,19 @@
 
 # This file contains language specific program code for Finnish
 
-import os
-
-# Path to module directory (Hunspell-fi tools)
-MODULE_PATH_HFTOOLS = '/home/harri/svn/voikko/trunk/tools/pylib'
-
-# Path to Hunspell-fi data directory
-HF_DATA = '/home/harri/svn/voikko/trunk/data'
-VOIKKO_DATA = "/home/harri/svn/voikko/trunk/data"
+# Path to module directory (Voikko tools)
+MODULE_PATH_VOIKKOTOOLS = '/home/harri/svn/voikko/trunk/tools/pylib'
 
 import sys
-sys.path.append(MODULE_PATH_HFTOOLS)
+sys.path.append(MODULE_PATH_VOIKKOTOOLS)
+import voikkoutils
 import hfaffix
 import hfutils
-import voikkoutils
 import xml.sax.saxutils
 import time
+
+# Path to Voikko data directory
+VOIKKO_DATA = voikkoutils.get_preference('voikko_data_dir')
 
 # Returns the vowel type for a word in the database.
 def _get_db_vowel_type(db, wid):
@@ -101,8 +98,8 @@ def _get_inflection_gradation(db, wid):
 # classid is the word class identifier in Joukahainen.
 # Returns None if no class information could be retrieved
 def _get_hfutils_class(wid, classid, infclass_main):
-	if classid in [1, 2]: classdatafile = HF_DATA + "/subst.aff"
-	elif classid == 3: classdatafile = HF_DATA + "/verb.aff"
+	if classid in [1, 2]: classdatafile = VOIKKO_DATA + "/subst.aff"
+	elif classid == 3: classdatafile = VOIKKO_DATA + "/verb.aff"
 	else: return None
 	
 	word_classes = hfaffix.read_word_classes(classdatafile)
