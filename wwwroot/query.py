@@ -47,11 +47,12 @@ def form(req):
 		jotools.write(req, u'<option value="%i">%s</option>\n' % (aid, unicode(dsc, 'UTF-8')))
 	jotools.write(req, u'</select> %s <input type="text" name="textvalue" /><br />\n' % _(u'is'))
 	flagattrs = db.query("SELECT aid, descr FROM attribute WHERE type = 2 ORDER BY descr, aid").getresult()
-	jotools.write(req, u'</p><p><optgroup>%s:<br />' % _(u'Flags set'))
+	jotools.write(req, u'</p><h2>%s</h2>' % _(u'Flags set'))
+	jotools.write(req, u'<optgroup><ul class="cblist"')
 	for (aid, dsc) in flagattrs:
-		jotools.write(req, u'<label><input type="checkbox" name="flagon%i" />%s</label>\n' \
+		jotools.write(req, u'<li><label><input type="checkbox" name="flagon%i" />%s</label></li>\n' \
 		              % (aid, unicode(dsc, 'UTF-8')))
-	jotools.write(req, u'</optgroup></p><p>\n')
+	jotools.write(req, u'</ul></optgroup><p>\n')
 	for (tname, tdesc) in jooutput.list_supported_types():
 		if tname == 'html': selected = u'checked="checked"'
 		else: selected = u''

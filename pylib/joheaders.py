@@ -64,8 +64,8 @@ def _page_header_internal(req, title, h1, uid, uname, wid):
 		jotools.write(req, u"""
 <div class="login">
 <form method="post" action="%s/user/login"><p>
-<label>%s: <input type="text" name="username" /></label>&nbsp;
-<label>%s: <input type="password" name="password" /></label>&nbsp;
+<label>%s: <input type="text" size="12" name="username" /></label>&nbsp;
+<label>%s: <input type="password" size="12" name="password" /></label>&nbsp;
 <input type="hidden" name="wid" value="%i" />
 <input type="submit" value="%s" />
 </p></form>

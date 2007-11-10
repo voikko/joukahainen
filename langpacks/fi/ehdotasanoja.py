@@ -94,11 +94,11 @@ def _is_old_word(req, db, word):
 
 def _print_entry_form(req, db):
 	"Prints an entry form for word suggestions"
-	jotools.write(req, u'''<p>Jos Voikko ei tunnista jotain sanaa, voit ehdottaa sen lisäämistä
-alla olevan lomakkeen avulla. Sanaa ei lisätä sanastoon automaattisesti, vaan jonkun Joukahaisen
-rekisteröityneistä käyttäjistä on ensin käsiteltävä ehdotus.</p>
-
-<p>Sanaston puutteista ja muista ongelmista voi ilmoittaa myös sähköpostitse osoitteeseen hatapitk@iki.fi.</p>
+	jotools.write(req, u'''<p>Joukahainen on Voikko-oikolukuohjelmiston kehittäjien
+yhteinen sanastotietokanta. Sen avulla myös Voikon käyttäjät voivat auttaa kehittäjiä tekemään ohjelmasta
+entistäkin paremman. Esimerkiksi OpenOffice.orgia käyttäessäsi saatat joskus huomata, että
+oikolukutoiminto ei hyväksy jotain kirjoittamaasi sanaa, vaikka se on oikein. Voit ilmoittaa meille
+näistä sanoista tämän lomakkeen kautta.</p>
 
 <form method="post" action="ehdotasanoja">
 
@@ -114,14 +114,23 @@ jos olet epävarma sanan oikeasta perusmuodosta.</i></p>
 <option value="virheellinen">virheellinen sana (poistettava sanastosta)</option>
 </select></label><br />
 <i>Valitse lisättävän sanan tyyppi. Vaihtoehtoisesti voit valita kohdan "virheellinen sana",
-jos Voikko hyväksyy sanan, jota sen ei mielestäsi pitäisi hyväksyä.</i></p>
+jos Voikko hyväksyy virheellisen sanan.</i></p>
 
 <p><label>Lisätietoja: <input type="text" name="comment" size="60" /></label><br />
 <i>Tähän voit kirjoittaa sanaan liittyviä lisätietoja. Jos sana on vaikkapa jonkin
 erikoisalan termi, kirjoita tähän sille lyhyt selitys.</i></p>
 
 <p><input type="submit" value="Lähetä ehdotus" /></p>
-</form>''')
+</form>
+<hr />
+<p>Ehdotukset käsitellään yleensä parin päivän kuluessa niiden lähettämisestä. Päivitettyjä
+versioita Voikon sanastosta julkaistaan puolestaan kolmen tai neljän kuukauden välein.
+Jos sinulla on paljon ehdotuksia sanastoon lisättäviksi sanoiksi tai haluat auttaa
+jonkin erikoisalan sanaston kehityksessä, voit myös lähettää ehdotuksesi sähköpostitse Harri Pitkäselle
+(<a href="mailto:hatapitk@iki.fi">hatapitk@iki.fi</a>).</p>
+
+<p>Voikkoa kehitetään pääasiassa vapaaehtoisvoimin. Lisää tietoa Voikosta löytyy
+osoitteesta <a href="http://voikko.sourceforge.net">voikko.sourceforge.net</a>.</p>''')
 
 def _print_error_forbidden(req):
 	"Print an error, if adding new words is no longer possible"

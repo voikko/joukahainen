@@ -167,6 +167,16 @@ p.ok {
 	font-weight: bold;
 }
 
+ul.cblist {
+	list-style-type: none;
+}
+
+ul.cblist li {
+	display: inline;
+	white-space: nowrap;
+	margin-right: 1em;
+}
+
 li p {
 	margin: 0;
 	padding: 0;
