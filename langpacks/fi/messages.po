@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: messages\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-28 15:32+0300\n"
-"PO-Revision-Date: 2007-04-28 15:41+0300\n"
+"POT-Creation-Date: 2007-11-19 20:04+0200\n"
+"PO-Revision-Date: 2007-11-19 20:07+0200\n"
 "Last-Translator: Harri Pitkänen <hatapitk@iki.fi>\n"
 "Language-Team: Finnish\n"
 "MIME-Version: 1.0\n"
@@ -318,55 +318,63 @@ msgstr "Hae tietokannasta"
 msgid "Use regular expression"
 msgstr "Käytä säännöllistä lauseketta"
 
-#: wwwroot/query.py:45
+#: wwwroot/query.py:44
+msgid "Text attributes"
+msgstr "Tekstikentät"
+
+#: wwwroot/query.py:46
 msgid "select attribute"
 msgstr "valitse attribuutti"
 
-#: wwwroot/query.py:48
+#: wwwroot/query.py:49
 msgid "is"
 msgstr "on"
 
-#: wwwroot/query.py:50
+#: wwwroot/query.py:51
 msgid "Flags set"
 msgstr "Asetetut liput"
 
-#: wwwroot/query.py:61
+#: wwwroot/query.py:57
+msgid "Output type"
+msgstr "Tulosteen tyyppi"
+
+#: wwwroot/query.py:64
 msgid "Search"
 msgstr "Hae"
 
-#: wwwroot/query.py:61
+#: wwwroot/query.py:64
 msgid "Reset"
 msgstr "Tyhjennä"
 
-#: wwwroot/query.py:72
+#: wwwroot/query.py:75
 msgid "Word has forbidden characters in it"
 msgstr "Sanassa on kiellettyjä merkkejä"
 
-#: wwwroot/query.py:119
+#: wwwroot/query.py:122
 msgid "List changes"
 msgstr "Listaa muutokset"
 
-#: wwwroot/query.py:128
+#: wwwroot/query.py:131
 msgid "Invalid start date"
 msgstr "Virheellinen aloituspäivä"
 
-#: wwwroot/query.py:134
+#: wwwroot/query.py:137
 msgid "Invalid end date"
 msgstr "Virheellinen lopetuspäivä"
 
-#: wwwroot/query.py:144
+#: wwwroot/query.py:147
 msgid "Start date"
 msgstr "Aloituspäivä"
 
-#: wwwroot/query.py:144
+#: wwwroot/query.py:147
 msgid "End date"
 msgstr "Lopetuspäivä"
 
-#: wwwroot/query.py:162 pylib/joeditors.py:104
+#: wwwroot/query.py:165 pylib/joeditors.py:105
 msgid "Word created"
 msgstr "Sana lisätty"
 
-#: wwwroot/query.py:165
+#: wwwroot/query.py:168
 msgid "Too many changes, use narrower date interval."
 msgstr "Liian paljon muutoksia, käytä lyhyempää aikaväliä."
 
@@ -407,55 +415,55 @@ msgstr "Virhe: sanaluokkaa %i ei ole olemassa"
 msgid "No flags set"
 msgstr "Ei asetettuja lippuja"
 
-#: pylib/joeditors.py:53 pylib/joeditors.py:64 pylib/joeditors.py:69
+#: pylib/joeditors.py:54 pylib/joeditors.py:65 pylib/joeditors.py:70
 msgid "Not set"
 msgstr "Ei asetettu"
 
-#: pylib/joeditors.py:88 pylib/joeditors.py:146 pylib/joeditors.py:168
+#: pylib/joeditors.py:89 pylib/joeditors.py:147 pylib/joeditors.py:169
 msgid "Add a comment"
 msgstr "Lisää kommentti"
 
-#: pylib/joeditors.py:88 pylib/joeditors.py:146 pylib/joeditors.py:168
+#: pylib/joeditors.py:89 pylib/joeditors.py:147 pylib/joeditors.py:169
 msgid "Save changes"
 msgstr "Tallenna muutokset"
 
-#: pylib/joeditors.py:88 pylib/joeditors.py:146 pylib/joeditors.py:169
+#: pylib/joeditors.py:89 pylib/joeditors.py:147 pylib/joeditors.py:170
 msgid "Cancel changes"
 msgstr "Peruuta muutokset"
 
-#: pylib/joeditors.py:134
+#: pylib/joeditors.py:135
 msgid "No flags available"
 msgstr "Lippuja ei ole olemassa"
 
-#: pylib/joeditors.py:154
+#: pylib/joeditors.py:155
 msgid "Remove alternative forms"
 msgstr "Poista kirjoitusasuja"
 
-#: pylib/joeditors.py:168
+#: pylib/joeditors.py:169
 msgid "Add alternative forms"
 msgstr "Lisää kirjoitusasuja"
 
-#: pylib/joeditors.py:175 pylib/joeditors.py:177 pylib/joeditors.py:178
+#: pylib/joeditors.py:176 pylib/joeditors.py:178 pylib/joeditors.py:179
 msgid "Word in Wiki"
 msgstr "Sana Wikissä"
 
-#: pylib/joeditors.py:182 pylib/joeditors.py:198 pylib/joeditors.py:207
-#: pylib/joeditors.py:213 pylib/joeditors.py:219 pylib/joeditors.py:225
+#: pylib/joeditors.py:183 pylib/joeditors.py:199 pylib/joeditors.py:208
+#: pylib/joeditors.py:214 pylib/joeditors.py:220 pylib/joeditors.py:226
 msgid "Error: 1 parameter expected"
 msgstr "Virhe: tarvitaan 1 parametri"
 
-#: pylib/joeditors.py:185 pylib/joeditors.py:189 pylib/joeditors.py:192
-#: pylib/joeditors.py:201 pylib/joeditors.py:204 pylib/joeditors.py:210
-#: pylib/joeditors.py:216 pylib/joeditors.py:222 pylib/joeditors.py:228
+#: pylib/joeditors.py:186 pylib/joeditors.py:190 pylib/joeditors.py:193
+#: pylib/joeditors.py:202 pylib/joeditors.py:205 pylib/joeditors.py:211
+#: pylib/joeditors.py:217 pylib/joeditors.py:223 pylib/joeditors.py:229
 #, python-format
 msgid "Error: %i parameters expected"
 msgstr "Virhe: tarvitaan %i parametriä"
 
-#: pylib/joeditors.py:196
+#: pylib/joeditors.py:197
 msgid "Find inflection class..."
 msgstr "Etsi taivutusluokka..."
 
-#: pylib/joeditors.py:230 pylib/joindex.py:49
+#: pylib/joeditors.py:231 pylib/joindex.py:49
 msgid "Error: unknown function"
 msgstr "Virhe: tuntematon funktio"
 

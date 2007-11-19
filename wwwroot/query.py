@@ -41,6 +41,7 @@ def form(req):
 	jotools.write(req, u'<label>%s <input type="checkbox" name="wordre" /></label></p><p>\n' \
 	              % _(u'Use regular expression'))
 	textattrs = db.query("SELECT aid, descr FROM attribute WHERE type = 1 ORDER BY descr, aid").getresult()
+	jotools.write(req, u'<h2>%s</h2>\n' % _(u'Text attributes'))
 	jotools.write(req, u'<select name="textaid">\n')
 	jotools.write(req, u'<option selected="1" value="">(%s)</option>\n' % _(u'select attribute'))
 	for (aid, dsc) in textattrs:
@@ -52,7 +53,8 @@ def form(req):
 	for (aid, dsc) in flagattrs:
 		jotools.write(req, u'<li><label><input type="checkbox" name="flagon%i" />%s</label></li>\n' \
 		              % (aid, unicode(dsc, 'UTF-8')))
-	jotools.write(req, u'</ul></optgroup><p>\n')
+	jotools.write(req, u'</ul></optgroup>\n')
+	jotools.write(req, u'<h2>%s</h2>\n<p>' % _(u'Output type'))
 	for (tname, tdesc) in jooutput.list_supported_types():
 		if tname == 'html': selected = u'checked="checked"'
 		else: selected = u''

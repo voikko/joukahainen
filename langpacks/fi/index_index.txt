@@ -8,7 +8,8 @@ Sanaston kehittäminen on kuitenkin jatkuva projekti, ja nykyisellään se sisä
 jonkin verran virheitä.</p>
 
 <p>Aineiston tekijänoikeudet kuuluvat useille henkilöille ja yhteisöille. Sitä voi levittää edelleen
-<a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL-lisenssin</a> ehdoilla. Sovelluksen sellainen käyttö,
+<a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL-lisenssin</a> (version 2 tai uudempien) ehdoilla.
+Sovelluksen sellainen käyttö,
 johon ei liity aineiston kopioimista, on sallittu ilman rajoituksia.</p>
 <p>Sovelluksen käytössä esiintyvistä ongelmista ja kehitysideoista voi kertoa Joukahaisen kehittäjälle ja
 tämän asennuksen ylläpitäjälle (Harri Pitkänen,
@@ -74,6 +75,11 @@ osallistua sanaston kehittämiseen, tutustu näihin ohjeisiin ennen kuin pyydät
 
 <div class="bottominfo">
 <p>
+2007-11-19: Tästä päivästä lähtien osa rekisteröityneille käyttäjille suunnatuista toiminnoista
+vaatii JavaScriptin käyttöä. Jos sinulla on ongelmia käyttämäsi selaimen kanssa, ota yhteys Joukahaisen
+ylläpitäjään. Vierailijoiden selainten ei edelleenkään tarvitse tukea JavaScriptiä.
+</p>
+<p>
 2007-04-25: Lisätty lomake <a href="ehdotasanoja">puuttuvista tai virheellisistä sanoista</a>
 huomauttamista varten.
 </p>
@@ -91,7 +97,7 @@ julkaistun nykysuomen sanalistan ja Joukahaisen sanalistan eroihin voi tutustua
 <a href="kotus-diff.html">päivittäin päivittyvän listan</a> avulla. Lista ei ole täydellinen, eikä se myöskään
 sisällä tietoja eroavaisuuksista jotka ovat tarkoituksellisesti jätetty tietokantaan. Kiitämme Kotimaisten
 kielten tutkimuskeskusta listan julkaisusta. Sitä tullaan hyödyntämään laajasti, mutta toisaalta Joukahaisen
-sanastoa kehitetään hiukan eri periaatteella joten varsinaisesti näitä sanastoja ei tulla yhdistämään.
+sanastoa kehitetään hiukan eri periaatteella, joten varsinaisesti näitä sanastoja ei tulla yhdistämään.
 </p>
 <p>
 2006-11-25: Joukahaisen käyttämä PostgreSQL-tietokantaohjelmisto on päivitetty versiosta

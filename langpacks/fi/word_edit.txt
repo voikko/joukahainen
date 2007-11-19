@@ -25,7 +25,7 @@ $$main_form_start(EDITABLE)$$
 <p>
 <span class="fheader">Taivutusluokka:</span> <span class="fsvalue">$$string_attribute(WID,1,EDITABLE)$$</span>
 @BEGIN IF_EDIT_ALLOWED
-$$find_infclass(WORD,CLASSID)$$
+$$find_infclass(WORD,CLASSID,1)$$
 @END IF_EDIT_ALLOWED
 <br /><span class="fheader">Historiallinen taivutusluokka:</span>
 <span class="fsvalue">$$string_attribute(WID,16,EDITABLE)$$</span>

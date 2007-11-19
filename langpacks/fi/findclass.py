@@ -172,11 +172,12 @@ def classlist(req):
 		previous_inflected = voikkoinfl.InflectedWord()
 		inflist = []
 		inflected_words.append(voikkoinfl.InflectedWord())
-		jotools.write(req, '<hr /><h2>' + infclass_main + grad_type_s + '</h2>')
+		jotools.write(req, '<hr /><h2 class="infclass">' + infclass_main + grad_type_s + '</h2>')
 		if word_class.note != u'':
 			jotools.write(req, u'<p>%s</p>\n' % word_class.note)
 		jotools.write(req, u'<p>Kotus-luokka: %s</p>' % \
 		              reduce(lambda x, y: u"%s, %s" % (x, y), word_class.kotusClasses))
+		
 		jotools.write(req, u'<table class="border">\n')
 		for inflected_word in inflected_words:
 			if previous_inflected.formName != inflected_word.formName:

@@ -48,7 +48,8 @@ def _string_attribute(db, wid, aid, editable):
 	if editable:
 		if results.ntuples() == 0: oldval = u'""'
 		else: oldval = jotools.escape_form_value(unicode(results.getresult()[0][0], 'UTF-8'))
-		return u'<input type="text" value=%s size="60" name="string%i" />' % (oldval, aid)
+		return u'<input type="text" value=%s size="60" name="string%i" id="string%i" />' \
+		       % (oldval, aid, aid)
 	else:
 		if results.ntuples() == 0 : return u"(%s)" % _(u'Not set')
 		return jotools.escape_html(unicode(results.getresult()[0][0], 'UTF-8'))
@@ -189,11 +190,11 @@ def call(db, funcname, paramlist):
 		if len(paramlist) != 2: return _(u"Error: %i parameters expected" % 2)
 		return _apply_config.joeditors_kotus_class(db, paramlist[0], paramlist[1])
 	if funcname == 'find_infclass':
-		if len(paramlist) != 2: return _(u"Error: %i parameters expected" % 2)
+		if len(paramlist) != 3: return _(u"Error: %i parameters expected" % 3)
 		target = _apply_config.joeditors_find_infclass(db, paramlist[0], paramlist[1])
 		if target == None: return u''
-		return u'<a href="%s%s">%s</a>' \
-		       % (_config.WWW_ROOT_DIR, target, _(u'Find inflection class...'))
+		return u'<a href="javascript:openInfclassFinder(\'%s\'+%s,\'string%s\')">%s</a>' \
+		       % (_config.WWW_ROOT_DIR, target, paramlist[2], _(u'Find inflection class...'))
 	if funcname == 'flag_attributes':
 		if len(paramlist) != 1: return _(u"Error: 1 parameter expected")
 		return _flag_attributes(db, paramlist[0])

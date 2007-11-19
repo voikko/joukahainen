@@ -4,6 +4,14 @@ body {
 	font-family: sans-serif;
 }
 
+h1 {
+	font-size: 1.5em;
+}
+
+h2 {
+	font-size: 1.2em;
+}
+
 span.fheader {
 	font-weight: bold;
 }
@@ -110,7 +118,6 @@ div.login {
 }
 
 div.topbar h1 {
-	font-size: 1.5em;
 	float: left;
 	margin-top: 0.0em;
 	margin-bottom: 0.0em;
@@ -169,6 +176,7 @@ p.ok {
 
 ul.cblist {
 	list-style-type: none;
+	padding-left: 0;
 }
 
 ul.cblist li {

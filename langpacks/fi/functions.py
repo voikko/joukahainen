@@ -374,4 +374,4 @@ def find_infclass(db, word, classid):
 	if classid in [1, 2]: finderclass = 1
 	elif classid == 3: finderclass = 3
 	else: return None
-	return u'/findclass/classlist?word=%s&class=%i' % (word, finderclass)
+	return u"'/findclass/classlist?word=%s&class=%i'" % (word, finderclass)
