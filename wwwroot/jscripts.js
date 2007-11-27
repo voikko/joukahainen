@@ -42,7 +42,7 @@ function switchDetailedDisplay(tableid) {
  */
 function openInfclassFinder(url, targetField) {
 	window.infclassTarget = document.getElementById(targetField);
-	window.open(url);
+	window.open(url, "VlTluokka", "menubar=no,location=np,resizable=yes,scrollbars=yes");
 }
 
 /**
