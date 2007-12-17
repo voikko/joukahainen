@@ -50,7 +50,7 @@ def toint(string):
 checkword = _apply_config.jotools_checkword
 
 # Checks if string is safe to be used as a Posix regular expression
-RECHARS = u"abcdefghijklmnopqrstuvwxyzåäöszèéšžáóâABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖŠŽÈÉŠŽ-'|_%*()[]+.:?$^"
+RECHARS = u"abcdefghijklmnopqrstuüvwxyzåäöszèéšžáóâABCDEFGHIJKLMNOPQRSTUÜVWXYZÅÄÖŠŽÈÉŠŽ-'|_%*()[]+.:?$^"
 def checkre(string):
 	for c in string:
 		if not c in RECHARS: return False
