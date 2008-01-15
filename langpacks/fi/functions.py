@@ -357,7 +357,7 @@ def jooutput_call(req, outputtype, db, query):
 
 # Returns information about the classification of the word in the format used by
 # the Research Institute for the Languages of Finland
-def kotus_class(db, wid, classid):
+def kotus_class(db, wid, word, classid):
 	infclass_parts = _get_inflection_gradation(db, wid)
 	if infclass_parts == None: return u""
 	(infclass_main, grad_type) = infclass_parts
@@ -366,7 +366,8 @@ def kotus_class(db, wid, classid):
 	if word_class == None: return ""
 	
 	return u'<span class="fheader">Kotus-luokka:</span> <span class="fsvalue">%s</span>' \
-	       % reduce(lambda x, y: u"%s, %s" % (x, y), word_class.kotusClasses)
+	       % (reduce(lambda x, y: u"%s, %s" % (x, y), word_class.kotusClasses) + \
+	          word_class.kotusGradClass(word, grad_type))
 
 # Returns a link target of the inflection class finder for a word or None,
 # if no finder is available

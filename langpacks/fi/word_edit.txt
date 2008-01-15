@@ -7,7 +7,7 @@ $$word_inflection(WID,WORD,CLASSID)$$
 $$word_class(CLASSID)$$
 </p>
 <p>
-$$kotus_class(WID,CLASSID)$$
+$$kotus_class(WID,WORD,CLASSID)$$
 </p>
 <h2>Kirjoitusasut</h2>
 $$related_words(WID)$$

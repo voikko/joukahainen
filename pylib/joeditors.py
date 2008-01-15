@@ -187,8 +187,9 @@ def call(db, funcname, paramlist):
 		return _apply_config.joeditors_word_inflection(db, paramlist[0],
 		                                               paramlist[1], paramlist[2])
 	if funcname == 'kotus_class':
-		if len(paramlist) != 2: return _(u"Error: %i parameters expected" % 2)
-		return _apply_config.joeditors_kotus_class(db, paramlist[0], paramlist[1])
+		if len(paramlist) != 3: return _(u"Error: %i parameters expected" % 3)
+		return _apply_config.joeditors_kotus_class(db, paramlist[0], paramlist[1],
+		                                           paramlist[2])
 	if funcname == 'find_infclass':
 		if len(paramlist) != 3: return _(u"Error: %i parameters expected" % 3)
 		target = _apply_config.joeditors_find_infclass(db, paramlist[0], paramlist[1])
