@@ -160,6 +160,10 @@ langpacks/LANG:
      user insertion commands here, but this time with password hashes. Note that you only need to add
      one user with admin rights: the rest can be added later through the web interface.
 
+   Two flag attributes should have special meaning in all language packs:
+   24: incorrect (deleted) entry
+   26: moved (deleted) entry.
+
 3) functions.py: Language specific program code. Here you will need to supply some Python functions.
    In practice it is enough to use en_US/function.py as a template, just change WCHARS to contain all
    valid word characters for your language. Here you will also be able to add your own output filters

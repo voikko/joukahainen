@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2006 Harri Pitkänen (hatapitk@iki.fi)
+# Copyright 2006 - 2008 Harri Pitkänen (hatapitk@iki.fi)
 # This file is part of Joukahainen, a vocabulary management application
 
 # This program is free software; you can redistribute it and/or modify
@@ -27,6 +27,15 @@ import _apply_config
 
 _ = _apply_config.translation.ugettext
 
+def _print_html_line(db, wid, word, wclass):
+	results = db.query("SELECT wid FROM flag_attribute_value WHERE aid in (24, 26)" +
+	                "AND wid = %i" % wid)
+	line = "<tr"
+	if results.ntuples() > 0: line = line + " class='deleted'"
+	line = line + "><td><a href='../word/edit?wid=%i'>%s</a></td><td>%s</td></tr>\n" \
+	       % (wid, word, wclass)
+	return line
+
 def _html(req, db, query):
 	offset_s = `jotools.toint(jotools.get_param(req, 'offset', u'0'))`
 	limit_s = `jotools.toint(jotools.get_param(req, 'limit', u'200'))`
@@ -51,8 +60,9 @@ def _html(req, db, query):
 		jotools.write(req, u'<table><tr><th>%s</th><th>%s</th></tr>\n' \
 		                   % (_("Word"), _("Word class")))
 		for result in results.getresult():
-			jotools.write(req, u"<tr><td><a href=\"../word/edit?wid=%i\">%s</a></td><td>%s</td></tr>\n" %
-			              (result[0], unicode(result[1], 'UTF-8'), unicode(result[2], 'UTF-8')))
+			jotools.write(req, _print_html_line(db, result[0],
+			              unicode(result[1], 'UTF-8'),
+				    unicode(result[2], 'UTF-8')))
 		jotools.write(req, u"</table>\n")
 		if not limit_s == u'ALL' and results.ntuples() == jotools.toint(limit_s):
 			jotools.write(req, (u'<p><a href="wlist?%soffset=%i&limit=%s">' +
