@@ -1,6 +1,5 @@
 
 function setRowDisplay(table, display) {
-	
 	var rows = table.getElementsByTagName("tr");
 	for (var i = 0; i < rows.length; i++) {
 		if (rows[i].className != "characteristic") {
@@ -13,8 +12,8 @@ function setRowDisplay(table, display) {
 }
 
 function switchDetailedDisplay(tableid) {
-
 	var toggle = document.getElementById(tableid + "a");
+	if (!toggle) return;
 	var table = document.getElementById(tableid);
 
 	// IE is buggy and does not understand style.display = "table-cell"
@@ -31,7 +30,6 @@ function switchDetailedDisplay(tableid) {
 		toggle.title = "Piilota ylimääräiset taivutusmuodot";
 		setRowDisplay(table, tableCellStyle);
 	}
-
 }
 
 /**
