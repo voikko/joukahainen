@@ -110,7 +110,7 @@ def _get_inflection_gradation(db, wid):
 def _get_inflection_type(classid, infclass_main):
 	_ensure_infdata_available()
 	if classid in [1, 2]: word_types = _NOUN_INFLECTIONS
-	elif classid == 3: word_types = _WERB_INFLECTIONS
+	elif classid == 3: word_types = _VERB_INFLECTIONS
 	else: return None
 	
 	for word_type in word_types:
