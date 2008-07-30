@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2006 - 2007 Harri Pitkänen (hatapitk@iki.fi)
+# Copyright 2006 - 2008 Harri Pitkänen (hatapitk@iki.fi)
 # This file is part of Joukahainen, a vocabulary management application
 
 # This program is free software: you can redistribute it and/or modify
@@ -30,6 +30,18 @@ import time
 
 # Path to Voikko data directory
 VOIKKO_DATA = voikkoutils.get_preference('voikko_data_dir')
+
+# Cached inflection rules
+_NOUN_INFLECTIONS = None
+_VERB_INFLECTIONS = None
+def _ensure_infdata_available():
+	global _NOUN_INFLECTIONS
+	global _VERB_INFLECTIONS
+	if _NOUN_INFLECTIONS == None:
+		_NOUN_INFLECTIONS = voikkoinfl.readInflectionTypes(VOIKKO_DATA + "/subst.aff")
+	if _VERB_INFLECTIONS == None:
+		_VERB_INFLECTIONS = voikkoinfl.readInflectionTypes(VOIKKO_DATA + "/verb.aff")
+
 
 # Returns the vowel type for a word in the database.
 def _get_db_vowel_type(db, wid):
@@ -96,11 +108,11 @@ def _get_inflection_gradation(db, wid):
 # classid is the word class identifier in Joukahainen.
 # Returns None if no class information could be retrieved
 def _get_inflection_type(classid, infclass_main):
-	if classid in [1, 2]: classdatafile = VOIKKO_DATA + "/subst.aff"
-	elif classid == 3: classdatafile = VOIKKO_DATA + "/verb.aff"
+	_ensure_infdata_available()
+	if classid in [1, 2]: word_types = _NOUN_INFLECTIONS
+	elif classid == 3: word_types = _WERB_INFLECTIONS
 	else: return None
 	
-	word_types = voikkoinfl.readInflectionTypes(classdatafile)
 	for word_type in word_types:
 		if not infclass_main in word_type.joukahainenClasses: continue
 		else: return word_type
