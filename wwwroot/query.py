@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2006 Harri Pitkänen (hatapitk@iki.fi)
+# Copyright 2006 - 2008 Harri Pitkänen (hatapitk@iki.fi)
 # This file is part of Joukahainen, a vocabulary management application
 
 # This program is free software: you can redistribute it and/or modify
@@ -36,9 +36,13 @@ def form(req):
 	(uid, uname, editable) = jotools.get_login_user(req)
 	joheaders.page_header_navbar_level1(req, _(u'Search database'), uid, uname)
 	jotools.write(req, u'<form method="get" action="wlist">\n<p>')
-	jotools.write(req, u'<label>%s: <input type="text" name="word" /></label>\n' % _(u'Word'))
-	jotools.write(req, u'<label>%s <input type="checkbox" name="wordre" /></label></p><p>\n' \
+	jotools.write(req, u'<label>%s: <input type="text" name="word" /></label></p>\n' % _(u'Word'))
+	jotools.write(req, u'<p><label><input type="checkbox" name="wordre" /> %s</label>\n' \
 	              % _(u'Use regular expression'))
+	jotools.write(req, u' <b>%s</b> <label><input type="checkbox" name="wordsimplere" /> %s</label><br />\n' \
+	              % (_(u'or'), _(u'Case insensitive search')))
+	jotools.write(req, u'<label><input type="checkbox" name="altforms" /> %s</label></p><p>\n' \
+	              % _(u'Search from alternative spellings'))
 	
 	textattrs = db.query("SELECT aid, descr FROM attribute WHERE type = 1 ORDER BY descr, aid").getresult()
 	jotools.write(req, u'<h2>%s</h2>\n' % _(u'Text attributes'))
@@ -75,8 +79,13 @@ def form(req):
 	return '\n'
 
 def wlist(req):
+	# The select clause
 	qselect = "SELECT w.wid, w.word, c.name AS classname, w.class FROM word w, wordclass c"
+	
+	# Initial conditions
 	conditions = ["w.class = c.classid"]
+	
+	# Word form conditions
 	word = jotools.get_param(req, 'word', u'')
 	if word != u'':
 		if not jotools.checkre(word):
@@ -91,7 +100,16 @@ def wlist(req):
 		else:
 			compop = '='
 			compword = word
-		conditions.append("w.word %s '%s'" % (compop, jotools.escape_sql_string(compword)))
+		# Use subquery if searching from alternative forms
+		cond = "w.word %s '%s'" % (compop, jotools.escape_sql_string(compword))
+		if jotools.get_param(req, 'altforms', u'') == u'on':
+			cond = cond + " OR w.wid IN (" + \
+			       "SELECT rw.wid FROM related_word rw WHERE " + \
+			       "replace(replace(rw.related_word, '=', ''), '|', '') %s '%s')" \
+			       % (compop, jotools.escape_sql_string(compword))
+		conditions.append(cond)
+	
+	# Text attribute conditions
 	aid = jotools.toint(jotools.get_param(req, 'textaid', u''))
 	if aid != 0:
 		value = jotools.get_param(req, 'textvalue', u'')
@@ -101,6 +119,8 @@ def wlist(req):
 			cond = ("w.wid IN (SELECT wid FROM string_attribute_value " +
 			        "WHERE aid = %i AND value = '%s')") % (aid, jotools.escape_sql_string(value))
 		conditions.append(cond)
+	
+	# Flag conditions
 	for field in req.form.list:
 		if field.name.startswith('flagon'):
 			aid = jotools.toint(field.name[6:])
@@ -112,18 +132,20 @@ def wlist(req):
 			if jotools.get_param(req, 'flagoff%i' % aid, u'') == u'on':
 				cond = "w.wid NOT IN (SELECT wid FROM flag_attribute_value WHERE aid = %i)" % aid
 				conditions.append(cond)
+	
 	# FIXME: user should be able to select the order
 	order = "ORDER BY w.word, c.name, w.wid"
+	
 	# Build the full select clause
 	if len(conditions) == 0:
 		select = qselect + " " + order
 	elif len(conditions) == 1:
-		select = qselect + " WHERE " + conditions[0] + " " + order
+		select = qselect + " WHERE (" + conditions[0] + ") " + order
 	else:
-		select = qselect + " WHERE " + conditions[0]
+		select = qselect + " WHERE (" + conditions[0]
 		for condition in conditions[1:]:
-			select = select + " AND " + condition
-		select = select + " " + order
+			select = select + ") AND (" + condition
+		select = select + ") " + order
 	
 	outputtype = jotools.get_param(req, "listtype", u'html')
 	jooutput.call(req, outputtype, select)

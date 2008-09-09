@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: messages\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-05 18:55+0300\n"
-"PO-Revision-Date: 2008-04-05 18:57+0300\n"
+"POT-Creation-Date: 2008-09-09 17:52+0300\n"
+"PO-Revision-Date: 2008-09-09 17:53+0300\n"
 "Last-Translator: Harri Pitkänen <hatapitk@iki.fi>\n"
 "Language-Team: Finnish\n"
 "MIME-Version: 1.0\n"
@@ -318,67 +318,79 @@ msgstr "Hae tietokannasta"
 msgid "Use regular expression"
 msgstr "Käytä säännöllistä lauseketta"
 
-#: wwwroot/query.py:44
+#: wwwroot/query.py:43
+msgid "or"
+msgstr "tai"
+
+#: wwwroot/query.py:43
+msgid "Case insensitive search"
+msgstr "Älä huomioi kirjainkokoa"
+
+#: wwwroot/query.py:45
+msgid "Search from alternative spellings"
+msgstr "Etsi myös vaihtoehtoisista kirjoitusasuista"
+
+#: wwwroot/query.py:48
 msgid "Text attributes"
 msgstr "Tekstikentät"
 
-#: wwwroot/query.py:46
+#: wwwroot/query.py:50
 msgid "select attribute"
 msgstr "valitse attribuutti"
 
-#: wwwroot/query.py:49
+#: wwwroot/query.py:53
 msgid "is"
 msgstr "on"
 
-#: wwwroot/query.py:52
+#: wwwroot/query.py:56
 msgid "Flags set"
 msgstr "Asetetut liput"
 
-#: wwwroot/query.py:58
+#: wwwroot/query.py:62
 msgid "Flags not set"
 msgstr "Pois päältä olevat liput"
 
-#: wwwroot/query.py:65
+#: wwwroot/query.py:69
 msgid "Output type"
 msgstr "Tulosteen tyyppi"
 
-#: wwwroot/query.py:72
+#: wwwroot/query.py:76
 msgid "Search"
 msgstr "Hae"
 
-#: wwwroot/query.py:72
+#: wwwroot/query.py:76
 msgid "Reset"
 msgstr "Tyhjennä"
 
-#: wwwroot/query.py:83
+#: wwwroot/query.py:92
 msgid "Word has forbidden characters in it"
 msgstr "Sanassa on kiellettyjä merkkejä"
 
-#: wwwroot/query.py:135
+#: wwwroot/query.py:157
 msgid "List changes"
 msgstr "Listaa muutokset"
 
-#: wwwroot/query.py:144
+#: wwwroot/query.py:166
 msgid "Invalid start date"
 msgstr "Virheellinen aloituspäivä"
 
-#: wwwroot/query.py:150
+#: wwwroot/query.py:172
 msgid "Invalid end date"
 msgstr "Virheellinen lopetuspäivä"
 
-#: wwwroot/query.py:160
+#: wwwroot/query.py:182
 msgid "Start date"
 msgstr "Aloituspäivä"
 
-#: wwwroot/query.py:160
+#: wwwroot/query.py:182
 msgid "End date"
 msgstr "Lopetuspäivä"
 
-#: wwwroot/query.py:178 pylib/joeditors.py:104
+#: wwwroot/query.py:200 pylib/joeditors.py:104
 msgid "Word created"
 msgstr "Sana lisätty"
 
-#: wwwroot/query.py:181
+#: wwwroot/query.py:203
 msgid "Too many changes, use narrower date interval."
 msgstr "Liian paljon muutoksia, käytä lyhyempää aikaväliä."
 
