@@ -22,18 +22,21 @@ osallistua sanaston kehittämiseen, tutustu näihin ohjeisiin ennen kuin pyydät
 <h2>Etsi ja käsittele sanoja</h2>
 <ul>
 <li><a href="query/wlist">Kaikki sanat (200 sanaa kerrallaan)</a></li>
-<li>Hae sana
+<li>Hae sana (<a href="docs/haku.html">hakuohje</a>)
  <ul>
  <li><form method="get" action="query/wlist"><p><label>Perushaku
     <input type="text" name="word" /></label>
     <input type="hidden" name="wordsimplere" value="on" />
+    <input type="hidden" name="altforms" value="on" />
     <input type="submit" value="Hae" /></p></form></li>
  <li><form method="get" action="query/wlist"><p><label>Tarkka haku
     <input type="text" name="word" /></label>
+    <input type="hidden" name="altforms" value="on" />
     <input type="submit" value="Hae" /></p></form></li>
  <li><form method="get" action="query/wlist"><p><label>Säännöllinen lauseke
     <input type="text" name="word" /></label>
     <input type="hidden" name="wordre" value="on" />
+    <input type="hidden" name="altforms" value="on" />
     <input type="submit" value="Hae" /></p></form></li>
  <li><a href="query/form">Hakulomake</a></li>
  </ul>
@@ -75,6 +78,11 @@ osallistua sanaston kehittämiseen, tutustu näihin ohjeisiin ennen kuin pyydät
 
 <div class="bottominfo">
 <p>
+2008-09-13: Pieniä käytettävyysparannuksia sanastohakuun: Hakukentät hakevat myös sanan
+kirjoitusasuista. Lisätty <a href="docs/haku.html">ohjesivu sanastohakua varten</a>.
+Lisätty <a href="http://opensearch.org/">OpenSearch</a>-tuki www-selaimia varten.
+</p>
+<p>
 2007-11-19: Tästä päivästä lähtien osa rekisteröityneille käyttäjille suunnatuista toiminnoista
 vaatii JavaScriptin käyttöä. Jos sinulla on ongelmia käyttämäsi selaimen kanssa, ota yhteys Joukahaisen
 ylläpitäjään. Vierailijoiden selainten ei edelleenkään tarvitse tukea JavaScriptiä.
@@ -98,19 +106,4 @@ julkaistun nykysuomen sanalistan ja Joukahaisen sanalistan eroihin voi tutustua
 sisällä tietoja eroavaisuuksista jotka ovat tarkoituksellisesti jätetty tietokantaan. Kiitämme Kotimaisten
 kielten tutkimuskeskusta listan julkaisusta. Sitä tullaan hyödyntämään laajasti, mutta toisaalta Joukahaisen
 sanastoa kehitetään hiukan eri periaatteella, joten varsinaisesti näitä sanastoja ei tulla yhdistämään.
-</p>
-<p>
-2006-11-25: Joukahaisen käyttämä PostgreSQL-tietokantaohjelmisto on päivitetty versiosta
-7.4 versioon 8.1. Tämän johdosta tietokantakopioiden käyttö omalla koneella vaatii myös ohjelmistosta
-version 8.1 tai uudemman.
-</p>
-<p>
-2006-11-15: Erityisesti sanaston muokkaajia varten on nyt olemassa <a href="/docs/">ohjeita</a>.
-Tutustukaa niihin huolella ennen kuin teette muutoksia Joukahaisen kautta.
-</p>
-<p>
-2006-10-13: Joukahainen on otettu virallisesti käyttöön. Testimuutosten teko
-tietokantaan on kielletty. Tälle sivulle linkitetään jatkossa ohjeita sanaston
-kehittäjien avuksi. Toistaiseksi muutoksia saa tehdä vain Voikko-oikolukuprojektin
-postituslistalla annettujen ohjeiden mukaan.
 </p>
