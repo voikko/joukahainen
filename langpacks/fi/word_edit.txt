@@ -1,4 +1,4 @@
-Sana: $$WORD$$
+$$WORD$$
 
 <div class="rightinfo">
 $$word_inflection(WID,WORD,CLASSID)$$

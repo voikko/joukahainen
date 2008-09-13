@@ -1,0 +1,10 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
+                       xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Joukahainen</ShortName>
+<Description>Haku Joukahaisen (joukahainen.lokalisointi.org) sanastosta säännöllisellä
+lausekkeella. Haetaan myös kirjoitusasuista.</Description>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="64" height="64" type="image/png">http://joukahainen.lokalisointi.org/joukahainen.png</Image>
+<Url type="text/html" method="GET" template="http://joukahainen.lokalisointi.org/query/wlist?wordre=on&amp;altforms=on&amp;word={searchTerms}">
+</Url>
+</OpenSearchDescription>

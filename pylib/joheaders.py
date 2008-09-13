@@ -37,11 +37,13 @@ def page_header_nonavbar(req, title):
 <head>
 <title>%s</title>
 <link rel="stylesheet" type="text/css" href="%s/style.css" />
+<link rel="icon" type="image/png" href="%s/joukahainen-small.png" />
 <script type="text/javascript" src="%s/jscripts.js"></script>
 </head>
 <body onload="initPage()">
 <div class="main">
-""" % (title.encode('UTF-8'), _config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR))
+""" % (title.encode('UTF-8'), _config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR,
+                              _config.WWW_ROOT_DIR))
 
 # Outputs the shared html header for ordinary pages
 def _page_header_internal(req, title, h1, uid, uname, wid):
@@ -54,10 +56,14 @@ def _page_header_internal(req, title, h1, uid, uname, wid):
 <head>
 <title>%s</title>
 <link rel="stylesheet" type="text/css" href="%s/style.css" />
+<link rel="icon" type="image/png" href="%s/joukahainen-small.png" />
+<link rel="search" type="application/opensearchdescription+xml"
+ title="Joukahainen" href="%s/searchplugin-fullsearch-re.xml">
 <script type="text/javascript" src="%s/jscripts.js"></script>
 </head>
 <body onload="initPage()">
-<div class="topbar">""" % (title, _config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR))
+<div class="topbar">""" % (title, _config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR,
+                           _config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR))
 	jotools.write(req, u"\n<h1>%s</h1>" % h1)
 	if uid == None:
 		jotools.write(req, u"""

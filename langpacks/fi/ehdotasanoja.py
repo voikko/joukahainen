@@ -116,8 +116,8 @@ jos olet epävarma sanan oikeasta perusmuodosta.</i></p>
 jos Voikko hyväksyy virheellisen sanan.</i></p>
 
 <p><label>Lisätietoja: <input type="text" name="comment" size="60" /></label><br />
-<i>Tähän voit kirjoittaa sanaan liittyviä lisätietoja. Jos sana on vaikkapa jonkin
-erikoisalan termi, kirjoita tähän sille lyhyt selitys.</i></p>
+<i>Tähän voit kirjoittaa sanaan liittyviä lisätietoja. Jos sana on jonkin
+erikoisalan termi tai muuten harvinainen, kirjoita tähän sille lyhyt selitys.</i></p>
 
 <p><input type="submit" value="Lähetä ehdotus" /></p>
 </form>
