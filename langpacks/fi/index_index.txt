@@ -78,6 +78,10 @@ osallistua sanaston kehittämiseen, tutustu näihin ohjeisiin ennen kuin pyydät
 
 <div class="bottominfo">
 <p>
+2008-10-26: Joukahainen on muuttanut uudelle palvelimelle. Muuton yhteydessä myös osoite
+on muuttunut: uusi osoite on joukahainen.puimula.org.
+</p>
+<p>
 2008-09-13: Pieniä käytettävyysparannuksia sanastohakuun: Hakukentät hakevat myös sanan
 kirjoitusasuista. Lisätty <a href="docs/haku.html">ohjesivu sanastohakua varten</a>.
 Lisätty <a href="http://opensearch.org/">OpenSearch</a>-tuki www-selaimia varten.

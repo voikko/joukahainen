@@ -317,7 +317,7 @@ def _jooutput_xml(req, db, query):
   The copyright holders are listed in file CONTRIBUTORS of current Suomi-malaga
   Voikko edition Subversion repository (or, if you have received this file as a
   part of Suomi-malaga, the file is located at the root directory of the source
-  package). For more information, see http://joukahainen.lokalisointi.org
+  package). For more information, see http://joukahainen.puimula.org
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
