@@ -1,6 +1,6 @@
 body {
 	margin: 0;
-	background-color: #9999FF;
+	background-color: #AAAAFF;
 	font-family: sans-serif;
 }
 
@@ -30,7 +30,7 @@ table.inflection {
 
 table.inflection tr > td {
 	color: black;
-	background-color: #88EE88;
+	background-color: #99EE99;
 }
 
 table.inflection a {
@@ -39,7 +39,7 @@ table.inflection a {
 
 table.inflection tr.characteristic > td {
 	color: black;
-	background-color: #44DD44;
+	background-color: #55DD55;
 	display: table-cell;
 }
 
@@ -57,7 +57,7 @@ table.border th {
 
 div.topbar {
 	color: black;
-	background-color: #227777;
+	background-color: #449999;
 	padding: 0.5em;
 	-moz-border-radius-bottomleft: 1em;
 	-moz-border-radius-bottomright: 1em;
@@ -69,13 +69,13 @@ div.topbar {
 
 div.main {
 	color: black;
-	background-color: #9999FF;
+	background-color: #AAAAFF;
 	padding: 0.5em;
 }
 
 div.editor {
 	color: black;
-	background-color: #9999FF;
+	background-color: #AAAAFF;
 	top: 0;
 	left: 0;
 }
@@ -90,7 +90,7 @@ div.main a {
 
 div.rightinfo {
 	color: black;
-	background-color: #44DD44;
+	background-color: #55DD55;
 	position: relative;
 	float: right;
 	max-width: 40%;
@@ -103,7 +103,7 @@ div.rightinfo {
 
 div.bottominfo {
 	color: black;
-	background-color: #44DD44;
+	background-color: #55DD55;
 	clear: both;
 	padding: 0.5em;
 	-moz-border-radius: 1em;
@@ -173,7 +173,7 @@ p.error {
 }
 
 p.ok {
-	background-color: #44DD44;
+	background-color: #55DD55;
 	color: #000000;
 	font-weight: bold;
 }
