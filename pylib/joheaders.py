@@ -58,7 +58,7 @@ def _page_header_internal(req, title, h1, uid, uname, wid):
 <link rel="stylesheet" type="text/css" href="%s/style.css" />
 <link rel="icon" type="image/png" href="%s/joukahainen-small.png" />
 <link rel="search" type="application/opensearchdescription+xml"
- title="Joukahainen" href="%s/searchplugin-fullsearch-re.xml">
+ title="Joukahainen" href="%s/searchplugin-fullsearch-re.xml" />
 <script type="text/javascript" src="%s/jscripts.js"></script>
 </head>
 <body onload="initPage()">

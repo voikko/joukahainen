@@ -4,13 +4,13 @@
 # Copyright (C) 2006 Harri Pitkänen
 # This file is distributed under the same license as the Joukahainen package.
 #
-# Harri Pitkänen <hatapitk@iki.fi>, 2006, 2007, 2008.
+# Harri Pitkänen <hatapitk@iki.fi>, 2006, 2007, 2008, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: messages\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 17:52+0300\n"
-"PO-Revision-Date: 2008-09-09 17:53+0300\n"
+"POT-Creation-Date: 2009-01-14 17:45+0200\n"
+"PO-Revision-Date: 2009-01-14 17:47+0200\n"
 "Last-Translator: Harri Pitkänen <hatapitk@iki.fi>\n"
 "Language-Team: Finnish\n"
 "MIME-Version: 1.0\n"
@@ -132,7 +132,8 @@ msgid "Add words"
 msgstr "Lisää sanoja"
 
 #: wwwroot/word.py:482 wwwroot/word.py:514 wwwroot/word.py:563
-#: wwwroot/word.py:574 pylib/jooutput.py:60 pylib/joeditors.py:32
+#: wwwroot/word.py:574 wwwroot/query.py:48 pylib/jooutput.py:60
+#: pylib/joeditors.py:32
 msgid "Word class"
 msgstr "Sanaluokka"
 
@@ -217,7 +218,7 @@ msgstr "Etunimi"
 msgid "Last name"
 msgstr "Sukunimi"
 
-#: wwwroot/user.py:123 pylib/joindex.py:36 pylib/joheaders.py:72
+#: wwwroot/user.py:123 pylib/joindex.py:36 pylib/joheaders.py:78
 msgid "Username"
 msgstr "Käyttäjätunnus"
 
@@ -225,7 +226,7 @@ msgstr "Käyttäjätunnus"
 msgid "Email address"
 msgstr "Sähköpostiosoite"
 
-#: wwwroot/user.py:124 pylib/joindex.py:36 pylib/joheaders.py:72
+#: wwwroot/user.py:124 pylib/joindex.py:36 pylib/joheaders.py:78
 msgid "Password"
 msgstr "Salasana"
 
@@ -330,67 +331,75 @@ msgstr "Älä huomioi kirjainkokoa"
 msgid "Search from alternative spellings"
 msgstr "Etsi myös vaihtoehtoisista kirjoitusasuista"
 
-#: wwwroot/query.py:48
+#: wwwroot/query.py:49
+msgid "Word class is"
+msgstr "Sanaluokka on"
+
+#: wwwroot/query.py:51
+msgid "any"
+msgstr "mikä tahansa"
+
+#: wwwroot/query.py:57
 msgid "Text attributes"
 msgstr "Tekstikentät"
 
-#: wwwroot/query.py:50
+#: wwwroot/query.py:59
 msgid "select attribute"
 msgstr "valitse attribuutti"
 
-#: wwwroot/query.py:53
+#: wwwroot/query.py:62
 msgid "is"
 msgstr "on"
 
-#: wwwroot/query.py:56
+#: wwwroot/query.py:65
 msgid "Flags set"
 msgstr "Asetetut liput"
 
-#: wwwroot/query.py:62
+#: wwwroot/query.py:71
 msgid "Flags not set"
 msgstr "Pois päältä olevat liput"
 
-#: wwwroot/query.py:69
+#: wwwroot/query.py:78
 msgid "Output type"
 msgstr "Tulosteen tyyppi"
 
-#: wwwroot/query.py:76
+#: wwwroot/query.py:85
 msgid "Search"
 msgstr "Hae"
 
-#: wwwroot/query.py:76
+#: wwwroot/query.py:85
 msgid "Reset"
 msgstr "Tyhjennä"
 
-#: wwwroot/query.py:92
+#: wwwroot/query.py:101
 msgid "Word has forbidden characters in it"
 msgstr "Sanassa on kiellettyjä merkkejä"
 
-#: wwwroot/query.py:157
+#: wwwroot/query.py:171
 msgid "List changes"
 msgstr "Listaa muutokset"
 
-#: wwwroot/query.py:166
+#: wwwroot/query.py:180
 msgid "Invalid start date"
 msgstr "Virheellinen aloituspäivä"
 
-#: wwwroot/query.py:172
+#: wwwroot/query.py:186
 msgid "Invalid end date"
 msgstr "Virheellinen lopetuspäivä"
 
-#: wwwroot/query.py:182
+#: wwwroot/query.py:196
 msgid "Start date"
 msgstr "Aloituspäivä"
 
-#: wwwroot/query.py:182
+#: wwwroot/query.py:196
 msgid "End date"
 msgstr "Lopetuspäivä"
 
-#: wwwroot/query.py:200 pylib/joeditors.py:104
+#: wwwroot/query.py:214 pylib/joeditors.py:104
 msgid "Word created"
 msgstr "Sana lisätty"
 
-#: wwwroot/query.py:203
+#: wwwroot/query.py:217
 msgid "Too many changes, use narrower date interval."
 msgstr "Liian paljon muutoksia, käytä lyhyempää aikaväliä."
 
@@ -483,11 +492,11 @@ msgstr "Etsi taivutusluokka..."
 msgid "Error: unknown function"
 msgstr "Virhe: tuntematon funktio"
 
-#: pylib/joindex.py:36 pylib/joheaders.py:72
+#: pylib/joindex.py:36 pylib/joheaders.py:78
 msgid "Log in"
 msgstr "Kirjaudu sisään"
 
-#: pylib/joindex.py:42 pylib/joheaders.py:81
+#: pylib/joindex.py:42 pylib/joheaders.py:87
 msgid "Log out user"
 msgstr "Kirjaa ulos käyttäjä"
 
@@ -495,24 +504,24 @@ msgstr "Kirjaa ulos käyttäjä"
 msgid "Error: % parameters expected"
 msgstr "Virhe: tarvitaan %i parametriä"
 
-#: pylib/joheaders.py:135
+#: pylib/joheaders.py:141
 #, python-format
 msgid "Redirecting to %s"
 msgstr "Uudelleenohjataan osoitteeseen %s"
 
-#: pylib/joheaders.py:139
+#: pylib/joheaders.py:145
 msgid "error"
 msgstr "virhe"
 
-#: pylib/joheaders.py:140
+#: pylib/joheaders.py:146
 msgid "Error"
 msgstr "Virhe"
 
-#: pylib/joheaders.py:145 pylib/joheaders.py:146
+#: pylib/joheaders.py:151 pylib/joheaders.py:152
 msgid "operation succeeded"
 msgstr "toiminto suoritettu"
 
-#: pylib/joheaders.py:148
+#: pylib/joheaders.py:154
 msgid "Back to front page"
 msgstr "Takaisin aloitussivulle"
 

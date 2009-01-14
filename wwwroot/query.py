@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2006 - 2008 Harri Pitkänen (hatapitk@iki.fi)
+# Copyright 2006 - 2009 Harri Pitkänen (hatapitk@iki.fi)
 # This file is part of Joukahainen, a vocabulary management application
 
 # This program is free software: you can redistribute it and/or modify
@@ -41,36 +41,45 @@ def form(req):
 	              % _(u'Use regular expression'))
 	jotools.write(req, u' <b>%s</b> <label><input type="checkbox" name="wordsimplere" /> %s</label><br />\n' \
 	              % (_(u'or'), _(u'Case insensitive search')))
-	jotools.write(req, u'<label><input type="checkbox" name="altforms" /> %s</label></p><p>\n' \
+	jotools.write(req, u'<label><input type="checkbox" name="altforms" /> %s</label></p>\n' \
 	              % _(u'Search from alternative spellings'))
+	
+	wclasses = db.query("SELECT classid, name FROM wordclass ORDER BY classid").getresult()
+	jotools.write(req, u'<h2>%s</h2>\n' % _(u'Word class'))
+	jotools.write(req, u'<p>%s ' % _(u'Word class is'))
+	jotools.write(req, u'<select name="wordclass">\n')
+	jotools.write(req, u'<option selected="selected" value="">(%s)</option>\n' % _(u'any'))
+	for (classid, name) in wclasses:
+		jotools.write(req, u'<option value="%i">%s</option>\n' % (classid, unicode(name, 'UTF-8')))
+	jotools.write(req, u'</select></p>\n')
 	
 	textattrs = db.query("SELECT aid, descr FROM attribute WHERE type = 1 ORDER BY descr, aid").getresult()
 	jotools.write(req, u'<h2>%s</h2>\n' % _(u'Text attributes'))
-	jotools.write(req, u'<select name="textaid">\n')
-	jotools.write(req, u'<option selected="1" value="">(%s)</option>\n' % _(u'select attribute'))
+	jotools.write(req, u'<p><select name="textaid">\n')
+	jotools.write(req, u'<option selected="selected" value="">(%s)</option>\n' % _(u'select attribute'))
 	for (aid, dsc) in textattrs:
 		jotools.write(req, u'<option value="%i">%s</option>\n' % (aid, unicode(dsc, 'UTF-8')))
 	jotools.write(req, u'</select> %s <input type="text" name="textvalue" /><br />\n' % _(u'is'))
 	
 	flagattrs = db.query("SELECT aid, descr FROM attribute WHERE type = 2 ORDER BY descr, aid").getresult()
 	jotools.write(req, u'</p><h2>%s</h2>' % _(u'Flags set'))
-	jotools.write(req, u'<optgroup><ul class="cblist"')
+	jotools.write(req, u'<ul class="cblist">')
 	for (aid, dsc) in flagattrs:
 		jotools.write(req, u'<li><label><input type="checkbox" name="flagon%i" />%s</label></li>\n' \
 		              % (aid, unicode(dsc, 'UTF-8')))
-	jotools.write(req, u'</ul></optgroup>\n')
-	jotools.write(req, u'</p><h2>%s</h2>' % _(u'Flags not set'))
-	jotools.write(req, u'<optgroup><ul class="cblist"')
+	jotools.write(req, u'</ul>\n')
+	jotools.write(req, u'<h2>%s</h2>' % _(u'Flags not set'))
+	jotools.write(req, u'<ul class="cblist">')
 	for (aid, dsc) in flagattrs:
 		jotools.write(req, u'<li><label><input type="checkbox" name="flagoff%i" />%s</label></li>\n' \
 		              % (aid, unicode(dsc, 'UTF-8')))
-	jotools.write(req, u'</ul></optgroup>\n')
+	jotools.write(req, u'</ul>\n')
 	
 	jotools.write(req, u'<h2>%s</h2>\n<p>' % _(u'Output type'))
 	for (tname, tdesc) in jooutput.list_supported_types():
 		if tname == 'html': selected = u'checked="checked"'
 		else: selected = u''
-		jotools.write(req, (u'<label><input type="radio" name="listtype" value="%s" %s>' +
+		jotools.write(req, (u'<label><input type="radio" name="listtype" value="%s" %s />' +
 		                    u'%s</label><br />\n') % (tname, selected, tdesc))
 	jotools.write(req, u'</p><p><input type="submit" value="%s" /><input type="reset" value="%s" /></p>\n' \
 	              % (_(u'Search'), _(u'Reset')))
@@ -108,6 +117,11 @@ def wlist(req):
 			       "replace(replace(rw.related_word, '=', ''), '|', '') %s '%s')" \
 			       % (compop, jotools.escape_sql_string(compword))
 		conditions.append(cond)
+	
+	# Word class conditions
+	wclass = jotools.toint(jotools.get_param(req, 'wordclass', u''))
+	if wclass > 0:
+		conditions.append("w.class = %i" % wclass)
 	
 	# Text attribute conditions
 	aid = jotools.toint(jotools.get_param(req, 'textaid', u''))
