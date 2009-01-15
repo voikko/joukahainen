@@ -145,7 +145,7 @@ osoitteeseen.</li>
 Internet-selaimesi asetettu käyttämään välityspalvelinta? Rekisteröitymättömien käyttäjien
 rajoitukset tehdään koneen ip-osoitteen perusteella, joten joku muu on
 ehkä jo käyttänyt päivittäisen lisäyskiintiösi. Pahoittelemme ongelmaa, mutta meillä ei
-ole mahdollisuutta käyttää älykkäämpien rajoitusmenetelmiä. Voit lähettää lisäysehdotuksesi
+ole mahdollisuutta käyttää älykkäämpiä rajoitusmenetelmiä. Voit lähettää lisäysehdotuksesi
 sähköpostitse.</li>
 </ul>
 <p>Jos sinulla on käyttäjätunnus Joukahaiseen, kirjautumalla sisään pääset käyttämään
