@@ -2,10 +2,10 @@ Joukahainen: aloitus
 
 <div class="rightinfo">
 <p>Joukahainen on www-pohjainen suomen kielen sanastotietokanta. Se on kehitetty palvelemaan
-vapaita kieliteknologian sovelluksia, erityisesti <a href="http://voikko.sourceforge.net">Voikkoa</a>.
+vapaita kieliteknologian sovelluksia, erityisesti <a href="http://voikko.sourceforge.net">Voikkoa</a>
+ja <a href="http://joyds1.joensuu.fi/sukija/sukija.html">Sukijaa</a>.
 Tietokannan sisältöä voi vapaasti selata, jos tarvitsee tietoa suomen sanojen oikeinkirjoituksesta.
-Sanaston kehittäminen on kuitenkin jatkuva projekti, ja nykyisellään se sisältää vielä
-jonkin verran virheitä.</p>
+Sanastoa täydennetään jatkuvasti, eikä sen virheettömyyttä voida taata.</p>
 
 <p>Aineiston tekijänoikeudet kuuluvat useille henkilöille ja yhteisöille. Sitä voi levittää edelleen
 <a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL-lisenssin</a> (version 2 tai uudempien) ehdoilla.
@@ -21,7 +21,6 @@ osallistua sanaston kehittämiseen, tutustu näihin ohjeisiin ennen kuin pyydät
 </div>
 <h2>Etsi ja käsittele sanoja</h2>
 <ul>
-<li><a href="query/wlist">Kaikki sanat (200 sanaa kerrallaan)</a></li>
 <li>Hae sana (<a href="docs/haku.html">hakuohje</a>)
  <ul>
  <li><form method="get" action="query/wlist"><p><label>Perushaku
@@ -77,6 +76,7 @@ osallistua sanaston kehittämiseen, tutustu näihin ohjeisiin ennen kuin pyydät
 </div>
 
 <div class="bottominfo">
+<h2>Tiedotteita</h2>
 <p>
 2008-10-26: Joukahainen on muuttanut uudelle palvelimelle. Muuton yhteydessä myös osoite
 on muuttunut: uusi osoite on joukahainen.puimula.org.
@@ -107,7 +107,7 @@ Jatkossa XML-muoto korvaa käytössä olleen, vain Voikossa toimineen tiedostomu
 2007-01-06: Kotimaisten kielten tutkimukeskuksen <a href="http://kaino.kotus.fi">Kaino-aineistopalvelussa</a>
 julkaistun nykysuomen sanalistan ja Joukahaisen sanalistan eroihin voi tutustua
 <a href="kotus-diff.html">päivittäin päivittyvän listan</a> avulla. Lista ei ole täydellinen, eikä se myöskään
-sisällä tietoja eroavaisuuksista jotka ovat tarkoituksellisesti jätetty tietokantaan. Kiitämme Kotimaisten
+sisällä tietoja eroavaisuuksista, jotka on tarkoituksellisesti jätetty tietokantaan. Kiitämme Kotimaisten
 kielten tutkimuskeskusta listan julkaisusta. Sitä tullaan hyödyntämään laajasti, mutta toisaalta Joukahaisen
 sanastoa kehitetään hiukan eri periaatteella, joten varsinaisesti näitä sanastoja ei tulla yhdistämään.
 </p>

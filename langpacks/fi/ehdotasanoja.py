@@ -123,7 +123,7 @@ erikoisalan termi tai muuten harvinainen, kirjoita tähän sille lyhyt selitys.<
 </form>
 <hr />
 <p>Ehdotukset käsitellään yleensä parin päivän kuluessa niiden lähettämisestä. Päivitettyjä
-versioita Voikon sanastosta julkaistaan puolestaan kolmen tai neljän kuukauden välein.
+versioita Voikon sanastosta julkaistaan puolestaan noin puolen vuoden välein.
 Jos sinulla on paljon ehdotuksia sanastoon lisättäviksi sanoiksi tai haluat auttaa
 jonkin erikoisalan sanaston kehityksessä, voit myös lähettää ehdotuksesi sähköpostitse Harri Pitkäselle
 (<a href="mailto:hatapitk@iki.fi">hatapitk@iki.fi</a>).</p>
