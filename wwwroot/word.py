@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2006 Harri Pitkänen (hatapitk@iki.fi)
+# Copyright 2006 - 2009 Harri Pitkänen (hatapitk@iki.fi)
 # This file is part of Joukahainen, a vocabulary management application
 
 # This program is free software: you can redistribute it and/or modify
@@ -32,6 +32,18 @@ import jodb
 _ = _apply_config.translation.ugettext
 
 def edit(req, wid = None):
+	# Sometimes browser may close the TCP session before page is fully
+	# loaded, which leads to IOError when trying to write the response.
+	# Typically this occurs when Firefox does link prefetching from
+	# Google search. Building the page can be safely aborted, but we
+	# catch the exception here so that it does not show up in the Apache
+	# error log.
+	try:
+		return _edit(req, wid)
+	except IOError:
+		return ""
+
+def _edit(req, wid):
 	if (wid == None):
 		joheaders.error_page(req, _(u'Parameter %s is required') % u'wid')
 		return '\n'
