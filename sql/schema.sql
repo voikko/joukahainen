@@ -76,6 +76,7 @@ CREATE TABLE string_attribute_value (
   eevent integer REFERENCES event, -- last edit event
   PRIMARY KEY (wid, aid)
 );
+CREATE INDEX string_attribute_value_wid_idx ON string_attribute_value(wid);
 
 -- Word attribute value (integer). Dynamic.
 CREATE TABLE int_attribute_value (
@@ -85,6 +86,7 @@ CREATE TABLE int_attribute_value (
   eevent integer REFERENCES event, -- last edit event
   PRIMARY KEY (wid, aid)
 );
+CREATE INDEX int_attribute_value_wid_idx ON int_attribute_value(wid);
 
 -- Word attribute value (flag). Dynamic.
 CREATE TABLE flag_attribute_value (
@@ -93,6 +95,7 @@ CREATE TABLE flag_attribute_value (
   eevent integer REFERENCES event, -- last edit event
   PRIMARY KEY (wid, aid)
 );
+CREATE INDEX flag_attribute_value_wid_idx ON flag_attribute_value(wid);
 
 -- Related word form or compound word. Dynamic.
 CREATE TABLE related_word (
@@ -101,6 +104,7 @@ CREATE TABLE related_word (
   eevent integer REFERENCES event, -- last edit event
   related_word varchar NOT NULL -- the related word form
 );
+CREATE INDEX related_word_wid_idx ON related_word(wid);
 
 -- Unclassified word. Dynamic.
 CREATE TABLE raw_word (
