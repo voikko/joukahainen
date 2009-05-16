@@ -176,11 +176,13 @@ def word_inflection(db, wid, word, classid):
 	else: notetext = u'<p>%s</p>\n' % note
 	return notetext + table_header + retdata + u'</table>\n'
 
-def _get_xml_flags(flags, flagtype, flaglist):
+def _get_xml_flags(flags, flagType, flagMap):
 	results = []
-	for flag in flaglist:
-		if flag.xmlGroup == flagtype and flag.joukahainen in flags:
-			results.append(u'<flag>%s</flag>' % flag.xmlFlag)
+	for flagId in flags:
+		if flagId in flagMap:
+			flag = flagMap[flagId]
+			if flag.xmlGroup == flagType:
+				results.append(u'<flag>%s</flag>' % flag.xmlFlag)
 	return results
 
 def _write_xml_forms(db, req, wid, word):
@@ -215,7 +217,7 @@ def _write_xml_classes(req, wid, classid, flags):
 	elif classid == 3: req.write(u'\t\t<wclass>verb</wclass>\n')
 	req.write('\t</classes>\n')
 
-def _write_xml_inflection(req, flags, strings, flaglist):
+def _write_xml_inflection(req, flags, strings, flagMap):
 	elements = []
 	
 	for s in strings:
@@ -227,7 +229,7 @@ def _write_xml_inflection(req, flags, strings, flaglist):
 		else: elements.append(u'<vtype>ä</vtype>')
 	elif 23 in flags: elements.append(u'<vtype>a</vtype>')
 	
-	for f in _get_xml_flags(flags, 'inflection', flaglist): elements.append(f)
+	for f in _get_xml_flags(flags, 'inflection', flagMap): elements.append(f)
 	
 	if len(elements) > 0:
 		req.write('\t<inflection>\n')
@@ -235,21 +237,21 @@ def _write_xml_inflection(req, flags, strings, flaglist):
 			req.write('\t\t%s\n' % element.encode('UTF-8'))
 		req.write('\t</inflection>\n')
 
-def _write_xml_flagset(req, flags, flaglist, flagname):
-	elements = _get_xml_flags(flags, flagname, flaglist)
+def _write_xml_flagset(req, flags, flagMap, flagname):
+	elements = _get_xml_flags(flags, flagname, flagMap)
 	if len(elements) > 0:
 		req.write('\t<%s>\n' % flagname)
 		for element in elements:
 			req.write('\t\t%s\n' % element.encode('UTF-8'))
 		req.write('\t</%s>\n' % flagname)
 
-def _write_xml_frequency(req, flags, integers, flaglist):
+def _write_xml_frequency(req, flags, integers, flagMap):
 	elements = []
 	
 	for i in integers:
 		if i[0] == 38: elements.append(u'<fclass>%i</fclass>' % i[1])
 	
-	for f in _get_xml_flags(flags, 'frequency', flaglist): elements.append(f)
+	for f in _get_xml_flags(flags, 'frequency', flagMap): elements.append(f)
 	
 	if len(elements) > 0:
 		req.write('\t<frequency>\n')
@@ -274,7 +276,7 @@ def _write_xml_info(req, strings):
 			req.write('\t\t%s\n' % element.encode('UTF-8'))
 		req.write('\t</info>\n')
 
-def _write_xml_word(db, req, wid, word, wclass, flaglist):
+def _write_xml_word(db, req, wid, word, wclass, flagMap):
 	req.write('<word id="w%i">\n' % wid)
 	
 	# Read attribute values. We use this strange union query because it is faster
@@ -295,16 +297,24 @@ def _write_xml_word(db, req, wid, word, wclass, flaglist):
 	
 	_write_xml_forms(db, req, wid, word)
 	_write_xml_classes(req, wid, wclass, flags)
-	_write_xml_inflection(req, flags, strings, flaglist)
-	_write_xml_flagset(req, flags, flaglist, 'usage')
-	_write_xml_flagset(req, flags, flaglist, 'compounding')
-	_write_xml_flagset(req, flags, flaglist, 'derivation')
-	_write_xml_flagset(req, flags, flaglist, 'style')
-	_write_xml_flagset(req, flags, flaglist, 'application')
-	_write_xml_frequency(req, flags, integers, flaglist)
+	_write_xml_inflection(req, flags, strings, flagMap)
+	_write_xml_flagset(req, flags, flagMap, 'usage')
+	_write_xml_flagset(req, flags, flagMap, 'compounding')
+	_write_xml_flagset(req, flags, flagMap, 'derivation')
+	_write_xml_flagset(req, flags, flagMap, 'style')
+	_write_xml_flagset(req, flags, flagMap, 'application')
+	_write_xml_frequency(req, flags, integers, flagMap)
 	_write_xml_info(req, strings)
 	
 	req.write('</word>\n')
+
+def _convertFlagMapKeysToJoukahainenId(originalMap):
+	"""Converts a map of flags with arbitary keys to map of
+	flags with Joukahainen id numbers as keys."""
+	mapById = {}
+	for (key, flag) in originalMap.iteritems():
+		mapById[flag.joukahainen] = flag
+	return mapById
 
 def _jooutput_xml(req, db, query):
 	req.content_type = "application/xml"
@@ -338,7 +348,8 @@ def _jooutput_xml(req, db, query):
 <wordlist xml:lang="fi">
 ''' % time.strftime("%Y-%m-%d %H:%M:%S %Z")).encode('UTF-8'))
 	
-	flaglist = voikkoutils.readFlagAttributes(VOIKKO_DATA + "/words/flags.txt")
+	flagMapByName = voikkoutils.readFlagAttributes(VOIKKO_DATA + "/words/flags.txt")
+	flagMap = _convertFlagMapKeysToJoukahainenId(flagMapByName)
 	
 	results = db.query(("SELECT w.wid, w.word, w.class FROM (%s) w " +
 	"WHERE w.wid NOT IN (SELECT f.wid FROM flag_attribute_value f " +
@@ -348,7 +359,7 @@ def _jooutput_xml(req, db, query):
 		wid = result[0]
 		word = unicode(result[1], 'UTF-8')
 		wclass = result[2]
-		_write_xml_word(db, req, wid, word, wclass, flaglist)
+		_write_xml_word(db, req, wid, word, wclass, flagMap)
 	
 	req.write("</wordlist>\n")
 
