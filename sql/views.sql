@@ -4,6 +4,7 @@ DROP VIEW view_voikko_inflection;
 
 CREATE VIEW view_voikko_inflection AS
 SELECT w.wid, w.word, coalesce(rword.related_word, w.word) AS wstruct,
+  w.class AS wclass,
   inf.value AS infclass,
   CASE WHEN frontv.aid IS NULL THEN false ELSE true END AS frontv,
   CASE WHEN backv.aid IS NULL THEN false ELSE true END AS backv,
@@ -21,6 +22,7 @@ COMMENT ON VIEW view_voikko_inflection IS 'Inflection information for words in V
 COMMENT ON COLUMN view_voikko_inflection.wid IS 'Word id';
 COMMENT ON COLUMN view_voikko_inflection.word IS 'Base form';
 COMMENT ON COLUMN view_voikko_inflection.wstruct IS 'Word structure pattern';
+COMMENT ON COLUMN view_voikko_inflection.wclass IS 'Word class';
 COMMENT ON COLUMN view_voikko_inflection.infclass IS 'Inflection class';
 COMMENT ON COLUMN view_voikko_inflection.frontv IS 'Vowel harmony (front)';
 COMMENT ON COLUMN view_voikko_inflection.backv IS 'Vowel harmony (back)';
