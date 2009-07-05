@@ -118,6 +118,16 @@ def _get_inflection_type(classid, infclass_main):
 		else: return word_type
 	return None
 
+# Returns structure information for the word or the word itself, if
+# no structure is available.
+def _get_structure_for_word(db, wid, word):
+	sql = ("SELECT r.related_word FROM related_word r, word w WHERE " +
+	       "w.wid = r.wid AND r.wid = %i AND " +
+	       "replace(replace(related_word, '=', ''), '|', '') = w.word") \
+	      % wid
+	results = db.query(sql)
+	if results.ntuples() != 1: return word
+	return unicode(results.getresult()[0][0], 'UTF-8')
 
 # Inflection table for a Finnish noun or verb.
 def word_inflection(db, wid, word, classid):
@@ -132,11 +142,12 @@ def word_inflection(db, wid, word, classid):
 	word_class = _get_inflection_type(classid, infclass_main)
 	if word_class == None: return "(taivutuksia ei ole saatavilla tai virheellinen taivutusluokka)"
 	
+	wordWithStructure = _get_structure_for_word(db, wid, word)
 	tableid = u"inftable%i" % wid
 	retdata = u''
 	note = u''
 	have_only_characteristic = True
-	inflected_words = voikkoinfl.inflectWordWithType(word, word_class, infclass_main, grad_type,
+	inflected_words = voikkoinfl.inflectWordWithType(wordWithStructure, word_class, infclass_main, grad_type,
 	                                                 _get_infl_vowel_type(db, wid, word))
 	if inflected_words == []: return "(virhe taivutusten muodostuksessa)"
 	
