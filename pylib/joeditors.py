@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2006 Harri Pitkänen (hatapitk@iki.fi)
+# Copyright 2006 - 2009 Harri Pitkänen (hatapitk@iki.fi)
 # This file is part of Joukahainen, a vocabulary management application
 
 # This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ def _word_class(db, classid):
 
 def _flag_attributes(db, wid):
 	results = db.query(("SELECT a.descr FROM attribute a, flag_attribute_value f " +
-	                    "WHERE a.aid = f.aid AND a.type = 2 AND f.wid = %i") % wid)
+	                    "WHERE a.aid = f.aid AND a.type = 2 AND f.wid = %i ORDER BY a.descr") % wid)
 	if results.ntuples() == 0: return u"<p>(%s)</p>" % _(u"No flags set")
 	retdata = u"<ul>\n"
 	for result in results.getresult():
@@ -65,7 +65,7 @@ def _int_attribute(db, wid, aid, editable):
 		return `results.getresult()[0][0]`
 
 def _related_words(db, wid):
-	results = db.query("SELECT related_word FROM related_word WHERE wid = %i" % wid)
+	results = db.query("SELECT related_word FROM related_word WHERE wid = %i ORDER BY related_word" % wid)
 	if results.ntuples() == 0: return u"<p>(%s)</p>" % _(u'Not set')
 	retdata = "<ul>\n"
 	for result in results.getresult():
