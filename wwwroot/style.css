@@ -1,6 +1,6 @@
 body {
 	margin: 0;
-	background-color: #AAAAFF;
+	background-color: #BBBBFF;
 	font-family: sans-serif;
 }
 
@@ -57,7 +57,7 @@ table.border th {
 
 div.topbar {
 	color: black;
-	background-color: #449999;
+	background-color: #55AAAA;
 	padding: 0.5em;
 	-moz-border-radius-bottomleft: 1em;
 	-moz-border-radius-bottomright: 1em;
@@ -69,13 +69,13 @@ div.topbar {
 
 div.main {
 	color: black;
-	background-color: #AAAAFF;
+	background-color: #BBBBFF;
 	padding: 0.5em;
 }
 
 div.editor {
 	color: black;
-	background-color: #AAAAFF;
+	background-color: #BBBBFF;
 	top: 0;
 	left: 0;
 }
@@ -130,6 +130,10 @@ div.topbar h1 {
 div.topbar p {
 	margin: 0;
 	padding: 0;
+}
+
+div.topbar a {
+	text-decoration: none;
 }
 
 form.subform {
@@ -198,3 +202,8 @@ li p {
 	text-decoration: line-through;
 	font-style: italic;
 }
+
+body a:link, body a:visited {
+	color: #0000DD;
+}
+
