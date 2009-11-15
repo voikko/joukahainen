@@ -565,6 +565,10 @@ def add(req):
 		if stored_word['try_again']: need_confirm_count = need_confirm_count + 1
 		nwordlist.append(stored_word)
 	db.query("COMMIT")
+	if added_count == 1 and len(nwordlist) == 1:
+		# No confirmation screen if exactly 1 word was successfully added
+		joheaders.redirect_header(req, "edit?wid=%i" % nwordlist[0]['wid'])
+		return '\n'
 	joheaders.page_header_navbar_level1(req, _(u"Add words"), uid, uname)
 	if need_confirm_count > 0:
 		jotools.write(req, u'<p>' + _(u'''Adding some words failed or requires confirmation.
