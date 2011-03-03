@@ -223,7 +223,11 @@ def unique(oldlist):
 def get_param(req, name, default):
 	for field in req.form.list:
 		if field.name == name:
-			return unicode(field.value, 'UTF-8')
+			try:
+				return unicode(field.value, 'UTF-8')
+			except UnicodeError:
+				# Simply ignore invalid UTF-8 sequences and return default value instead
+				return default
 	return default
 
 # Returns the integer prefix of the given string or 0, if no such prefix was found
