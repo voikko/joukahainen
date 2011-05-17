@@ -159,6 +159,11 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(40, 'tyypillinen kieliv
 INSERT INTO attribute_class(aid, classid) VALUES(40, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(40, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(40, 3);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(41, 'sitaattilaina', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(41, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(41, 2);
+INSERT INTO attribute_class(aid, classid) VALUES(41, 3);
+
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
 -- Test user, password 'testi'
