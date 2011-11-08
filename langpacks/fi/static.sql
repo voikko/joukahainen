@@ -163,6 +163,8 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(41, 'sitaattilaina', 2,
 INSERT INTO attribute_class(aid, classid) VALUES(41, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(41, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(41, 3);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(42, 'ala: organisaatiot ja tuotemerkit', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(42, 1);
 
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
