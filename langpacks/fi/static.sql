@@ -125,7 +125,7 @@ INSERT INTO attribute_class(aid, classid) VALUES(29, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(29, 3);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(30, 'ei mAinen -johdosta', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(30, 1);
-INSERT INTO attribute(aid, descr, type, editable) VALUES(31, 'yksitekijäinen teonsana', 2, TRUE);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(31, 'persoona: vain yksikön 3.', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(31, 3);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(32, 'ei taivu vertailumuodoissa', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(32, 2);
@@ -165,6 +165,8 @@ INSERT INTO attribute_class(aid, classid) VALUES(41, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(41, 3);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(42, 'ala: organisaatiot ja tuotemerkit', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(42, 1);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(43, 'persoona: vain yksikön tai monikon 3.', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(43, 3);
 
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
