@@ -31,25 +31,72 @@ sanastoa Voikon sanastoon lisättäväksi.</p>
 
 <h2>Mitä vaaditaan?</h2>
 
-<p>Ota yhteyttä Voikon kehittäjiin joko
-<a href="http://voikko.sourceforge.net/mail.html">postituslistan</a> kautta tai
-lähettämällä postia <a href="mailto:hatapitk@iki.fi">Harri Pitkäselle</a> ja
-kerro, minkä alan tai alojen sanastoa haluat kehittää. Selvitämme ensin, onko
+<p>Ota yhteyttä Voikon kehittäjiin
+mieluiten <a href="http://voikko.sourceforge.net/mail.html">postituslistan</a> kautta
+ja kerro, minkä alan tai alojen sanastoa haluat kehittää. Selvitämme ensin, onko
 tällaisten alakohtaisten sanastojen kokoaminen jo aloitettu. Jos ei ole, täytyy
 määritellä järkevät rajaukset sanastojen välille ja luoda uudet erikoissanastot.
 </p>
+
+<div style="border: 2px dotted gray">
+Tässä laatikossa on kokeellisia ohjeita.<br />
+Erikoissanaston kehitysversion ensiasennus Ubuntu- ja Debian-käyttäjille:
+<ul>
+<li>Asenna Linux-jakelusi ohjelmistopakettien hallinnan kautta paketit subversion,
+malaga-bin ja make.</li>
+<li>Suorita päätteessä seuraavat komennot:
+<pre>
+mkdir -p ~/.voikko/2
+cd ~/.voikko/2
+svn co https://voikko.svn.sourceforge.net/svnroot/voikko/trunk/suomimalaga src-mor-medicine
+ln -s src-mor-medicine/voikko mor-medicine
+cd src-mor-medicine
+wget http://www.puimula.org/htp/voikko/config/config-medicine.mak -O config.mak
+./update-all
+</pre>
+</li>
+<li>Käynnistä OpenOffice.org, valitse "Työkalut" ja "Asetukset".</li>
+<li>Valitse asetuksista "Kirjoituksen aputyökalut" ja sen alta "Voikko".</li>
+<li>Valitse oikolukusanastoksi oman erikoisalasi sanasto ja napsauta OK.</li>
+<li>Testaa, että erikoisalojen sanojen oikoluku toimii oikein OpenOffice.orgissa.</li>
+</ul>
+
+Päivitä sanastosi <strong>joka päivä</strong> ennen sanojen lisäämistä Joukahaiseen seuraavasti:
+<ul>
+<li>Sulje kaikki oikolukua käyttävät ohjelmat (ainakin OpenOffice.org).</li>
+<li>Suorita päätteessä seuraavat komennot:
+<pre>
+cd ~/.voikko/2/src-mor-medicine
+./update-all
+</pre>
+</li>
+</ul>
+</div>
 
 <p>Sinulle valmistellaan uusin versio Voikon sanastosta, johon on otettu mukaan ne
 erikoissanastot, joiden parissa aiot työskennellä. Sanastopaketteja voi
 ladata <a href="http://www.puimula.org/htp/testing/voikko-snapshot/">tästä
 hakemistosta</a>. Sanasto otetaan käyttöön Linuxissa kaikissa Voikkoa käyttävissä
-ohjelmissa seuraavalla komennolla:</p>
+ohjelmissa seuraavasti:</p>
 
+<ul>
+<li>Tallenna sanastopaketti työpöydälle.</li>
+<li>Käynnistä pääte. <a href="http://fi.wikibooks.org/wiki/Ubuntu_tutuksi/Peruskäyttö#Komentorivi">Katso
+ohje siitä, kuinka tämä tehdään Ubuntussa.</a></li>
+<li>Suorita päätteessä seuraava komento (korvaa sanaston nimi <em>dict-kasvatus.zip</em>
+oman sanastosi nimellä):
 <kbd>
-unzip -d ~/.voikko dict-kasvatus.zip
-</kbd>
+unzip -d ~/.voikko ~/Desktop/dict-kasvatus.zip
+</kbd><br />
+Jos käytät suomenkielistä jakelua, myös sana Desktop täytyy korvata sanalla Työpöytä.
+</li>
+<li>Sulje pääteikkuna.</li>
+<li>Käynnistä oikolukua käyttävä ohjelma uudestaan.</li>
+</ul>
 
-<p>Sanasto poistetaan käytöstä tyhjentämällä hakemisto ~/.voikko. Windowsissa,
+<p>Sanasto poistetaan käytöstä tyhjentämällä hakemisto ~/.voikko.</p>
+
+<p>Windowsissa,
 esimerkiksi OpenOffice.orgissa, saa erikoissanaston käyttöön korvaamalla
 openoffice.org-voikko-lisäosassa olevat voikko-fi_FI-alkuiset tiedostot
 sanastopaketissa olevilla tiedostoilla ja asentamalla lisäosan uudestaan.</p>
