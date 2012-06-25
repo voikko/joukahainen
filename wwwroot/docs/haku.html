@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fi" xml:lang="fi">
+
+<head>
+  <title>Sanojen haku Joukahaisessa</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../style.css" />
+  <link rel="search" type="application/opensearchdescription+xml"
+   title="Joukahainen" href="../searchplugin-fullsearch-re.xml">
+  <style type="text/css">
+	span.np { color: gray; }
+	table, th, td { border: 1px solid black; }
+	table { border-collapse: collapse; }
+	div.main {
+		line-height: 1.5em;
+		max-width: 45em;
+		margin-left: 1.5em;
+	}
+  </style>
+</head>
+<body>
+<div class="topbar">
+<h1><a href="..">Joukahainen</a> &gt; <a href="index.html">Ohjeita</a> &gt;
+    Sanojen haku</h1>
+<div class="clear"></div>
+</div>
+<div class="main">
+
+<h2>Sanojen haku</h2>
+
+<h3>Pikahaku etusivulta</h3>
+<p>Etusivulla olevat kolme pikahakukenttää toimivat seuraavasti:</p>
+<dl>
+<dt>Perushaku</dt>
+  <dd>Hakee sanoista ja niiden kirjoitusasuista huomioimatta aakkoskokoa. Esimerkiksi
+      sanatietue "koira" löytyy hakusanoilla "koira", "Koira", "KOIRA" ja "lapinkoira".</dd>
+<dt>Tarkka haku</dt>
+  <dd>Hakee sanoista ja niiden kirjoitusasuista aakkoskoon huomioiden. Esimerkiksi
+      sanatietue "koira" löytyy hakusanoilla "koira" ja "lapinkoira", muttei "Koira" tai
+      "KOIRA".</dd>
+<dt>Säännöllinen lauseke</dt>
+  <dd>Hakee sanoista ja niiden kirjoitusasuista säännöllisellä lausekkeella. Oletusarvoisesti
+  myös osumat sanan osiin huomoidaan. Esimerkiksi sanatietua "emäntä" löytyy hakusanoilla
+  "emänt", "^emäntä$", "emAntA", "^em..tä" ja "^em.*ä$".</dd>
+<dt>Hakulomake</dt>
+  <dd>Hakulomakkeen kautta voi tehdä monipuolisempia hakuja kuin suoraan etusivulta.
+  Hakulomakkeen kautta voi mm. hakea sanoja lisätietokenttien perusteella.</dd>
+</dl>
+
+<h3>Säännölliset lausekkeet</h3>
+<p>Sanastohauissa käytettävät säännölliset lausekkeet ovat PostgreSQL-tietokantaohjelmiston
+hyväksymiä <a href="http://www.postgresql.org/docs/8.1/static/functions-matching.html#FUNCTIONS-POSIX-REGEXP">POSIX-standardin
+mukaisia säännöllisiä lausekkeita</a>. Pienten ja isojen kirjaimien käytöön liittyy kuitenkin
+erikoissääntöjä, joiden tarkoituksena on helpottaa lingvistisesti kiinnostavien hakujen
+tekemistä. Tavalliset kirjaimet tulee syöttää hakuehtoon pieninä kirjaimina myös silloin,
+kun haetaan isoja kirjaimia sisältäviä sanoja. Isot kirjaimet viittaavat seuraaviin
+kirjainluokkiin:</p>
+<ul>
+<li>A: a tai ä</li>
+<li>O: o tai ö</li>
+<li>U: u tai y</li>
+<li>V: mikä tahansa vokaali</li>
+<li>C: mikä tahansa konsonantti</li>
+</ul>
+<p>Esimerkiksi kaikki utua/ytyä-loppuiset sanat, jotka eivät ala h-kirjaimella, voidaan
+hakea lausekkeella "^[^h].*UtUA$".</p>
+
+<h3>OpenSearch-lisäosa</h3>
+<p>Jos selaimesi tukee <a href="http://opensearch.org">OpenSearch</a>-standardia,
+voit hakea sanoja Joukahaisesta myös selaimen oman hakuliittymän kautta. Esimerkiksi
+Firefox-selaimessa voit lisätä Joukahaisen hakupalveluksi selainikkunan oikeassa laidassa
+olevaan hakupalkkiin avaamalla hakupalkin toimintovalikon ja valitsemalla
+<b>Add "Joukahainen"</b>. OpenSearch-pikahaun ymmärtämät hakusanat ovat samat kuin
+haettaessa sanoja säännöllisellä lausekkeella Joukahaisen etusivulta.</p>
+
+<hr />
+
+<p class="lisenssi">
+<!--Creative Commons License-->
+<img alt="Creative Commons License" style="border-width: 0" src="http://creativecommons.org/images/public/somerights20.png" />
+Tämän sivun sisältö on käytettävissä
+<a rel="license" href="http://creativecommons.org/licenses/GPL/2.0/">GPL 2.0</a> -lisenssillä, tai vaihtoehtoisesti
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/2.5/">Creative Commons Attribution-ShareAlike 2.5</a>
+-lisenssillä. Käyttö ja levitys on sallittu myös molempien mainittujen lisenssien uudempien versioiden
+ehdoilla.
+<!--/Creative Commons License-->
+<!-- <rdf:RDF xmlns="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+	<Work rdf:about="">
+		<license rdf:resource="http://creativecommons.org/licenses/by-sa/2.5/" />
+		<license rdf:resource="http://creativecommons.org/licenses/GPL/2.0/" />
+	</Work>
+</rdf:RDF> -->
+</p>
+
+</div>
+</body>
+</html>

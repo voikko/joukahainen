@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fi" xml:lang="fi">
+
+<head>
+  <title>Taivutusluokat Joukahaisessa</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../style.css" />
+  <style type="text/css">
+	span.np { color: gray; }
+	span.def { text-decoration: underline; }
+	table, th, td { border: 1px solid black; }
+	table { border-collapse: collapse; }
+	div.main {
+		line-height: 1.5em;
+		max-width: 45em;
+		margin-left: 1.5em;
+	}
+  </style>
+</head>
+<body>
+<div class="topbar">
+<h1><a href="..">Joukahainen</a> &gt; <a href="index.html">Ohjeita</a> &gt;
+    Taivutusluokat</h1>
+<div class="clear"></div>
+</div>
+<div class="main">
+
+<p>Joukahaisessa on käytössä kaksi eri taivutusluokkaa, <span class="def">taivutusluokka</span>
+ja <span class="def">historiallinen taivutusluokka</span>. Molemmat kentät ovat Joukahaisen
+kannalta vapaamuotoisia tekstikenttiä, mutta
+tämä on ainoastaan teknisistä syistä tehty valinta: Joukahaisen ei itse tarvitse ymmärtää kenttien
+merkitystä vaan niiden tulkitseminen jätetään tietoa käyttävien sovellusten vastuulle.</p>
+<p>Todellisuudessa kentissä olevan tiedon on on oltava tarkasti määritellyn formaatin mukaista,
+tai muuten tietoa käyttävät ohjelmat joutuvat yleensä hylkäämään kyseisen sanan. Tässä ohjeessa
+käsitellään ainoastaan tavallisia taivutusluokkia. Historiallisten taivutusluokkien määrittelyä
+ei vielä ole edes tehty, joten niihin ei kannata toistaiseksi lainkaan koskea.</p>
+
+<h2>Taivutusluokka</h2>
+
+<p>Joukahaisessa käytössä oleva taivutusluokitus on rakennettu Suomi-malagan ja entisen Hunspell-fi
+-projektin käyttämien luokitusten pohjalle huomioiden myös Kotimaisten kielten tutkimuskeskuksen
+Suomen kielen perussanakirjassa käyttämä luokitus. Joukahaisen luokitus ei kuitenkaan täysin vastaa
+mitään noista mainituista luokituksista. Joukahainen ei toistaiseksi tue kaikkia suomen kielessä
+käytössä olevia taivutusluokkia, mutta sanastosta yli 95 prosenttia sopii nyt käytössä oleviin
+luokkiin.</p>
+
+<p>Taivutusluokkien määritys tapahtuu käyttäen toimintoa
+<a href="/findclass/classlist">Etsi sanalle taivutusluokka</a>. Tähän vaaditaan sana perusmuodossaan,
+sanaluokka ja astevaihteluluokka. Astevaihteluluokkaa kuvataan symboleilla av1, av2, av3, av4, av5 ja
+av6. Astevaihteluluokkiin kuuluvat vaihtelut esimerkkisanoineen on lueteltu sivun oikeassa laidassa
+olevassa ohjelaatikossa. Kun tiedot on annettu, painetaan nappia "Hae mahdolliset taivutukset".
+Näkyville tulee lista taivutusluokkia, ja annetun sanan taivutus näissä luokissa. Oikean taivutusluokan
+on täytettävä seuraavat kriteerit:</p>
+<ul>
+<li>Kaikkien listattujen taivutusmuotojen ja johdosten on sovittava kyseiselle sanalle.</li>
+<li>Jos otsikon ja taivutustaulun välissä on sanallisesti ilmaistu lisäehto (esimerkiksi
+"kaksitavuinen sana"), on sanan täytettävä tämä ehto.</li>
+<li>Jos useampi kuin yksi taivutusluokka täyttää edellä mainitut ehdot, oikea luokka on se, johon
+kuuluu eniten järkeviä taivutusmuotoja tai johdoksia.</li>
+</ul>
+<p>Kun oikea taivutusluokka on löytynyt, se voidaan syöttää sanan tietoihin. Joukahainen näyttää
+sanalle valitun taivutuksen sanaeditorin oikeassa ylälaidassa olevassa laatikossa. Jos oikeaa
+taivutusluokkaa ei löydy, jätetään taivutusluokkakenttä tyhjäksi ja sanalle asetetaan lippu
+"vaatii selvennystä".</p>
+<p>Tavallisten taivutusluokkien lisäksi käytössä on taivutusluokka "poikkeava". Tämä merkitsee sitä,
+että sanaa vastaava tietue löytyy Suomi-malagan Voikko-version tiedostosta sanat/poikkeavat.lex.
+Poikkeavasti taipuviksi merkittyjen sanojen taivutusluokkaan ei koskaan saa tehdä oma-aloitteisesti
+muutoksia, koska tällöin on myös tehtävä muutoksia tiedostoon poikkeavat.lex mikä ei ole mahdollista
+Joukahaisen kautta. Poikkeavasti taipuvista sanoista on tarkoitus päästä ajan kuluessa kokonaan
+eroon.</p>
+
+<hr />
+
+<p class="lisenssi">
+<!--Creative Commons License-->
+<img alt="Creative Commons License" style="border-width: 0"
+src="http://creativecommons.org/images/public/somerights20.png" />
+Tämän sivun sisältö on käytettävissä
+<a rel="license" href="http://creativecommons.org/licenses/GPL/2.0/">GPL 2.0</a> -lisenssillä, tai
+vaihtoehtoisesti
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/2.5/">Creative Commons
+Attribution-ShareAlike 2.5</a> -lisenssillä. Käyttö ja levitys on sallittu myös molempien mainittujen
+lisenssien uudempien versioiden ehdoilla.
+<!--/Creative Commons License-->
+<!-- <rdf:RDF xmlns="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/"
+	    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+	<Work rdf:about="">
+		<license rdf:resource="http://creativecommons.org/licenses/by-sa/2.5/" />
+		<license rdf:resource="http://creativecommons.org/licenses/GPL/2.0/" />
+	</Work>
+</rdf:RDF> -->
+</p>
+
+</div>
+</body>
+</html>

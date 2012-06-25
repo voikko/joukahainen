@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fi" xml:lang="fi">
+
+<head>
+  <title>Tietokannan käyttö omiin tarkoituksiin</title>
+  <meta name="GENERATOR" content="Quanta Plus" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../style.css" />
+  <style type="text/css">
+	span.np { color: gray; }
+	table, th, td { border: 1px solid black; }
+	table { border-collapse: collapse; }
+	div.main {
+		line-height: 1.5em;
+		max-width: 45em;
+		margin-left: 1.5em;
+	}
+  </style>
+</head>
+<body>
+<div class="topbar">
+<h1><a href="..">Joukahainen</a> &gt; <a href="index.html">Ohjeita</a> &gt;
+    Tietokantakopioiden käyttö</h1>
+<div class="clear"></div>
+</div>
+<div class="main">
+
+<p>Joukahaisen tietokannan sisällöstä tehdään automaattisesti kopio joka yö.
+Uusin kopio löytyy aina tiedostosta
+<a href="/pgdumps/joukahainen.pgdump">joukahainen.pgdump</a> ja vanhempia kopioita
+voi tutkia hakemistosta <a href="/pgdumps/">pgdumps</a>. Vaikka tarkoitus onkin,
+että Joukahaista pystyy kaikessa normaalissa käytössä käyttämään www-liittymän kautta,
+koko tietokannan käsittelystä omalla koneella voi joissain tilanteissa olla hyötyä:</p>
+<ul>
+<li>Www-liittymän hakutoiminnot ovat toistaiseksi jossain määrin rajoittuneita, eikä
+hakutuloksia ole saatavissa muissa muodoissa kuin html-listana ja XML-muodossa.</li>
+<li>Joitakin hyödyllisiä hakutyyppejä ei ole mahdollista toteuttaa järkevästi www-liittymän
+avulla. Esimerkiksi hakuehtoja saman tietokantataulun eri tietueiden välillä on hyvin vaikea
+esittää "graafisesti", mutta niiden ilmaiseminen SQL-kielellä on suhteellisen helppoa. Tällainen
+haku voisi olla esimerkiksi <em>listaa kaikki sanat, joissa sanan alkuosa on jokin toinen sana</em>.
+Mahdollisuutta tehdä suoria SQL-hakuja ei voida kuitenkaan lisätä www-liittymään tietoturvasyistä.
+Monet tällaiset haut voivat myös viedä paljon prosessoriaikaa, jolloin on parempi että ne tehdään
+omalla koneella eikä palvelimella, joka palvelee samanaikaisesti monia käyttäjiä.</li>
+<li>Jotkut voivat olla kiinnostuneita rakentamaan omia, Joukahaisen tietoja käyttäviä sovelluksia.
+Näitä on hyvä ainakin alkuvaiheessa testata omilla tietokantakopioilla, vaikka valmiita toimintoja
+sitten liitettäisiinkin osaksi Joukahaista.</li>
+</ul>
+<p>Julkisesti saatavilla olevat kopiot ovat käytettävissä kokonaisuudessaan samalla lisenssillä kuin
+Voikko (GPL:n versio 2 tai uudempi). Myös julkinen osa käyttäjien tiedoista (käyttäjätunnus, nimi
+ja yhteys muutostietoihin) tulee tämän tietokannan mukana. Sen sijaan esimerkiksi sähköpostiosoitteet,
+salasanat, käyttöoikeustiedot ja tiedot viimeisestä kirjautumisajankohdasta eivät kuulu näihin
+julkisiin tietoihin, ja niitä säilytetään muualla.</p>
+
+<h2>Kuinka päästä alkuun?</h2>
+<p>Tämän ohjeen tarkoitus ei ole toimia perinpohjaisena oppimateriaalina tiedonhallintajärjestelmien
+käyttöön. Seuraavassa on vain vihjeitä, kuinka päästä liikkeelle. Ensimmäisenä on asennettava tarvittava
+tietokantaohjelmisto. Joukahaisen käytössä on PostgreSQL versio 8.3, joten tarvitset tämän tai uudemman
+version. Kun ohjelmisto on asennettu, suorita seuraavat toimenpiteet:</p>
+
+<ol>
+<li>Siirry käyttäjäksi postgres ja anna komento <kbd>psql template1</kbd></li>
+<li>Päädyt PostgreSQL-päätteeseen, jossa pitää suorittaa seuraavat komennot (korvaa käyttäjänimi
+aku koneellasi käyttämällä käyttäjätunnuksella):
+<pre>
+template1=# create role joukahainen;
+CREATE ROLE
+tempalte1=# create user aku;
+CREATE ROLE
+template1=# grant joukahainen to aku;
+GRANT ROLE
+template1=# create database joukahainen with template template0;
+CREATE DATABASE
+template1=# \q
+</pre></li>
+<li>Edelleen käyttäjänä postgres, kopioi Joukahaisen sisältö juuri luomaasi tietokantaan komennolla
+<kbd>pg_restore -d joukahainen /tmp/joukahainen.pgdump</kbd> Tämä antaa liudan varoituksia, joissa
+sanotaan mm. <em>ERROR:  role "hatapitk" does not exist</em>. Tämä johtuu siitä, että alkuperäisessä
+tietokannassa on sen varmuuskopiointiin käytetty käyttäjätunnusta "hatapitk" jota omassa
+PostgreSQL-asennuksessasi ei todennäköisesti ole. Nämä varoitukset ovat harmittomia.</li>
+</ol>
+<p>Nyt tietokannan pitäisi olla käyttövalmis. Voit varmistaa asian antamalla omalla käyttäjätunnuksellasi
+(yllä "aku") komennon <kbd>psql joukahainen</kbd>. Tällöin toivottavasti päädyt PostgreSQL-päätteeseen.
+Siellä voit antaa esimerkiksi komennon <kbd>select count(*) from word;</kbd> jonka pitäisi tulostaa
+tietokannassa olevien sanatietueiden kokonaismäärä. Jos näin tapahtuu, on asennus valmis ja tietokanta
+käytettävissä hakuja (ja muutoksia) varten.</p>
+<p>Myöhemmin tietokannan sisällön voi päivittää poistamalla vanhan sisällön ja tuomalla tuoreemman
+sen tilalle. Käyttäjänä postgres suorita:</p>
+<pre>
+template1=# drop database joukahainen;
+DROP DATABASE
+template1=# create database joukahainen with template template0;
+CREATE DATABASE
+template1=# \q
+</pre>
+<p>jonka jälkeen annetaan jälleen komento <kbd>pg_restore -d joukahainen /tmp/joukahainen.pgdump</kbd>.
+</p>
+
+<h2>Tärkeimmät taulut</h2>
+
+<h3>word</h3>
+<p>Taulu <em>word</em> sisältää sanatietueet. Word-taulun oleellisimmat sarakkeet ovat seuraavat:</p>
+<table>
+<tr><th>Nimi</th><th>Tyyppi</th><th>Huomioita</th></tr>
+<tr><td>wid</td><td>integer</td><td>Avainkenttä, käytetään sanojen tunnistamiseen mm.
+    URL-osoitteissa.</td></tr>
+<tr><td>word</td><td>character varying</td><td>Varsinainen sana</td></tr>
+<tr><td>class</td><td>integer</td><td>Sanaluokka, viittaus tauluun <em>wordclass(classid)</em></td></tr>
+</table>
+
+<h3>attribute</h3>
+<p>Taulu <em>attribute</em> sisältää tiedot Joukahaisen tuntemista sanoja kuvaavista attribuuteista
+(siis lipuista ja tekstikentistä). Attribute-taulun oleellisimmat sarakkeet ovat seuraavat:</p>
+<table>
+<tr><th>Nimi</th><th>Tyyppi</th><th>Huomioita</th></tr>
+<tr><td>aid</td><td>integer</td><td>Avainkenttä, attribuutin tunniste.</td></tr>
+<tr><td>descr</td><td>character varying</td><td>Attribuutin kuvaus</td></tr>
+<tr><td>type</td><td>integer</td><td>Attribuutin tyyppi, viittaus tauluun
+    <em>attribute_type(type)</em></td></tr>
+</table>
+
+<h3>string_attribute_value</h3>
+<p>Taulu <em>string_attribute_value</em> sisältää tiedot sanojen tekstikenttien arvoista. Huomaa, että
+jos sanan jokin tekstikenttä on tyhjä, sitä vastaava tietue puuttuu tästä taulusta. Koska Joukahaisen
+tekstikentissä ei tunneta eroa puuttuvan arvon ja nollamittaisen merkkijonon välillä, tässä taulussa
+olevat tietueet sisältävät aina vähintään yhden merkin mittaisen merkkijonoarvon. Taulun oleellisimmat
+sarakkeet ovat seuraavat:</p>
+<table>
+<tr><th>Nimi</th><th>Tyyppi</th><th>Huomioita</th></tr>
+<tr><td>wid</td><td>integer</td><td>Sanan tunniste, viittaus tauluun <em>word(wid)</em></td></tr>
+<tr><td>aid</td><td>integer</td><td>Tekstikentän tunniste, viittaus tauluun <em>attribute(aid)</em></td>
+    </tr>
+<tr><td>value</td><td>character varying</td><td>Tekstikentän arvo</td></tr>
+</table>
+
+<h3>flag_attribute_value</h3>
+<p>Taulu <em>flag_attribute_value</em> sisältää sanoille asetetut liput. Jos taulussa on sanan ja lipun
+yhdistävä tietue, lippu on asetettuna, muutoin se ei ole asetettuna. Taulun oleellisimmat
+sarakkeet ovat seuraavat:</p>
+<table>
+<tr><th>Nimi</th><th>Tyyppi</th><th>Huomioita</th></tr>
+<tr><td>wid</td><td>integer</td><td>Sanan tunniste, viittaus tauluun <em>word(wid)</em></td></tr>
+<tr><td>aid</td><td>integer</td><td>Lipun tunniste, viittaus tauluun <em>attribute(aid)</em></td></tr>
+</table>
+
+<h3>related_word</h3>
+<p>Taulu <em>related_word</em> sisältää sanojen kirjoitusasut. Oleellisimmat sarakkeet ovat seuraavat:</p>
+<table>
+<tr><th>Nimi</th><th>Tyyppi</th><th>Huomioita</th></tr>
+<tr><td>wid</td><td>integer</td><td>Sanan tunniste, viittaus tauluun <em>word(wid)</em></td></tr>
+<tr><td>related_word</td><td>character varying</td><td>Kirjoitusasu</td></tr>
+</table>
+
+<h2>Käyttöesimerkkejä</h2>
+<p>Alla on esimerkkejä muutamista hyödyllisistä kyselyistä. Jos SQL-kieli ei ole hallussa, kannattaa
+tutustua PostgreSQL:n laadukkaaseen
+<a href="http://www.postgresql.org/docs/8.1/static/index.html">dokumentaatioon</a>,
+erityisesti sen Tutorial-osuuteen.
+</p>
+<ul>
+<li>Luettele kaikki sellaiset kahden eri sanan parit, joiden viisi viimeistä kirjainta ovat samat ja
+jotka kuuluvat samaan sanaluokkaan, mutta joilla on eri taivutusluokat. Sanoja, jotka kuuluvat
+taivutusluokkiin "paperi", "risti" tai niiden astevaihtelullisiin versiohin ei huomioida.
+<pre>
+joukahainen=&gt; select w1.word, w2.word
+joukahainen-&gt; from word w1, word w2, string_attribute_value s1, string_attribute_value s2
+joukahainen-&gt; where length(w1.word) &gt; 5 and length(w2.word) &gt; 5
+joukahainen-&gt; and substr(w1.word, length(w1.word)-4) = substr(w2.word, length(w2.word)-4)
+joukahainen-&gt; and w1.class = w2.class
+joukahainen-&gt; and w1.wid = s1.wid and w2.wid = s2.wid
+joukahainen-&gt; and s1.aid = 1 and s2.aid = 1
+joukahainen-&gt; and s1.value &lt;&gt; s2.value
+joukahainen-&gt; and s1.value not like 'paperi%' and s1.value not like 'risti%'
+joukahainen-&gt; and w1.word &lt; w2.word;
+</pre></li>
+<li>Luettele käyttäjät, jotka ovat tehneet tietokantaan muutoksia (muita kuin uusien sanojen
+lisäyksiä) järjestettynä muutostapahtumien määrän mukaan laskevassa järjestyksessä. Näytä myös
+käyttäjien muutostapahtumien sekä lisättyjen kommenttien määrä. Yksittäiseksi tapahtumaksi
+tulkitaan kaikki yhdellä "Tallenna muutokset"-nappulan painalluksella tehdyt muutokset ja kommentit.
+<pre>
+joukahainen=&gt; select u.uname, u.firstname, u.lastname, count(*) as events, count(e.comment) as comments
+joukahainen-&gt; from event e, appuser u
+joukahainen-&gt; where e.euser = u.uid
+joukahainen-&gt; group by u.uname, u.firstname, u.lastname
+joukahainen-&gt; order by events desc;
+</pre></li>
+</ul>
+
+<hr />
+
+<p class="lisenssi">
+<!--Creative Commons License-->
+<img alt="Creative Commons License" style="border-width: 0" src="http://creativecommons.org/images/public/somerights20.png" />
+Tämän sivun sisältö on käytettävissä
+<a rel="license" href="http://creativecommons.org/licenses/GPL/2.0/">GPL 2.0</a> -lisenssillä, tai vaihtoehtoisesti
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/2.5/">Creative Commons Attribution-ShareAlike 2.5</a>
+-lisenssillä. Käyttö ja levitys on sallittu myös molempien mainittujen lisenssien uudempien versioiden
+ehdoilla.
+<!--/Creative Commons License-->
+<!-- <rdf:RDF xmlns="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+	<Work rdf:about="">
+		<license rdf:resource="http://creativecommons.org/licenses/by-sa/2.5/" />
+		<license rdf:resource="http://creativecommons.org/licenses/GPL/2.0/" />
+	</Work>
+</rdf:RDF> -->
+</p>
+
+</div>
+</body>
+</html>

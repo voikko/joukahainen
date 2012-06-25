@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fi" xml:lang="fi">
+
+<head>
+  <title>Kirjoitusasut Joukahaisessa</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../style.css" />
+  <style type="text/css">
+	span.np { color: gray; }
+	table, th, td { border: 1px solid black; }
+	table { border-collapse: collapse; }
+	div.main {
+		line-height: 1.5em;
+		max-width: 45em;
+		margin-left: 1.5em;
+	}
+  </style>
+</head>
+<body>
+<div class="topbar">
+<h1><a href="..">Joukahainen</a> &gt; <a href="index.html">Ohjeita</a> &gt;
+    Kirjoitusasut</h1>
+<div class="clear"></div>
+</div>
+<div class="main">
+
+<p>Jokaiseen perussanaan liittyy yksi tai useampi kirjoitusasu. Jos ja vain jos perussanalle ei ole
+määritelty yhtään kirjoitusasua, otetaan sen kirjoitusasuksi perussana itse.</p>
+
+<p>Kirjoitusasuilla on kolme käyttötarkoitusta:</p>
+<ul>
+<li>Alkuperäinen käyttötarkoitus, eli liittää sanatietueeseen vaihtoehtoisia kirjoitusasuja, kuten
+sanan <em>pikkolo</em> vaihtoehtoinen kirjoitusasu <em>piccolo</em>.</li>
+<li>Yhdistää perusosaltaan ja muilta tiedoiltaan samoja yhdyssanoja yhteen tietueeseen.
+Tällöin sanan osat on erotettava toisistaan merkillä =. Esimerkiksi sanalla <em>kakku</em> voi olla
+kirjoitusasut <em>kakku</em> ja <em>toska=kakku</em>.</li>
+<li>Liittää sanaan sen rakenteeseen liittyvää lisäinformaatiota. Ainakin kaikille sanastoon lisättäville
+yhdyssanoille pitäisi merkitä sanarajat kirjoitusasun avulla.</li>
+</ul>
+
+<h2>Rakennemerkinnät kirjoitusasuissa</h2>
+
+<p>Kirjoitusasuissa voidaan käyttää seuraavia ohjausmerkkejä sanan rakenteen kuvaamiseksi:</p>
+
+<dl>
+<dt>=</dt>
+<dd>Vahvan morfeemirajan merkki. Tätä käytetään erottamaan yhdyssanan osat toisistaan, sekä
+erottamaan selkeät etuliitteet muusta sanasta. Vahvalla morfeemirajalla on seuraavat ominaisuudet:
+<ul>
+<li>Automaattinen taivutuspäätteiden vokaalityypin tunnistus ei huomioi rajaa edeltäviä merkkejä.</li>
+<li>Voikossa sanan tavutuksessa vahva morfeemiraja käsitellään kuten yhdyssanan sanaraja: se on aina
+sallittu tavutuskohta, ja jos optio VOIKKO_OPT_NO_UGLY_HYPHENATION on käytössä, lyhyitä tavuja
+ei eroteta rajan kummaltakaan puolelta.</li>
+<li>Voikossa oikoluvun korjausehdotuksissa näillä sanoilla on sama prioriteetti kuin yhdyssanoilla.</li>
+</ul></dd>
+
+<dt>|</dt>
+<dd>Heikon morfeemirajan merkki. Tätä käytetään sellaisilla kohdissa, joissa morfeemirajan olemassaolo
+on kyseenalaista tai sanaa ei yleensä hahmoteta moniosaiseksi, vaikka se sitä loogisesti ehkä olisikin.
+Esimerkiksi sanan <em>estrogeeni</em> kirjoitusasu on <em>estro|geeni</em>. Heikolla morfeemirajalla
+on seuraavat ominaisuudet:
+<ul>
+<li>Automaattinen taivutuspäätteiden vokaalityypin tunnistus tutkii sanan vokaalityypin sekä rajan
+kanssa että ilman, ja vokaalityypiksi tulee näiden tulosten yhdiste.</li>
+<li>Voikon tavutuksessa ja korjausehdotuksissa heikolla morfeemirajalla ei ole toistaiseksi
+merkitystä.</li>
+</ul></dd>
+
+<dt>[ ]</dt>
+<dd>Merkitsee alueen, jonka sisällä olevien merkkien välissä automaattitavutus on kielletty.
+Tätä aluetta ei kannata ulottaa taipuvien sanojen loppuun saakka, sillä Voikossa tavutusvihjeet
+käsitellään niiden paikan perusteella. Tällöin sanan lopussa olevat vihjeet voivat leikkautua
+pois, tai niiden välissä olevat kirjaimet voivat vaihtua sanaa taivutettaessa. Vihjeiden pois
+leikkaantuminen on mahdollista myös silloin, kun tavutettava sana on perusmuodossaan!
+Alueen sisällä Voikon tavutusta ohjaavia optioita ei huomioida, joten kaikkia käyttäjiä
+miellyttävän tuloksen saamiseksi ainakin vokaalilla alkavan sanan (tai yhdyssanan osan) ensimmäinen
+kirjain sekä vokaaliin päättyvän sanan (tai yhdyssanan osan) viimeinen kirjain olisi hyvä
+jättää alueen ulkopuolelle.
+</dd>
+
+<dt>+<var>n</var></dt>
+<dd>Tavurajan merkki. <var>n</var> kertoo tavurajan käyttökelpoisuuden sanan jakokohtana
+tekstin rivityksessä. Se voi saada seuraavat arvot:
+<ol>
+<li>Jako vahvan morfeemirajan kohdalta. Jakomerkkiä <kbd>+1</kbd> ei käytännössä tarvita koskaan, sillä
+sen sijasta pitää käyttää merkkiä <kbd>=</kbd>.</li>
+<li>Normaali jako konsonantti-vokaaliyhdistelmän edestä. Esimerkiksi <kbd>ravin+2tola</kbd>.</li>
+<li>Jako konsonantti-vokaaliyhdistelmän edestä yhden tavun etäisyydellä yhdyssanan sanarajasta.
+Esimerkiksi <kbd>kerrosta+3lo</kbd>.</li>
+<li>Jako jako konsonantti-vokaaliyhdistelmän edestä sanahahmon ensimmäisen tavun jälkeen.
+Esimerkiksi <kbd>ta+4lo</kbd>.</li>
+<li>Normaali jako kahden vokaalin välistä. Esimerkiksi <kbd>huomi+5oida</kbd>.</li>
+<li>Jako kahden vokaalin välistä siten, että kaksi samaa vokaalia erotetaan sanan alusta tai
+lopusta. Esimerkiksi <kbd>uho+6aa</kbd>.</li>
+<li>Yhden vokaalin sanan (tai yhdyssanan osan) alusta tai lopusta erottava jako.
+Esimerkiksi <kbd>o+7letus</kbd>.</li>
+</ol>
+Yksittäisten sanojen kohdalla voi tavurajojen luokittelussa käyttää harkintaa. Tärkeintä on se,
+että valittu luokka vastaa mahdollisimman tarkasti tavurajan käyttökelpoisuutta sanan jakokohtana.
+Erityisesti k:n astevaihtelussa syntyvät kahden vokaalin väliset tavurajat voidaan luokitella
+muita vokaalien välistä tapahtuvia jakoja korkeampaan luokkaan, esimerkiksi <kbd>ruo+3an</kbd>.
+Tavurajoja ei saa merkitä sellaiselle sanan osalle, jossa käytetään
+automaattitavutusta, eli tavutusvihjeet tulisi laittaa aina merkkien [ ja ] väliselle alueelle.
+Näiden merkkien välissä kaikki tavurajat on merkittävä.</dd>
+
+</dl>
+
+<p>Kirjoitusasujen rakennemerkintöjen on oltava yksikäsitteisiä, toisin sanoen mikäli kaikista
+perussanan kirjoitusasuista poistetaan niiden rakennemerkinnät, jäljelle jäävässä merkkijonolistassa
+ei saa olla kahta samaa merkkijonoa.</p>
+
+<h2>Tavutuksen periaatteet Voikossa</h2>
+
+<p>On tilanteita, joissa Voikko (tai sen kehittäjät) joutuvat valitsemaan kahden pahan
+väliltä: hyväksytäänkö tavutus mahdollisesti kyseenalaisesta paikasta vai ollaanko varovaisia, vaikka
+tämä joskus johtaisikin Voikkoa käyttävässä sovelluksessa ongelmiin tekstin tasauksen kanssa.
+Ongelmaan on monia ratkaisuja, joiden keskinäinen paremmuus on lähinnä makuasia. Voikon oletusarvoisesti
+käyttämät periaatteet on lueteltu alla. On kuitenkin tärkeää muistaa, että Voikon ohjelmointirajapintaan
+kuuluu optioita, joilla oletuskäyttäytymistä voi muuttaa, ja näitä optioita tarjotaan todennäköisesti
+lisää tulevissa versioissa. Jo nyt osa Voikkoa käyttävistä sovelluksista hyödyntää olemassa olevia
+lisäoptioita, joten esimerkiksi OpenOffice.orgin Voikko-tavutus ei toimi täysin kuvatun kaltaisella
+tavalla.</p>
+
+<ul>
+<li>Automaattisesti muodostetut yhdyssanat, sekä vahvan morfeemirajan sisältävät yhdistetyt sanat
+tavutetaan osa kerrallaan. Monikäsitteiset yhdyssanat tavutetaan (tietyin poikkeuksin) niin, että
+sanan monikäsitteisyys säilyy. Tällä vältetään se, että automaattitavutuksen tekemä sanajako muuttaisi
+tavutettavan sanan merkitystä.</li>
+
+<li>Lyhenteitä ei tavuteta, mutta muuten sanan osat tavutetaan suomen kielen yleisten tavutussääntöjen
+mukaan. Automaattitavutus tosin osaa huomioida muutaman vierasperäisen kirjainyhdistelmänkin.</li>
+
+<li>Epäselvissä tapauksissa toimitaan siten, että mikä tahansa tavutus, joka ei ole selvästi väärin,
+on oikein. Siispä Voikon tulisi tavuttaa myös tavutukseltaan kyseenalaiset sanat, ellei kyseessä ole
+niin patologinen tapaus että kaikki sanajaot näyttäisivät suomalaisen lukijan silmissä hirveiltä.
+Erillisten tavutusvihjeiden (ks. yllä) avulla voidaan tarvittaessa ohjata tavutusta, jos tiedetään
+automaattitavutuksen johtavan huonoon tulokseen ja parempi sanajako tunnetaan. Kahden yhtä hyvän
+ratkaisun välillä on syytä valita se, joka lähimmin noudattaa sääntöpohjaisen tavutuksen antamaa
+tulosta.</li>
+
+</ul>
+
+<hr />
+
+<p class="lisenssi">
+<!--Creative Commons License-->
+<img alt="Creative Commons License" style="border-width: 0" src="http://creativecommons.org/images/public/somerights20.png" />
+Tämän sivun sisältö on käytettävissä
+<a rel="license" href="http://creativecommons.org/licenses/GPL/2.0/">GPL 2.0</a> -lisenssillä, tai vaihtoehtoisesti
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/2.5/">Creative Commons Attribution-ShareAlike 2.5</a>
+-lisenssillä. Käyttö ja levitys on sallittu myös molempien mainittujen lisenssien uudempien versioiden
+ehdoilla.
+<!--/Creative Commons License-->
+<!-- <rdf:RDF xmlns="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+	<Work rdf:about="">
+		<license rdf:resource="http://creativecommons.org/licenses/by-sa/2.5/" />
+		<license rdf:resource="http://creativecommons.org/licenses/GPL/2.0/" />
+	</Work>
+</rdf:RDF> -->
+</p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fi" xml:lang="fi">
+
+<head>
+	<title>Voikko – Ohjeita erikoissanastojen kokoamiseen</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+	<style type="text/css">
+		div.main {
+			line-height: 1.5em;
+			max-width: 45em;
+			margin-left: 1.5em;
+			}
+		h2, h3 { margin: 1.3em 0 0.8em; }
+		p { margin: 1em 0; }
+		li p { margin: 1em 0; }
+	</style>
+</head>
+<body>
+<div class="topbar">
+<h1><a href="..">Joukahainen</a> &gt; <a href="index.html">Ohjeita</a> &gt;
+    Erikoissanastojen kokoaminen</h1>
+<div class="clear"></div>
+</div>
+<div class="main">
+
+<p>Tämä ohje on tarkoitettu henkilöille, jotka haluavat toimittaa erikoisalojen
+sanastoa Voikon sanastoon lisättäväksi.</p>
+
+<h2>Mitä vaaditaan?</h2>
+
+<p>Ota yhteyttä Voikon kehittäjiin joko
+<a href="http://voikko.sourceforge.net/mail.html">postituslistan</a> kautta tai
+lähettämällä postia <a href="mailto:hatapitk@iki.fi">Harri Pitkäselle</a> ja
+kerro, minkä alan tai alojen sanastoa haluat kehittää. Selvitämme ensin, onko
+tällaisten alakohtaisten sanastojen kokoaminen jo aloitettu. Jos ei ole, täytyy
+määritellä järkevät rajaukset sanastojen välille ja luoda uudet erikoissanastot.
+</p>
+
+<p>Sinulle valmistellaan uusin versio Voikon sanastosta, johon on otettu mukaan ne
+erikoissanastot, joiden parissa aiot työskennellä. Sanastopaketteja voi
+ladata <a href="http://www.puimula.org/htp/testing/voikko-snapshot/">tästä
+hakemistosta</a>. Sanasto otetaan käyttöön Linuxissa kaikissa Voikkoa käyttävissä
+ohjelmissa seuraavalla komennolla:</p>
+
+<kbd>
+unzip -d ~/.voikko dict-kasvatus.zip
+</kbd>
+
+<p>Sanasto poistetaan käytöstä tyhjentämällä hakemisto ~/.voikko. Windowsissa,
+esimerkiksi OpenOffice.orgissa, saa erikoissanaston käyttöön korvaamalla
+openoffice.org-voikko-lisäosassa olevat voikko-fi_FI-alkuiset tiedostot
+sanastopaketissa olevilla tiedostoilla ja asentamalla lisäosan uudestaan.</p>
+
+<p>Voit itse valita, miten sanastoa keräät. OpenOffice.orgin henkilökohtaiset
+sanalistat sekä
+<a href="http://extensions.services.openoffice.org/project/Linguist">Linguist</a>-lisäosa
+saattavat olla avuksi. Suoraan sanakirjoista ei sanoja saa kopioida, ja
+tekijänoikeusasioissa tulee muutenkin olla mieluummin liian varovainen kuin liian
+varomaton.</p>
+
+<p>Sanaston voit toimittaa Voikko-projektille haluamassasi muodossa, esimerkiksi
+suoraan sähköpostiviestiin liitettynä tekstinä tai OpenOffice.org-tekstiasiakirjana
+tai laskentataulukkona. Jokaisesta sanasta tulee antaa vähintään seuraavat tiedot:
+</p>
+<ul>
+<li>Sana perusmuodossaan</li>
+<li>Sanan lyhyt (pari, kolme sanaa) selitys. Selityksen ei tarvitse olla tarkka
+eikä välttämättä edes täysin oikein. Sen tarkoitus on lähinnä valottaa sanan
+käyttöalaa ja auttaa alaa tuntemattomia kehittäjiä erottamaan sana mahdollisista
+muista käyttötarkoituksista muilla aloilla. Joissakin tapauksissa sanan merkityksen
+likimääräinen ymmärtäminen auttaa myös silloin, kun kehittäjien on päätettävä,
+millaisia johdoksia sanasta voi tehdä. Esimerkiksi sanan "makaronilaatikko"
+selitykseksi riittää "eräs ruokalaji", ei tarvitse alkaa selittämään, millaisesta
+ruuasta on kyse.</li>
+<li>Jos keräät sanastoa usealle erikoisalalle, mainitse, minkä alan sanastoon
+tämä sana kuuluu. Sana voi myös kuulua useamman kuin yhden alan sanastoon.</li>
+</ul>
+
+<p>Jos sanan taivutus ei ole itsestään selvä, kannattaa myös kertoa pari tärkeintä
+taivutusmuotoa. Monesti sanaluokkakin kannattaa kertoa. Yleensä kehittäjät kuitenkin
+osaavat arvata nämä ilman apuakin. Mikäli intoa riittää, saa sanalle yrittää löytää
+täydellisemmänkin taivutusluokan esimerkiksi Kotuksen tai Joukahaisen
+taivutusjärjestelmän mukaan.
+</p>
+
+<p>Lähetä keräämääsi sanastoa kehittäjille mielellään usein kuin harvoin. Näin
+mahdolliset ongelmat havaitaan ajoissa ennen kuin kukaan ehtii tekemään kovin
+paljon turhaa työtä.</p>
+
+<p>Erikoissanastojen kokoajien työpanos saattaa helposti kasvaa sen verran laajaksi,
+että heidän tekijänoikeutensa on otettava huomioon. Tästä syystä sinun tulee antaa
+meille lupa julkaista nimesi
+<a href="http://voikko.svn.sourceforge.net/viewvc/voikko/trunk/suomimalaga/CONTRIBUTORS?view=markup">sanaston 
+kehittämiseen osallistuneiden henkilöiden listalla</a> ja ilmoittaa, että hyväksyt
+työsi tulosten levittämisen projektin valitseman lisenssin alaisuudessa. Voit
+tehdä tämän kätevästi kopioimalla seuraavan tekstin sähköpostiviestiin, jonka lähetät
+jompaankumpaan yllä mainituista osoitteista esimerkiksi ensimmäisen lähettämäsi
+sanalistan yhteydessä:</p>
+
+<kbd>
+Luovutan Voikko-projektille toimittamani sanaston ja muun materiaalin GNU General
+Public License -lisenssin version 2 mukaisesti. Sallin materiaalin levittämisen myös
+lisenssin uudempien versioiden ehdoilla. Nimeni saa julkaista sanaston kehittämiseen
+osallistuneiden henkilöiden listalla.
+</kbd>
+
+<p>Aktiiviset sanaston kerääjät saavat työstään palkkioksi käyttövalmiin erikoissanaston
+sen jälkeen, kun seuraava vakaa versio Suomi-malagasta on julkaistu.</p>
+
+<hr />
+
+<p class="lisenssi">
+<!--Creative Commons License-->
+<img alt="Creative Commons License" style="border-width: 0" src="http://creativecommons.org/images/public/somerights20.png" />
+Tämän sivun sisältö on käytettävissä
+<a rel="license" href="http://creativecommons.org/licenses/GPL/2.0/">GPL 2.0</a> -lisenssillä, tai vaihtoehtoisesti
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/2.5/">Creative Commons Attribution-ShareAlike 2.5</a>
+-lisenssillä. Käyttö ja levitys on sallittu myös molempien mainittujen lisenssien uudempien versioiden
+ehdoilla.
+<!--/Creative Commons License-->
+<!-- <rdf:RDF xmlns="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+	<Work rdf:about="">
+		<license rdf:resource="http://creativecommons.org/licenses/by-sa/2.5/" />
+		<license rdf:resource="http://creativecommons.org/licenses/GPL/2.0/" />
+	</Work>
+</rdf:RDF> -->
+</p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fi" xml:lang="fi">
+
+<head>
+	<title>Voikko – Ohjeet oikolukusanaston kehittämiseen</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+	<style type="text/css">
+		div.main {
+			line-height: 1.5em;
+			max-width: 45em;
+			margin-left: 1.5em;
+			}
+		h2, h3 { margin: 1.3em 0 0.8em; }
+		p { margin: 1em 0; }
+		li p { margin: 1em 0; }
+	</style>
+</head>
+<body>
+<div class="topbar">
+<h1><a href="..">Joukahainen</a> &gt; <a href="index.html">Ohjeita</a> &gt;
+    Oikolukusanaston kehittäminen</h1>
+<div class="clear"></div>
+</div>
+<div class="main">
+
+<p>Tämä ohje antaa yleiskuvan siitä, millä periaatteilla <a
+href="http://voikko.sourceforge.net/">Voikko</a>-oikolukujärjestelmän sanastoa
+kehitetään. Tämä on ensisijassa näkemyksellinen opas, jonka tarkoitus on
+ohjata oikoluvun kehittäjiä samoihin päämääriin. Tässä ohjeessa sanalla
+<i>oikoluku</i> viitataan nimenomaan Voikon oikolukuun. Muiden
+oikolukujärjestelmien lähtökohdat voivat olla toisenlaiset.</p>
+
+<h2 id="tarkoitus">Mikä on oikoluvun tarkoitus?</h2>
+
+<p><strong>Oikoluvun ensisijainen tarkoitus</strong> on tunnistaa nykysuomen
+yleiskielisiä sanoja. Toiseksi oikoluku pyrkii parhaansa mukaan estämään
+käyttäjää tekemästä kielivirheitä. Oikoluvun kehittäminen kiteytyy periaatteessa
+vain näihin kahteen tavoitteeseen: oikein kirjoitetut sanat tunnistetaan, väärin
+kirjoitettuja ei. (Tarkkaan ottaen tietokonepohjainen oikolukujärjestelmä ei
+tiedä, onko sana kirjoitettu oikein. Oikoluku vain tarkistaa, löytyykö sana sen
+omasta sanastosta vai ei.)</p>
+
+<p><strong>Oikoluvun tarkoituksena ei ole</strong> tunnistaa mahdollisimman
+paljon sanoja. Nopeasti ajatellen saattaisi ehkä tuntua, että hyvä
+oikolukuohjelma tunnistaa kaikki oikein kirjoitetut sanat. Kirjoittajan
+näkökulmasta voi tuntua mukavalle, jos tekstinkäsittelyohjelmalla
+kirjoitetussa tekstissä ei näy lainkaan punaisella alleviivattuja sanoja. Se
+antaa kuitenkin virheellisen kuvan oikeinkirjoituksesta. Kaikki se, mitä
+voidaan kirjoittaa, ei ole suositusten mukaista yleiskieltä. Oikoluku, joka
+sallii kaiken, on yhtä hyödyllinen kuin ei oikolukua lainkaan. Ei siis kannata
+nähdä suurta vaivaa päästäkseen lähes nollatilanteeseen. Harkitulla sanaston
+kehittämisellä päästään parempiin tuloksiin.</p>
+
+<h2 id="periaatteet">Sanaston kehittämisen periaatteet</h2>
+
+<p>Maailma on täynnä sanoja. Joitakin sanoja käytetään hyvin usein, joitakin
+harvemmin ja joitakin tuskin koskaan. Oikoluvussa tarpeellisimpia ovat usein
+käytetyt sanat. Harvinaisemmat sanatkaan eivät välttämättä ole haitaksi mutta
+joskus ne voivat olla. Sanoja, joita ei juuri koskaan käytetä, ei tarvita
+oikoluvussa, ja ne ovatkin todennäköisesti enemmän haitaksi kuin hyödyksi.</p>
+
+<p>Harvinaisten sanojen mahdollinen haitta oikoluvun kannalta liittyy siihen,
+että mitä enemmän sanastossa on sanoja, sitä todennäköisemmin joidenkin
+sanojen taivutukset tai yhdyssanatilanteet muistuttavat joitakin toisia
+sanoja. Tästä seuraa tilanteita, jossa vahingossa tehty kirjoitusvirhe
+tekeekin sanasta jonkin toisen sanan. Kirjoittajan näkökulmasta oikoluku siis
+tavallaan hyväksyy kirjoitusvirheen. Tältä ei voida kokonaan välttyä, koska on
+äärettömästi tilanteita, joissa jokin kirjoitusvirhe voi muodostaa oikean
+sanan. Asiaa kannattaa kuitenkin pohtia, jos sana on hyvin harvinainen.
+Kuvitellaan esimerkiksi, että on olemassa jokin kaakkoisaasialainen soitin,
+jonka nimi perusmuodossaan kirjoitetaan samalla tavalla kuin jokin suomen
+kielen sana mutta se taipuu eri tavalla (ilman astevaihtelua). Tällaista
+vieraskielistä sanaa ei kannata oikoluvun sanastoon lisätä, koska useimmat
+kirjoittajat eivät sanaa edes tunne ja se tuottaa väärän näköisiä
+taivutusmuotoja suomen kielen sanaan nähden.</p>
+
+<p>Ei ole olemassa selvää ohjetta siihen, mikä sana on tärkeä, riittävän
+yleinen tai muulla tavalla sopiva oikolukuun lisättäväksi. Jos on käytössä
+laajoja, suomenkielistä tekstiä sisältäviä tietokantoja, niistä tehdyt sanojen
+yleisyyslaskelmat ja muut vertailut voivat antaa suuntaa valinnalle. Usein
+päätös kuitenkin perustuu omaan harkintaan. Tärkeää onkin muistaa, että oma
+(ja muiden) kielikorva kuulee silloin tällöin väärin. Kielenkäyttöön liittyy
+paljon yleisiä väärinkäsityksiä ja luuloja. Oikoluvun sanaston kehittäminen
+vaatii jatkuvaa sanojen oikeinkirjoitukseen ja taivutukseen liittyvää
+tutkimista.</p>
+
+<p>Sanan tärkeyttä arvioidessa on kielikorvan ja tutkimisen lisäksi hyvä
+huomioida myös asia, jota kognitiivisessa psykologiassa kutsutaan
+saavutettavuusheuristiikaksi. Kyseessä on yleinen ja sinänsä luonnollinen
+päättelyvirhe, jossa valinta perustuu vain itselle ensiksi mieleen tuleviin
+asioihin. Oikoluvun sanaston kehittämiseen sovellettuna se voi tarkoittaa,
+että jos harrastat esimerkiksi tietotekniikkaa, saatat ajatella, että monet
+tietotekniikkaan liittyvät sanat ovat todella yleisiä ja että ne on tärkeää
+saada oikolukusanastoon. Alueellinen vääristymä voi tulla siten, että henkilö
+pitää oman kotiseutunsa sanastoa (paikannimiä tai aluepuhekieltä) muita
+tärkeämpänä. Sinänsä asiantuntemus on rikkaus; täytyy vain muistaa, että
+oikoluvun perussanastoa kehitetään yleiseen käyttöön.</p>
+
+<h2>Mitä oikolukusanastoon voi lisätä?</h2>
+
+<h3>Ensisijaiset</h3>
+
+<p>Seuraavassa on listattu suurin piirtein tärkeysjärjestyksessä, minkä
+tyyppisiä sanoja oikolukuun lisätään ja mitä täytyy samalla huomioida. Näitä
+ohjeita noudattamalla sanastoon pääsee todennäköisesti lipsahtamaan vähemmän
+virheitä ja oikoluvun laatu saadaan pidettyä korkealla. Sanan
+oikeinkirjoituksessa ja taivutuksessa täytyy aina olla tarkkana. Sitä ei
+yleensä ole mainittu erikseen.</p>
+
+<ol>
+
+<li><p><strong>Nykysuomen yleiskieliset sanat.</strong> Nykyaikana yleisesti
+käytössä olevia suomen yleiskielen sanoja voi lisätä vapaasti. <a
+href="http://www.kotus.fi">Kotimaisten kielten tutkimuskeskuksen</a>
+kielenhuolto-osasto, nk. kielitoimisto, antaa suosituksia kielen käytöstä.
+Voikon sanaston kehittämisessä pyritään noudattamaan niitä. (Vanha, lähes
+käytöstä poistunut sanasto on toissijaista.)</p>
+
+<p>Suomen kielen sanakirjoja voi käyttää apuna, jos haluaa varmistaa, kuuluuko
+sana yleiskieleen. Sanakirjoissa saattaa olla myös tietoa sanojen taipumisesta.
+Muista kuitenkin, että laaja sanakirja on luettelo- tai tietokantasuojan
+alainen, ks. <a
+href="http://www.finlex.fi/fi/laki/ajantasa/1961/19610404#P49">tekijänoikeuslain
+49. §</a>. Se tarkoittaa, että sanakirjasta ei saa ilman lupaa
+järjestelmällisesti kopioida sanoja eikä niihin liittyviä lisätietoja.
+Yksittäisten sanojen tarkistaminen on tietenkin sallittua. Katso
+tekijänoikeuteen liittyviä ohjeita tämän dokumentin kohdasta ”<a
+href="#kiellot">Mitä ei saa tehdä?</a>”.</p></li>
+
+<li><p><strong>Lähes yleiskielisiksi vakiintuneet arkikielen sanat.</strong>
+Harkitusti voi lisätä yleisimpiä arkikielen sanoja, kuten <i>lenkkari</i>
+’lenkkitossu’ tai <i>tintti</i> ’tiainen’. Huomioi kuitenkin edellä mainittu
+saavutettavuusheuristiikka. Omassa ja oman lähipiirin kielenkäytössä asiat
+voivat vaikuttaa yleisemmiltä ja vakiintuneemmilta kuin ne todellisuudessa
+ovatkaan. Yleisyys ei myöskään välttämättä tarkoita, että sanan käyttö olisi
+suositeltavaa. Sanojen lisäämisestä voi aina keskustella muiden kehittäjien
+kanssa.</p></li>
+
+<li><p><strong>Yleisimmät suomalaiset paikannimet ja henkilöiden
+nimet.</strong> Suomen paikannimet ja henkilöiden nimet ovat melko pysyviä, ja
+tässä mielessä niiden lisääminen oikolukusanastoon on perusteltua. Jokaista
+niemeä ja notkoa ei sanastoon kuitenkaan lisätä, vaan perusteena käytetään
+harkintaa nimen yleisyydestä kielenkäytössä. Suomenkielisissä teksteissä
+esiintyvät pääasiassa kuntien ja henkilöiden nimet. Muut luonnon paikannimet
+ovat harvinaisempia.</p></li>
+
+<li><p><strong>Muita yleisiä ja pitkäikäisiä suomalaisia erisnimiä.</strong>
+Harkitusti ja hyvin perustein myös muita erisnimiä voi sanastoon lisätä.
+Tällainen on esimerkiksi nimi <i>Finlandia</i>. Tärkeipänä perusteena
+oikoluvun kannalta lienee sen pitkäikäinen esiintyvyys monissa Suomen
+historiaan, yhteiskuntaan ja kulttuuriin liittyvissä nimissä.</p>
+
+<p>Yritysten ja yhteisöjen nimet, tuotemerkit tai muut kaupalliset erisnimet
+sen sijaan ovat kielen näkökulmasta usein varsin lyhytikäisiä. Sellaisia ei
+oikolukuun oteta mukaan muuten kuin hyvin perustein. Kysy ensin toisten
+kehittäjien mielipiteitä asiasta.</p></li>
+
+<li><p><strong>Kaikkein yleisimmät ulkomaiset paikannimet.</strong> Tämä koskee
+lähinnä valtioita, niiden pääkaupunkeja ja mahdollisesti suurimpia kaupunkeja.
+Lisäksi mukaan voidaan ottaa suurimmat vesistöt ja muut luonnon muodot.</p>
+
+<p>Vieraskielisten nimien oikeinkirjoituksessa ja siirtämisessä suomen kielen
+taivutusjärjestelmään tulee olla erityisen tarkkana. Joidenkin ulkomaisten
+nimien suomenkielinen kirjoitusasu on muuttunut historian aikana. Huomioi myös
+oikeaa kirjoitusasua selvittäessäsi, että sama nimi voidaan kirjoittaa eri
+kielissä eri tavalla (esimerkiksi <i>München</i> ~ <i>Munich</i>). Oikoluvun
+sanastoon lisätään nykyisten normien mukainen suomenkielinen kirjoitusasu.
+Vanha karttakirja ei välttämättä ole nimistön suhteen enää ajan tasalla,
+eivätkä karttakirjat muutenkaan ole aina luotettavia nimistön
+oikeinkirjoituksessa.</p>
+
+<p>Periaatteessa vieraskielisten nimien taivutus perustuu sanan ääntämiseen
+alkukielessä. Ääntäminen on ainakin suurin piirtein tunnettava, jotta oikea
+taivutus suomen kielessä olisi ylipäätään mahdollista. Tämän lisäksi on
+tunnettava suomen kielen normit vieraskielisten sanojen taivutuksesta. Tämä
+voi vaatia melko lailla tutkimista, koska yleiseen kielenkäyttöön ei voi
+luottaa. Joidenkin nimien kohdalla on paljon tavallisempaa taivuttaa niitä
+väärin, joten esimerkiksi Google-haut paljastavat vain joukon enemmän tai
+vähemmän virheellisiä tapoja. Jos olet rohkea ja haluat yrittää, Jukka
+Korpelan kirjoittamassa <a
+href="http://www.cs.tut.fi/~jkorpela/kielenopas/">Nykyajan kielenoppaassa</a>
+on hyödyllinen luku <a
+href="http://www.cs.tut.fi/~jkorpela/kielenopas/8.4.html#vier-taiv">erisnimien
+ja vieraiden sanojen taivutuksesta</a>.</p>
+
+<p>(Internetissä oleviin oppaisiin tulee suhtautua kriittisesti. Edellä mainitun
+Nykyajan kielenoppaan vieraiden sanojen taivutusohjeet perustuvat
+kielitoimiston ohjeisiin, joten niitä voidaan pitää varsin luotettavina.
+Epävarmassa tilanteessa sana jätetään pois oikoluvusta.)</p></li>
+
+<li><p><strong>Kaikkein merkittävimpiä kansainvälisiä nimiä.</strong> Jotkut
+sanat, yleensä erisnimet, ovat hyvin yleisesti kansainvälisessä käytössä,
+esimerkiksi poliittisesta tai historiallisesta syystä. Harkitusti sanastoon
+voi lisätä kaikkein merkittävimpiä, pysyvimpiä ja tunnetuimpia kansainvälisiä
+nimiä. Tällaisia ovat esimerkiksi nimi <i>Aristoteles</i> tai sotilasliitto
+<i>Nato</i>. Huomioi, että tiedotusvälineet saattavat antaa vääristyneen kuvan
+asioiden merkittävyydestä. Muista olla tarkkana vieraskielisten sanojen
+oikeinkirjoituksen ja taivutuksen kanssa. Samat nimet voidaan kirjoittaa eri
+kielissä eri tavalla (esimerkiksi <i>Tšingis-kaani</i> ~ <i>Genghis Khan</i>).
+Oikolukuun lisätään suomenkielinen kirjoitusasu.</p></li>
+
+</ol>
+
+<h3>Toissijaiset</h3>
+
+<p>Seuraava luettelo antaa vinkkejä sanoista, joiden lisääminen on mahdollista
+mutta ei välttämättä kovin tärkeää. Halutessasi voit vaikka jättää tällaisten
+sanojen lisäämisen kokonaan ja keskittyä edellä lueteltuihin, huomattavasti
+tärkeämpiin asioihin.</p>
+
+<ul>
+
+<li><p><strong>Erityisalojen sanat.</strong> Erityisaloille syntyy usein omaa
+sanastoa, jota ei kovin paljon käytetä muualla. Usein on kyse vieraskielisten
+sanojen enemmän tai vähemmän onnistuneesta mukauttamisesta suomen kieleen.
+Erityisaloilla saatetaan käyttää myös ihan suoria sitaattilainoja vieraasta
+kielestä. Myös erisnimiä esiintyy, esimerkiksi merkittävien tutkijoiden
+nimiä.</p>
+
+<p>Oikoluvun perussanastoon – sanastoon, joka tulee kaikkien käyttöön
+– lisätään vain erityisalojen pysyvimpiä peruskäsitteitä. Usein kunkin alan
+peruskäsitteet ovatkin jo yleistyneet osaksi yleiskieltä eivätkä ne enää ole
+”erityisiä” käsitteitä. Sen sijaan harvinaisempia sanoja ei laiteta oikoluvun
+perussanastoon; niille ei ole käyttöä suurimmalle osalle oikoluvun
+käyttäjistä. Alakohtaisia erityissanoja voi kuitenkin sanastoon lisätä, mikäli
+niille asetetaan erityinen lippu, joka osoittaa sanan kuuluvan erityisalaan.
+Tällaiset sanat eivät automaattisesti tule osaksi perussanastoa, mutta ne voi
+halutessaan ottaa käyttöön. Jos haluat kerätä jonkin erityisalan sanoja, niitä
+on usein paras kerätä ensin itselle omaan listaan, ja vasta sitten lisätä
+oikoluvun sanastoon. Kysy asiasta neuvoa muilta Voikon kehittäjiltä.</p></li>
+
+</ul>
+
+<h2 id="kiellot">Mitä ei saa tehdä?</h2>
+
+<p>Tässä luetellaan asioita, jotka ovat kiellettyjä Voikon sanaston kehittämisen
+kannalta.</p>
+
+<ul>
+
+<li><p><strong>Sanojen kopioiminen sanakirjasta tai muusta lähteestä, johon ei
+ole GPL-yhteensopivaa käyttöoikeutta.</strong> Laajat sanakirjat nauttivat
+tekijänoikeuslain tuomaa luettelo- tai tietokantasuojaa, ja niiden
+määrällisesti tai laadullisesti olennaisen osan kopioiminen ilman lupaa on
+Suomen lain mukaan kiellettyä, ks. <a
+href="http://www.finlex.fi/fi/laki/ajantasa/1961/19610404#P49">tekijänoikeuslain
+49. §</a>.</p>
+
+<p>Voikko-oikolukujärjestelmää ja sen sanastoa levitetään <a
+href="http://www.gnu.org/copyleft/gpl.html">GPL-lisenssillä</a>, ja siten
+sanaston kehittäjillä tulee itsellä olla joko tekijänoikeus tai
+GPL-yhteensopiva käyttöoikeus siihen materiaaliin, joka liitetään Voikon
+osaksi. Lakiasiat ovat monimutkaisia, ja siksi täytyy ensin keskustella muiden
+kehittäjien kanssa, jos suunnittelee hyödyntävänsä jotakin olemassa olevaa
+sanastoa. Emme aio rikkoa tekijänoikeuslakia, jottei Voikosta tulisi laitonta.
+Jos laki tuntuu rajoittavalta, kannattaa muistaa, että sama laki antaa myös
+Voikon tekijöille suojan, jonka turvin olemme määränneet Voikkoa
+levitettäväksi vapaalla GPL-lisenssillä.</p></li>
+
+<li><p><strong>Järjestelmällinen, kaikkien tiettyyn aiheeseen liittyvien
+sanojen lisääminen.</strong> Tällä tarkoitetaan harkitsematonta, täydellistä,
+johonkin tiettyyn laajaan aiheeseen liittyvän sanaston kokoamista, esimerkiksi
+”kaikki Suomen katujen nimet” tai ”kaikki Suomen joet”. Tämän kaltainen
+järjestelmällisyys tuo sanastoon valtavan paljon turhia sanoja, joita kukaan
+ei koskaan tarvitse. Vain yleisimpien tapausten lisääminen on tarpeellista.
+Jos lisättävä sanajoukko on suhteellisen pieni ja kokonaisuudessaan jollain
+tapaa merkittävä, voidaan tällaista järjestelmällisyyttä toteuttaa.
+Esimerkiksi kaikki Suomen tasavallan presidenttien nimet on järkevää lisätä
+sanastoon.</p></li>
+
+<li><p><strong>Joidenkin virheellisten ilmaisujen poistaminen.</strong> Koska
+sanasto on alun perin kehitetty taivutettujen sanojen muuttamiseen
+perusmuotoon tiedostojen <a
+href="http://joyds1.joensuu.fi/sukija/sukija.html">indeksointia varten</a>,
+siinä on sanoja, jotka ovat väärin nykyisten oikeinkirjoitussääntöjen mukaan.
+Tällaisia sanoja ei saa poistaa sanastosta, mutta ne täytyy merkitä siten,
+että niitä ei käytetä oikoluvussa.</p>
+
+<p>Tiedostojen indeksointi eroaa oikoluvusta muun muassa siten, että siinä ei
+oteta kantaa, mikä on oikein ja mikä väärin (esimerkiksi
+<i>lukuunottamatta</i> vai <i>lukuun ottamatta</i>). Indeksoinnissa sanat on
+hyväksyttävä sellaisina kuin niitä on käytetty. Oikoluvussa sen sijaan
+pyritään oikeakielisyyteen, ja tämän vuoksi sanaston virheelliset tai muuten
+tarpeettomat sanat merkitään lipulla, joka estää sanojen tulemisen
+oikolukusanastoon. Jos sanan lisäämisen yhteydessä sattui kirjoitusvirhe,
+sellaisen sanan saa poistaa. Indeksoinnissa on tarkoitus ottaa huomioon
+lähinnä yleiset kielivirheet, kuten sanoissa <i>*kirjottaa</i> tai
+<i>*lukuunottamatta</i>.</p></li>
+
+</ul>
+
+<h2>Sanastoon tulevat sanat</h2>
+
+<p>Voikon perussanastoon tulevat kaikki Joukahaisen sanat, paitsi seuraavat:</p>
+
+<ul>
+<li>Sanat, joissa on jokin seuraavista lipuista:
+  <ul>
+    <li>ala: atk</li>
+    <li>ala: kasvatustiede</li>
+    <li>ala: lääketiede</li>
+    <li>ala: matematiikka, fysiikka ja kemia</li>
+    <li>ala: puhekieltä tai murretta</li>
+    <li>ala: vieraskielinen sana</li>
+    <li>siirretty</li>
+    <li>virheellinen sana</li>
+    <li>ei kuulu oikolukusanastoon</li>
+    <li>tyypillinen kielivirhe</li>
+  </ul>
+</li>
+<li>Sanat, joiden yleisyysluokka on 9 ja joilla on lippu ”sekoittuu helposti yleisempään sanaan”.</li>
+<li>Sanat, joiden yleisyysluokka on 10.</li>
+</ul>
+
+<h2>Apuvälineitä</h2>
+
+<p>Rekisteröityneillä käyttäjillä nämä apuvälineet ovat näkyivissä suoraan Joukahaisen etusivulla.
+Myös rekisteröitymättömät käyttäjät voivat tutustua näihin, jos haluavat perehtyä tarkemmin
+Joukahaisen käyttöön.</p>
+
+<ul>
+<li><a href="../findclass/classlist">Etsi sanalle taivutusluokka</a></li>
+<li><a href="../kotus-diff.html">Kotus-diff</a></li>
+</ul>
+
+<hr />
+
+<p class="lisenssi">
+<!--Creative Commons License-->
+<img alt="Creative Commons License" style="border-width: 0" src="http://creativecommons.org/images/public/somerights20.png" />
+Tämän sivun sisältö on käytettävissä
+<a rel="license" href="http://creativecommons.org/licenses/GPL/2.0/">GPL 2.0</a> -lisenssillä, tai vaihtoehtoisesti
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/2.5/">Creative Commons Attribution-ShareAlike 2.5</a>
+-lisenssillä. Käyttö ja levitys on sallittu myös molempien mainittujen lisenssien uudempien versioiden
+ehdoilla.
+<!--/Creative Commons License-->
+<!-- <rdf:RDF xmlns="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+	<Work rdf:about="">
+		<license rdf:resource="http://creativecommons.org/licenses/by-sa/2.5/" />
+		<license rdf:resource="http://creativecommons.org/licenses/GPL/2.0/" />
+	</Work>
+</rdf:RDF> -->
+</p>
+
+</div>
+</body>
+</html>
