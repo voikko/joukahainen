@@ -2,7 +2,7 @@ This file contains the installation instructions for Joukahainen.
 
 As Joukahainen is still being developed, there are not fixed
 installation packages. You should check out the code directly
-from SVN trunk (which should be rather stable), write your
+from GIT master branch (which should be rather stable), write your
 language pack, test the application (and report any bugs you
 may find) and when you are happy, put it to production use.
 Quite likely all installations of Joukahainen will be different
@@ -27,7 +27,7 @@ configured:
 - mod_python (Python <-> Apache)
 - python-pygresql (Python <-> PostgreSQL)
 - gettext
-- Subversion (SVN)
+- Git
 - GNU make (other variants may work as well) 
 
 For all of these programs, any version released in year 2008 or later
@@ -52,8 +52,8 @@ where Joukahainen will be installed (for example "/usr/local/joukahainen")
 and WWW_LOCAL_ROOT is the directory on the local filesystem that contains
 the files visible through the http server (for example "/var/www/joukahainen").
 
-1) Check out the application from SVN:
-svn co https://voikko.svn.sourceforge.net/svnroot/voikko/trunk/joukahainen INSTALLATION_DIRECTORY/joukahainen
+1) Check out the application from GIT:
+git clone https://github.com/voikko/joukahainen.git INSTALLATION_DIRECTORY/joukahainen
 
 2) Create WWW_LOCAL_ROOT and add symbolic links from INSTALLATION_DIRECTORY/joukahainen/wwwroot
    to WWW_LOCAL_ROOT for the following files:
