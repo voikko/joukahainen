@@ -42,15 +42,15 @@ määritellä järkevät rajaukset sanastojen välille ja luoda uudet erikoissan
 Tässä laatikossa on kokeellisia ohjeita.<br />
 Erikoissanaston kehitysversion ensiasennus Ubuntu- ja Debian-käyttäjille:
 <ul>
-<li>Asenna Linux-jakelusi ohjelmistopakettien hallinnan kautta paketit subversion,
+<li>Asenna Linux-jakelusi ohjelmistopakettien hallinnan kautta paketit git,
 malaga-bin ja make.</li>
 <li>Suorita päätteessä seuraavat komennot:
 <pre>
 mkdir -p ~/.voikko/2
 cd ~/.voikko/2
-svn co https://voikko.svn.sourceforge.net/svnroot/voikko/trunk/suomimalaga src-mor-medicine
-ln -s src-mor-medicine/voikko mor-medicine
-cd src-mor-medicine
+git clone git://github.com/voikko/corevoikko.git src-mor-medicine
+ln -s src-mor-medicine/suomimalaga/voikko mor-medicine
+cd src-mor-medicine/suomimalaga
 wget http://www.puimula.org/htp/voikko/config/config-medicine.mak -O config.mak
 ./update-all
 </pre>
@@ -66,7 +66,7 @@ Päivitä sanastosi <strong>joka päivä</strong> ennen sanojen lisäämistä Jo
 <li>Sulje kaikki oikolukua käyttävät ohjelmat (ainakin OpenOffice.org).</li>
 <li>Suorita päätteessä seuraavat komennot:
 <pre>
-cd ~/.voikko/2/src-mor-medicine
+cd ~/.voikko/2/src-mor-medicine/suomimalaga
 ./update-all
 </pre>
 </li>
