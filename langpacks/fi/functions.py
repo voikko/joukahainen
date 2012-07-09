@@ -133,7 +133,7 @@ def _get_structure_for_word(db, wid, word):
 def word_inflection(db, wid, word, classid):
 	if classid in [1, 2]: characteristic_forms = CHARACTERISTIC_NOUN_FORMS
 	elif classid == 3: characteristic_forms = CHARACTERISTIC_VERB_FORMS
-	else: return "(ei taivutuksia tämän sanaluokan sanoille)"
+	else: return u"(ei taivutuksia tämän sanaluokan sanoille)"
 	
 	infclass_parts = _get_inflection_gradation(db, wid)
 	if infclass_parts == None: return u"(ei taivutusluokkaa)"
