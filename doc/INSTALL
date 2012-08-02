@@ -33,13 +33,13 @@ configured:
 For all of these programs, any version released in year 2008 or later
 should do. The following versions are used on joukahainen.puimula.org
 at the time of writing this:
-apache                   2.2.9
-postgresql               8.3
-python                   2.5.2
+apache                   2.2.16
+postgresql               8.4
+python                   2.6.6
 libapache2-mod-python    3.3.1
-python-pygresql          3.8.1
-gettext                  0.17
-subversion               1.5.1
+python-pygresql          4.0
+gettext                  0.18.1.1
+git                      1.7.2.5
 make                     3.81
 
 

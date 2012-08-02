@@ -3,7 +3,7 @@
 # Application configuration file for Joukahainen
 
 # Installation directory
-INSTALLATION_DIRECTORY = u'hunspell-fi-svn/trunk/joukahainen'
+INSTALLATION_DIRECTORY = u'/var/lib/joukahainen'
 
 # Root directory of the application as seen from the web
 WWW_ROOT_DIR = '/joukahainen'
