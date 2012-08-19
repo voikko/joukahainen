@@ -194,6 +194,8 @@ INSERT INTO attribute_class(aid, classid) VALUES(44, 3);
 INSERT INTO attribute_class(aid, classid) VALUES(44, 4);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(45, 'huudahdussana', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(45, 4);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(46, 'perusmuoto', 1, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(46, 4);
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
 -- Test user, password 'testi'
