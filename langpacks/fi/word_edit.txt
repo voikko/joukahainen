@@ -46,4 +46,7 @@ $$main_form_end(WID,EDITABLE)$$
 </div>
 <div class="bottominfo">
 $$message_log(WID)$$
+@BEGIN IF_EDIT_ALLOWED
+<p><a href="add_manual" accesskey="N">Lisää uusi sana</a></p>
+@END IF_EDIT_ALLOWED
 
