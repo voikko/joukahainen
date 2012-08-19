@@ -89,6 +89,18 @@ def write(req, string):
 def errormsg(req, error):
 	write(req, error)
 
+# Get a mapping from attribute ids to matching word class ids
+def word_classes_for_attributes(db):
+	results = db.query("SELECT aid, classid FROM attribute_class")
+	cattributes = {}
+	for row in results.getresult():
+		aid = row[0]
+		typeid = row[1]
+		if not cattributes.has_key(aid):
+			cattributes[aid] = set([])
+		cattributes[aid].add(typeid)
+	return cattributes
+
 # Processes the given page template and writes the content to request req
 def process_template(req, db, static_vars, template_name, lang, module, level):
 	tmplfilename = _config.INSTALLATION_DIRECTORY + '/langpacks/' + \
@@ -98,6 +110,7 @@ def process_template(req, db, static_vars, template_name, lang, module, level):
 	func_re = re.compile("^(.*)\\((.*)\\)$")
 	file_cont = True
 	first_line = True
+	cattributes = None
 	while file_cont:
 		# FIXME: only one variable/function allowed on one line
 		line = tmplfile.readline()
@@ -109,6 +122,15 @@ def process_template(req, db, static_vars, template_name, lang, module, level):
 			continue
 		if line == u"@END IF_EDIT_ALLOWED\n": continue
 		
+		if line.startswith(u"@BEGIN ATTRIBUTE_ENCLOSURE "):
+			if cattributes is None:
+				cattributes = word_classes_for_attributes(db)
+			aid = int(line[27:].strip())
+			if static_vars['CLASSID'] not in cattributes[aid]:
+				while line.endswith('\n') and line != u"@END ATTRIBUTE_ENCLOSURE\n": line = tmplfile.readline()
+			continue
+		if line == u"@END ATTRIBUTE_ENCLOSURE\n": continue
+
 		var_match = var_re.match(line)
 		line_str = u''
 		if var_match != None:

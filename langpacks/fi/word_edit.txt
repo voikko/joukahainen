@@ -29,8 +29,12 @@ $$find_infclass(WORD,CLASSID,1)$$
 @END IF_EDIT_ALLOWED
 <br /><span class="fheader">Historiallinen taivutusluokka:</span>
 <span class="fsvalue">$$string_attribute(WID,16,EDITABLE)$$</span>
+
+@BEGIN ATTRIBUTE_ENCLOSURE 46
 <br /><span class="fheader">Perusmuoto:</span>
 <span class="fsvalue">$$string_attribute(WID,46,EDITABLE)$$</span>
+@END ATTRIBUTE_ENCLOSURE
+
 <br /><span class="fheader">Lyhyt sanan selitys:</span>
 <span class="fsvalue">$$string_attribute(WID,18,EDITABLE)$$</span>
 <br /><span class="fheader">$$wiki_link(28,WID)$$:</span>
