@@ -291,6 +291,13 @@ def _write_xml_info(req, strings):
 			req.write('\t\t%s\n' % element.encode('UTF-8'))
 		req.write('\t</info>\n')
 
+def _write_xml_baseform(req, strings):
+	for s in strings:
+		if s[0] == 46:
+			req.write('\t<baseform>')
+			req.write(xml.sax.saxutils.escape(s[1]))
+			req.write('</baseform>\n')
+
 def _write_xml_word(db, req, wid, word, wclass, flagMap):
 	req.write('<word id="w%i">\n' % wid)
 	
@@ -311,6 +318,7 @@ def _write_xml_word(db, req, wid, word, wclass, flagMap):
 		else: flags.append(r[0])
 	
 	_write_xml_forms(db, req, wid, word)
+	_write_xml_baseform(req, strings)
 	_write_xml_classes(req, wid, wclass, flags)
 	_write_xml_inflection(req, flags, strings, flagMap)
 	_write_xml_flagset(req, flags, flagMap, 'usage')
