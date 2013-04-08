@@ -230,6 +230,8 @@ def _write_xml_classes(req, wid, classid, flags):
 	elif classid == 4:
 		if len(set(flags) & set([45])) > 0:
 			if 45 in flags: req.write('\t\t<wclass>interjection</wclass>\n')
+	elif classid == 5:
+		req.write(u'\t\t<wclass>prefix</wclass>\n')
 	req.write('\t</classes>\n')
 
 def _write_xml_inflection(req, flags, strings, flagMap):
