@@ -67,6 +67,7 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(9, 'ei sallittu yhdyssa
 INSERT INTO attribute_class(aid, classid) VALUES(9, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(9, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(9, 3);
+INSERT INTO attribute_class(aid, classid) VALUES(9, 5);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(10, 'sana on myös substantiivi', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(10, 2);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(11, 'erisnimi: etunimi', 2, TRUE);
@@ -224,6 +225,10 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(49, 'teonsanan etuliite
 INSERT INTO attribute_class(aid, classid) VALUES(49, 5);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(50, 'teonsanan nimi- tai laatusanajohdoksen etuliite', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(50, 5);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(51, 'aluetta tarkentava etuliite', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(51, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(51, 2);
+INSERT INTO attribute_class(aid, classid) VALUES(51, 5);
 
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
