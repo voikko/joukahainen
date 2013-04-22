@@ -30,21 +30,37 @@
 # by this script. This is to avoid certain security issues that are not handled
 # properly here.
 
+# ====== Imports ======
+
+import os
+import subprocess
+import datetime
+import codecs
+import sys
+from getopt import getopt
+
 # ====== Settings ======
 
-# URLs and dump directories
-JOUKAHAINEN_URL = u'http://localhost/joukahainen'
-JOUKAHAINEN_VOC_URL = u'http://localhost/joukahainen/sanastot'
-VOC_DUMP_DIR = u'/tmp/d/voc'
-DB_DUMP_DIR = u'/tmp/d/db'
+optlist, args = getopt(sys.argv[1:], u'', \
+	[u'joukahainen_url=', u'dump_dir=', u'pgdump_command=', u'db_name=', u'db_port='])
 
-# Commands
-PGDUMP_COMMAND = u'/usr/lib/postgresql/8.1/bin/pg_dump'
+for opt, val in optlist:
+	if opt == u'--joukahainen_url':
+		JOUKAHAINEN_URL = val
+	elif opt == u'--dump_dir':
+		DUMP_DIR = val
+	elif opt == u'--pgdump_command':
+		PGDUMP_COMMAND = val
+	elif opt == u'--db_name':
+		DB_NAME = val
+	elif opt == u'--db_port':
+		DB_PORT = val
+
+# Derived/unchanging configuration
+JOUKAHAINEN_VOC_URL = JOUKAHAINEN_URL + u'/sanastot'
+VOC_DUMP_DIR = DUMP_DIR + u'/voc'
+DB_DUMP_DIR = DUMP_DIR + u'/db'
 WGET_COMMAND = u'wget'
-
-# Database information
-DB_NAME = u'joukahainen'
-DB_PORT = u'5432'
 
 # Special vocabularies, format (id, name, description)
 SPECIAL_VOCS = [
@@ -54,13 +70,6 @@ SPECIAL_VOCS = [
 	(36, u'matluonnontiede', u'Matematiikan, fysiikan ja kemian erikoissanasto'),
 	(35, u'vieraskieliset', u'Vieraskieliset sanat ja nimet')
 ]
-
-# ====== Imports ======
-
-import os
-import subprocess
-import datetime
-import codecs
 
 # ====== Functions ======
 
