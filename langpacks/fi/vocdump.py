@@ -37,7 +37,6 @@ JOUKAHAINEN_URL = u'http://localhost/joukahainen'
 JOUKAHAINEN_VOC_URL = u'http://localhost/joukahainen/sanastot'
 VOC_DUMP_DIR = u'/tmp/d/voc'
 DB_DUMP_DIR = u'/tmp/d/db'
-VOCABULARY_INDEX = u'/tmp/d/update-index-1'
 
 # Commands
 PGDUMP_COMMAND = u'/usr/lib/postgresql/8.1/bin/pg_dump'
@@ -108,10 +107,7 @@ def remove(filename):
 
 # ====== Main program ======
 
-#indexfile = codecs.open(VOCABULARY_INDEX, 'w', 'UTF-8')
 cdate = current_date()
-
-#indexfile.write(u'[version]\n1\n\n')
 
 # The default vocabulary
 new_dvoc_name = VOC_DUMP_DIR + u'/' + DB_NAME + u'-' + cdate + u'.xml.gz'
@@ -126,8 +122,6 @@ dbdump_link_name = DB_DUMP_DIR + u'/' + DB_NAME + u'.pgdump'
 dump_database(new_dbdump_name)
 remove(dbdump_link_name)
 os.symlink(new_dbdump_name, dbdump_link_name)
-
-#indexfile.close()
 
 # Old file cleanup
 for cldate in cleanup_dates():
