@@ -230,6 +230,10 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(51, 'aluetta tarkentava
 INSERT INTO attribute_class(aid, classid) VALUES(51, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(51, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(51, 5);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(52, 'lyhenne', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(52, 4);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(53, 'lyhenne: ei taivuteta kaksoispisteen avulla', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(53, 4);
 
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
