@@ -47,15 +47,15 @@ make                     3.81
 Installing Joukahainen
 ======================
 
-In the following instructions INSTALLATION_DIRECTORY is the directory
+In the following instructions INSTALLATION_DIR is the directory
 where Joukahainen will be installed (for example "/usr/local/joukahainen")
 and WWW_LOCAL_ROOT is the directory on the local filesystem that contains
 the files visible through the http server (for example "/var/www/joukahainen").
 
 1) Check out the application from GIT:
-git clone https://github.com/voikko/joukahainen.git INSTALLATION_DIRECTORY/joukahainen
+git clone https://github.com/voikko/joukahainen.git INSTALLATION_DIR/joukahainen
 
-2) Create WWW_LOCAL_ROOT and add symbolic links from INSTALLATION_DIRECTORY/joukahainen/wwwroot
+2) Create WWW_LOCAL_ROOT and add symbolic links from INSTALLATION_DIR/joukahainen/wwwroot
    to WWW_LOCAL_ROOT for the following files:
    - index.py
    - jscripts.js
@@ -65,9 +65,9 @@ git clone https://github.com/voikko/joukahainen.git INSTALLATION_DIRECTORY/jouka
    - user.py
    - word.py
 
-3) Modify INSTALLATION_DIRECTORY/pylib/_config.py as needed.
+3) Modify INSTALLATION_DIR/pylib/_config.py as needed.
    Probably you have to do the following:
-   - change INSTALLATION_DIRECTORY to match what you have used here
+   - change INSTALLATION_DIR to match what you have used here
    - set WWW_ROOT_DIR to what you want to have as a directory for Joukahainen in the http URL:s
    - set PW_SALT to a random string
    - set LANG to match the language code of your vocabulary
@@ -78,7 +78,7 @@ git clone https://github.com/voikko/joukahainen.git INSTALLATION_DIRECTORY/jouka
 
   <Directory WWW_LOCAL_ROOT> # Change this
     AddHandler python-program .py
-    PythonPath "sys.path+['INSTALLATION_DIRECTORY/pylib','INSTALLATION_DIRECTORY/langpacks/LANG']"
+    PythonPath "sys.path+['INSTALLATION_DIR/pylib','INSTALLATION_DIR/langpacks/LANG','COREVOIKKO_DIR/tools/pylib']"
     PythonHandler mod_python.publisher
     PythonDebug On        # Set this to Off before making the installation public to improve security
     AddType text/html;charset=UTF-8 .html
@@ -87,7 +87,7 @@ git clone https://github.com/voikko/joukahainen.git INSTALLATION_DIRECTORY/jouka
 
 5) Create language pack for your language. This is described later and is the most demanding
    part of the installation unless there already is a language pack under
-   INSTALLATION_DIRECTORY/joukahainen/langpacks for your language.
+   INSTALLATION_DIR/joukahainen/langpacks for your language.
 
 6) Use the psql tool to create the database user for which you had set the user name and password in
    _config.py
@@ -95,9 +95,9 @@ git clone https://github.com/voikko/joukahainen.git INSTALLATION_DIRECTORY/jouka
 7) Use the psql tool (as postgres, not as the newly created user) to set up the database schema and
    populate it with static data:
    
-   \i INSTALLATION_DIRECTORY/joukahainen/sql/schema.sql
-   \i INSTALLATION_DIRECTORY/joukahainen/sql/schema_private.sql
-   \i INSTALLATION_DIRECTORY/joukahainen/langpacks/LANG/static.sql
+   \i INSTALLATION_DIR/joukahainen/sql/schema.sql
+   \i INSTALLATION_DIR/joukahainen/sql/schema_private.sql
+   \i INSTALLATION_DIR/joukahainen/langpacks/LANG/static.sql
 
   Create the password hash for the initial user by starting python and entering commands
 
@@ -111,7 +111,7 @@ git clone https://github.com/voikko/joukahainen.git INSTALLATION_DIRECTORY/jouka
 
   (Replace the hash with the correct value.)
 
-8) Create the gettext .mo files by entering INSTALLATION_DIRECTORY/joukahainen and running make.
+8) Create the gettext .mo files by entering INSTALLATION_DIR/joukahainen and running make.
 
 9) Perform any language specific installation tasks that may be specified in the INSTALL file of
    your language pack.

@@ -18,11 +18,7 @@
 
 # This file contains language specific program code for Finnish
 
-# Path to module directory (Voikko tools)
-MODULE_PATH_VOIKKOTOOLS = '/home/harri/svn/voikko/trunk/tools/pylib'
-
 import sys
-sys.path.append(MODULE_PATH_VOIKKOTOOLS)
 import voikkoutils
 import voikkoinfl
 import xml.sax.saxutils
