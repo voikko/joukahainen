@@ -65,7 +65,8 @@ git clone https://github.com/voikko/joukahainen.git INSTALLATION_DIR/joukahainen
    - user.py
    - word.py
 
-3) Modify INSTALLATION_DIR/pylib/_config.py as needed.
+3) Create INSTALLATION_DIR/pylib/_config.py by copying
+   INSTALLATION_DIR/pylib/_config.py.sample and modifying it as needed.
    Probably you have to do the following:
    - change INSTALLATION_DIR to match what you have used here
    - set WWW_ROOT_DIR to what you want to have as a directory for Joukahainen in the http URL:s
