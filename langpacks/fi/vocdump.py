@@ -58,8 +58,8 @@ for opt, val in optlist:
 
 # Derived/unchanging configuration
 JOUKAHAINEN_VOC_URL = JOUKAHAINEN_URL + u'/sanastot'
-VOC_DUMP_DIR = DUMP_DIR + u'/voc'
-DB_DUMP_DIR = DUMP_DIR + u'/db'
+VOC_DUMP_DIR = DUMP_DIR + u'/sanastot'
+DB_DUMP_DIR = DUMP_DIR + u'/pgdumps'
 WGET_COMMAND = u'wget'
 
 # Special vocabularies, format (id, name, description)
