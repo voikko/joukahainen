@@ -114,10 +114,12 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(22, 'vokaalisointu: etu
 INSERT INTO attribute_class(aid, classid) VALUES(22, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(22, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(22, 3);
+INSERT INTO attribute_class(aid, classid) VALUES(22, 4);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(23, 'vokaalisointu: takavokaalipäätteet (uao)', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(23, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(23, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(23, 3);
+INSERT INTO attribute_class(aid, classid) VALUES(23, 4);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(24, 'virheellinen sana', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(24, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(24, 2);
