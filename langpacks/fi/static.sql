@@ -208,6 +208,7 @@ INSERT INTO attribute_class(aid, classid) VALUES(41, 4);
 INSERT INTO attribute_class(aid, classid) VALUES(41, 5);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(42, 'ala: organisaatiot ja tuotemerkit', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(42, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(42, 4);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(43, 'persoona: vain yksikön tai monikon 3.', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(43, 3);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(44, 'mahdollisesti loukkaava tai alatyylinen', 2, TRUE);
