@@ -237,6 +237,8 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(52, 'lyhenne', 2, TRUE)
 INSERT INTO attribute_class(aid, classid) VALUES(52, 4);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(53, 'lyhenne: ei taivuteta kaksoispisteen avulla', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(53, 4);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(54, 'paikannimen jälkiliite', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(54, 1);
 
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
