@@ -95,7 +95,7 @@ def _print_entry_form(req, db):
 	"Prints an entry form for word suggestions"
 	jotools.write(req, u'''<p>Joukahainen on Voikko-oikolukuohjelmiston kehittäjien
 yhteinen sanastotietokanta. Sen avulla myös Voikon käyttäjät voivat auttaa kehittäjiä tekemään ohjelmasta
-entistäkin paremman. Esimerkiksi OpenOffice.orgia käyttäessäsi saatat joskus huomata, että
+entistäkin paremman. Esimerkiksi LibreOfficea käyttäessäsi saatat joskus huomata, että
 oikolukutoiminto ei hyväksy jotain kirjoittamaasi sanaa, vaikka se on oikein. Voit ilmoittaa meille
 näistä sanoista tämän lomakkeen kautta.</p>
 
