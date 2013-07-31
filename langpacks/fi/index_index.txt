@@ -2,7 +2,7 @@ Joukahainen: aloitus
 
 <div class="rightinfo">
 <p>Joukahainen on www-pohjainen suomen kielen sanastotietokanta. Se on kehitetty palvelemaan
-vapaita kieliteknologian sovelluksia, erityisesti <a href="http://voikko.sourceforge.net">Voikkoa</a>
+vapaita kieliteknologian sovelluksia, erityisesti <a href="http://voikko.puimula.org">Voikkoa</a>
 ja <a href="http://joyds1.joensuu.fi/sukija/sukija.html">Sukijaa</a>.
 Tietokannan sisältöä voi vapaasti selata, jos tarvitsee tietoa suomen sanojen oikeinkirjoituksesta.
 Sanastoa täydennetään jatkuvasti, eikä sen virheettömyyttä voida taata.</p>
@@ -14,7 +14,7 @@ johon ei liity aineiston kopioimista, on sallittu ilman rajoituksia.</p>
 <p>Sovelluksen käytössä esiintyvistä ongelmista ja kehitysideoista voi kertoa Joukahaisen kehittäjälle ja
 tämän asennuksen ylläpitäjälle (Harri Pitkänen,
 <a href="mailto:hatapitk@iki.fi">hatapitk@iki.fi</a>) tai Voikko-projektin
-<a href="http://voikko.sourceforge.net/mail.html">postituslistalle</a>.</p>
+<a href="http://voikko.puimula.org/mail.html">postituslistalle</a>.</p>
 
 <p>Joukahaisen rekisteröityneille käyttäjille on kirjoitettu <a href="docs/">ohjeita</a>. Jos haluat
 osallistua sanaston kehittämiseen, tutustu näihin ohjeisiin ennen kuin pyydät käyttäjätunnusta.</p>
