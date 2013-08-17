@@ -244,6 +244,7 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(45, 'huudahdussana', 2,
 INSERT INTO attribute_class(aid, classid) VALUES(45, 4);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(46, 'perusmuoto', 1, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(46, 4);
+INSERT INTO attribute_class(aid, classid) VALUES(46, 6);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(47, 'nimisanan etuliite', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(47, 5);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(48, 'laatusanan etuliite', 2, TRUE);

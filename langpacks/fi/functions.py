@@ -297,7 +297,7 @@ def _write_xml_baseform(req, strings):
 	for s in strings:
 		if s[0] == 46:
 			req.write('\t<baseform>')
-			req.write(xml.sax.saxutils.escape(s[1]))
+			req.write(xml.sax.saxutils.escape(s[1]).encode('UTF-8'))
 			req.write('</baseform>\n')
 
 def _write_xml_word(db, req, wid, word, wclass, flagMap):
