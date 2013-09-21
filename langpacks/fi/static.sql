@@ -265,6 +265,11 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(54, 'paikannimen jälki
 INSERT INTO attribute_class(aid, classid) VALUES(54, 1);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(55, 'jatko: liitesana', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(55, 6);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(56, 'jatko: omistusliite', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(56, 6);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(57, 'jatko: liite pakollinen', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(57, 6);
+
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
 -- Test user, password 'testi'
