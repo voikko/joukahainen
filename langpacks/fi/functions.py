@@ -228,6 +228,8 @@ def _write_xml_classes(req, wid, classid, flags):
 			req.write('\t\t<wclass>interjection</wclass>\n')
 		elif len(set(flags) & set([52])) > 0:
 			req.write('\t\t<wclass>abbreviation</wclass>\n')
+		elif len(set(flags) & set([59])) > 0:
+			req.write('\t\t<wclass>conjunction</wclass>\n')
 	elif classid == 5:
 		req.write(u'\t\t<wclass>prefix</wclass>\n')
 	elif classid == 6:
