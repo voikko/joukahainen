@@ -65,7 +65,7 @@ def _get_infl_vowel_type(db, wid, word):
 	return voikkoutils.get_wordform_infl_vowel_type(word)
 
 
-WCHARS = u"abcdefghijklmnńoôpqrstuüvwxyzåäöszèéšžáàóABCDEFGHIJKLMNŃOÔPQRSTUÜVWXYZÅÄÖŠŽÈÉŠŽ-'|="
+WCHARS = u"aáàâãæbcdefghiíìîïjklmnńñoóòôõøpqrstuüúùûvwxyýÿzåäöszèéêëšžçðßþABCDEFGHIJKLMNŃOÔPQRSTUÜVWXYZÅÄÖŠŽÈÉŠŽ-'|="
 # Checks if string looks like a valid word. This is a mandatory function.
 def checkword(string):
 	for c in string:
