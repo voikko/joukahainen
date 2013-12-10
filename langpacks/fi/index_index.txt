@@ -3,7 +3,7 @@ Joukahainen: aloitus
 <div class="rightinfo">
 <p>Joukahainen on www-pohjainen suomen kielen sanastotietokanta. Se on kehitetty palvelemaan
 vapaita kieliteknologian sovelluksia, erityisesti <a href="http://voikko.puimula.org">Voikkoa</a>
-ja <a href="http://joyds1.joensuu.fi/sukija/sukija.html">Sukijaa</a>.
+ja <a href="https://github.com/ahomansikka/sukija">Sukijaa</a>.
 Tietokannan sisältöä voi vapaasti selata, jos tarvitsee tietoa suomen sanojen oikeinkirjoituksesta.
 Sanastoa täydennetään jatkuvasti, eikä sen virheettömyyttä voida taata.</p>
 
