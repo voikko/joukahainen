@@ -273,6 +273,9 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(58, 'jatko: yks. ulkopa
 INSERT INTO attribute_class(aid, classid) VALUES(58, 6);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(59, 'sidesana', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(59, 4);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(60, 'yhdistyy vapaasti yhdyssanan perusosaksi', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(60, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(60, 3);
 
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
