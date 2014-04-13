@@ -329,6 +329,7 @@ def _write_xml_word(db, req, wid, word, wclass, flagMap):
 	_write_xml_flagset(req, flags, flagMap, 'compounding')
 	_write_xml_flagset(req, flags, flagMap, 'derivation')
 	_write_xml_flagset(req, flags, flagMap, 'style')
+	_write_xml_flagset(req, flags, flagMap, 'grammar')
 	_write_xml_flagset(req, flags, flagMap, 'application')
 	_write_xml_frequency(req, flags, integers, flagMap)
 	_write_xml_info(req, strings)
