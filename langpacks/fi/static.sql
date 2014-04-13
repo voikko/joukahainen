@@ -276,7 +276,12 @@ INSERT INTO attribute_class(aid, classid) VALUES(59, 4);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(60, 'yhdistyy vapaasti yhdyssanan perusosaksi', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(60, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(60, 3);
-
+INSERT INTO attribute(aid, descr, type, editable) VALUES(61, 'organisaationimen jälkiliite', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(61, 1);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(62, 'verbiketju: vaatii A-infinitiivin', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(62, 3);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(63, 'verbiketju: vaatii MA-infinitiivin', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(63, 3);
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
 -- Test user, password 'testi'
