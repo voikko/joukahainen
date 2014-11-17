@@ -174,7 +174,8 @@ def _wiki_link(db, wikiattr, wid):
 	                    "aid = %i and wid = %i") % (wikiattr, wid))
 	if results.ntuples() == 0: return _(u'Word in Wiki')
 	wikiurl = unicode(results.getresult()[0][0], 'UTF-8')
-	if not wikiurl.startswith(u'http://'): return _(u'Word in Wiki')
+	if not wikiurl.startswith(u'http://') and not wikiurl.startswith(u'https://'):
+		return _(u'Word in Wiki')
 	return u'<a href=%s>%s</a>' % (jotools.escape_form_value(wikiurl), _(u'Word in Wiki')) 
 
 def call(db, funcname, paramlist):

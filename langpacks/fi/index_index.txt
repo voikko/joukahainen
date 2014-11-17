@@ -78,6 +78,9 @@ osallistua sanaston kehittämiseen, tutustu näihin ohjeisiin ennen kuin pyydät
 <div class="bottominfo">
 <h2>Tiedotteita</h2>
 <p>
+2013-10-12: Joukahainen on siirretty uudelle palvelimelle.
+</p>
+<p>
 2010-01-30: Palvelinta on tehostettu ja sen ohjelmistot päivitetty. Joukahainen toimii entistä
 nopeammin ja luotettavammin.
 </p>
