@@ -282,6 +282,20 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(62, 'verbiketju: vaatii
 INSERT INTO attribute_class(aid, classid) VALUES(62, 3);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(63, 'verbiketju: vaatii MA-infinitiivin', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(63, 3);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(64, 'ala: biologia, maantiede ja geologia', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(64, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(64, 2);
+INSERT INTO attribute_class(aid, classid) VALUES(64, 3);
+INSERT INTO attribute_class(aid, classid) VALUES(64, 4);
+INSERT INTO attribute_class(aid, classid) VALUES(64, 5);
+INSERT INTO attribute_class(aid, classid) VALUES(64, 6);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(65, 'ala: ihmistieteet', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(65, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(65, 2);
+INSERT INTO attribute_class(aid, classid) VALUES(65, 3);
+INSERT INTO attribute_class(aid, classid) VALUES(65, 4);
+INSERT INTO attribute_class(aid, classid) VALUES(65, 5);
+INSERT INTO attribute_class(aid, classid) VALUES(65, 6);
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
 -- Test user, password 'testi'

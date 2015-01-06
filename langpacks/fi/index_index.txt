@@ -65,7 +65,8 @@ osallistua sanaston kehittämiseen, tutustu näihin ohjeisiin ennen kuin pyydät
 <h2>Apuvälineitä</h2>
 <ul>
 <li><a href="ehdotasanoja">Ehdota uusia sanoja lisättäväksi sanastoon</a></li>
-<li><a href="webvoikko">Webvoikko</a> (www-pohjainen oikoluku- ja tavutuspalvelu)</li>
+<li><a href="http://oikofix.com">Oikofix</a> (www-pohjainen oikolukupalvelu, jonka suomen kielen perussanastoon
+Joukahaiseen tehdyt muutokset päivittyvät kerran vuorokaudessa)</li>
 @BEGIN IF_EDIT_ALLOWED
 <li><a href="findclass/classlist">Etsi sanalle taivutusluokka</a></li>
 <li><a href="kotus-diff.html">Kotus-diff</a></li>
