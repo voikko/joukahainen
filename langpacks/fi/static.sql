@@ -64,14 +64,17 @@ INSERT INTO attribute(aid, descr, type, editable) VALUES(7, 'ei sallittu yhdyssa
 INSERT INTO attribute_class(aid, classid) VALUES(7, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(7, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(7, 3);
+INSERT INTO attribute_class(aid, classid) VALUES(7, 4);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(8, 'ei sallittu yhdyssanan alkuosana', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(8, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(8, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(8, 3);
+INSERT INTO attribute_class(aid, classid) VALUES(8, 4);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(9, 'ei sallittu yhdyssanan jälkiosana', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(9, 1);
 INSERT INTO attribute_class(aid, classid) VALUES(9, 2);
 INSERT INTO attribute_class(aid, classid) VALUES(9, 3);
+INSERT INTO attribute_class(aid, classid) VALUES(9, 4)
 INSERT INTO attribute_class(aid, classid) VALUES(9, 5);
 INSERT INTO attribute(aid, descr, type, editable) VALUES(10, 'sana on myös substantiivi', 2, TRUE);
 INSERT INTO attribute_class(aid, classid) VALUES(10, 2);
