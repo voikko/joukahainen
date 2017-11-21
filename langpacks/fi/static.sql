@@ -299,6 +299,14 @@ INSERT INTO attribute_class(aid, classid) VALUES(65, 3);
 INSERT INTO attribute_class(aid, classid) VALUES(65, 4);
 INSERT INTO attribute_class(aid, classid) VALUES(65, 5);
 INSERT INTO attribute_class(aid, classid) VALUES(65, 6);
+INSERT INTO attribute(aid, descr, type, editable) VALUES(66, 'organisaatio: stat.fi', 2, TRUE);
+INSERT INTO attribute_class(aid, classid) VALUES(66, 1);
+INSERT INTO attribute_class(aid, classid) VALUES(66, 2);
+INSERT INTO attribute_class(aid, classid) VALUES(66, 3);
+INSERT INTO attribute_class(aid, classid) VALUES(66, 4);
+INSERT INTO attribute_class(aid, classid) VALUES(66, 5);
+INSERT INTO attribute_class(aid, classid) VALUES(66, 6);
+
 
 INSERT INTO appuser(uid, uname) VALUES(1, 'malagaconverter');
 -- Test user, password 'testi'
