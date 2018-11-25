@@ -129,7 +129,7 @@ jonkin erikoisalan sanaston kehityksessä, voit myös lähettää ehdotuksesi s�
 (<a href="mailto:hatapitk@iki.fi">hatapitk@iki.fi</a>).</p>
 
 <p>Voikkoa kehitetään pääasiassa vapaaehtoisvoimin. Lisää tietoa Voikosta löytyy
-osoitteesta <a href="http://voikko.puimula.org">voikko.puimula.org</a>.</p>''')
+osoitteesta <a href="https://voikko.puimula.org">voikko.puimula.org</a>.</p>''')
 
 def _print_error_forbidden(req):
 	"Print an error, if adding new words is no longer possible"

@@ -2,19 +2,19 @@ Joukahainen: aloitus
 
 <div class="rightinfo">
 <p>Joukahainen on www-pohjainen suomen kielen sanastotietokanta. Se on kehitetty palvelemaan
-vapaita kieliteknologian sovelluksia, erityisesti <a href="http://voikko.puimula.org">Voikkoa</a>
+vapaita kieliteknologian sovelluksia, erityisesti <a href="https://voikko.puimula.org">Voikkoa</a>
 ja <a href="https://github.com/ahomansikka/sukija">Sukijaa</a>.
 Tietokannan sisältöä voi vapaasti selata, jos tarvitsee tietoa suomen sanojen oikeinkirjoituksesta.
 Sanastoa täydennetään jatkuvasti, eikä sen virheettömyyttä voida taata.</p>
 
 <p>Aineiston tekijänoikeudet kuuluvat useille henkilöille ja yhteisöille. Sitä voi levittää edelleen
-<a href="http://www.gnu.org/licenses/gpl-2.0.html">GPL-lisenssin</a> (version 2 tai uudempien) ehdoilla.
+<a href="https://www.gnu.org/licenses/gpl-2.0.html">GPL-lisenssin</a> (version 2 tai uudempien) ehdoilla.
 Sovelluksen sellainen käyttö,
 johon ei liity aineiston kopioimista, on sallittu ilman rajoituksia.</p>
 <p>Sovelluksen käytössä esiintyvistä ongelmista ja kehitysideoista voi kertoa Joukahaisen kehittäjälle ja
 tämän asennuksen ylläpitäjälle (Harri Pitkänen,
 <a href="mailto:hatapitk@iki.fi">hatapitk@iki.fi</a>) tai Voikko-projektin
-<a href="http://voikko.puimula.org/mail.html">postituslistalle</a>.</p>
+<a href="https://voikko.puimula.org/mail.html">postituslistalle</a>.</p>
 
 <p>Joukahaisen rekisteröityneille käyttäjille on kirjoitettu <a href="docs/">ohjeita</a>. Jos haluat
 osallistua sanaston kehittämiseen, tutustu näihin ohjeisiin ennen kuin pyydät käyttäjätunnusta.</p>
