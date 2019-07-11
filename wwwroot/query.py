@@ -23,6 +23,7 @@ from mod_python import apache
 import sys
 import datetime
 import time
+import re
 import _apply_config
 import joheaders
 import jotools
@@ -101,6 +102,11 @@ def wlist(req):
 			joheaders.error_page(req, _(u'Word has forbidden characters in it'))
 			return "\n"
 		if jotools.get_param(req, 'wordre', u'') == u'on':
+			try:
+				re.compile(word)
+			except re.error:
+				joheaders.error_page(req, _(u'Search string is not a valid regular expression'))
+				return "\n"
 			compop = '~*'
 			compword = jotools.expandre(word)
 		elif jotools.get_param(req, 'wordsimplere', u'') == u'on':
