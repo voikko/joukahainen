@@ -20,9 +20,9 @@
 
 import codecs
 import re
-import Cookie
+import http.cookies
 import time
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import jodb
 import joheaders
 import _pg
@@ -39,7 +39,7 @@ def _call_handler(db, module, funcname, paramlist):
 	if module == 'joindex':
 		import joindex
 		return joindex.call(db, funcname, paramlist)
-	return _(u"Error: unknown module")
+	return _("Error: unknown module")
 
 def toint(string):
 	if string.isdigit(): return int(string)
@@ -49,7 +49,7 @@ def toint(string):
 checkword = _apply_config.jotools_checkword
 
 # Checks if string is safe to be used as a Posix regular expression
-RECHARS = u"abcdefghijklmnoôpqrstuüvwxyzåäöszèéšžáàóâABCDEFGHIJKLMNOÔPQRSTUÜVWXYZÅÄÖŠŽÈÉŠŽµΩΩ-'|_%*()[]+.:?$^"
+RECHARS = "abcdefghijklmnoôpqrstuüvwxyzåäöszèéšžáàóâABCDEFGHIJKLMNOÔPQRSTUÜVWXYZÅÄÖŠŽÈÉŠŽµΩΩ-'|_%*()[]+.:?$^"
 def checkre(string):
 	for c in string:
 		if not c in RECHARS: return False
@@ -60,14 +60,14 @@ def checkre(string):
 # None
 def expandre(string):
 	if not checkre(string): return None
-	string = string.replace(u'V', u'(?:a|e|i|o|u|y|ä|ö|é|è|á|à|ó|ô|â)')
-	string = string.replace(u'C', u'(?:b|c|d|f|g|h|j|k|l|m|n|p|q|r|s|t|v|w|x|z|š|ž)')
-	string = string.replace(u'A', u'(?:a|ä)')
-	string = string.replace(u'O', u'(?:o|ö)')
-	string = string.replace(u'U', u'(?:u|y)')
+	string = string.replace('V', '(?:a|e|i|o|u|y|ä|ö|é|è|á|à|ó|ô|â)')
+	string = string.replace('C', '(?:b|c|d|f|g|h|j|k|l|m|n|p|q|r|s|t|v|w|x|z|š|ž)')
+	string = string.replace('A', '(?:a|ä)')
+	string = string.replace('O', '(?:o|ö)')
+	string = string.replace('U', '(?:u|y)')
 	return string
 
-UNAMECHARS = u'abcdefghijklmnopqrstuvwxyz'
+UNAMECHARS = 'abcdefghijklmnopqrstuvwxyz'
 # Checks if string looks like a valid user name
 def checkuname(string):
 	for c in string:
@@ -96,7 +96,7 @@ def word_classes_for_attributes(db):
 	for row in results.getresult():
 		aid = row[0]
 		typeid = row[1]
-		if not cattributes.has_key(aid):
+		if aid not in cattributes:
 			cattributes[aid] = set([])
 		cattributes[aid].add(typeid)
 	return cattributes
@@ -116,28 +116,28 @@ def process_template(req, db, static_vars, template_name, lang, module, level):
 		line = tmplfile.readline()
 		file_cont = line.endswith('\n')
 		
-		if line == u"@BEGIN IF_EDIT_ALLOWED\n":
-			if not static_vars.has_key('EDITABLE') or not static_vars['EDITABLE']:
-				while line.endswith('\n') and line != u"@END IF_EDIT_ALLOWED\n": line = tmplfile.readline()
+		if line == "@BEGIN IF_EDIT_ALLOWED\n":
+			if 'EDITABLE' not in static_vars or not static_vars['EDITABLE']:
+				while line.endswith('\n') and line != "@END IF_EDIT_ALLOWED\n": line = tmplfile.readline()
 			continue
-		if line == u"@END IF_EDIT_ALLOWED\n": continue
+		if line == "@END IF_EDIT_ALLOWED\n": continue
 		
-		if line.startswith(u"@BEGIN ATTRIBUTE_ENCLOSURE "):
+		if line.startswith("@BEGIN ATTRIBUTE_ENCLOSURE "):
 			if cattributes is None:
 				cattributes = word_classes_for_attributes(db)
 			aid = int(line[27:].strip())
 			if static_vars['CLASSID'] not in cattributes[aid]:
-				while line.endswith('\n') and line != u"@END ATTRIBUTE_ENCLOSURE\n": line = tmplfile.readline()
+				while line.endswith('\n') and line != "@END ATTRIBUTE_ENCLOSURE\n": line = tmplfile.readline()
 			continue
-		if line == u"@END ATTRIBUTE_ENCLOSURE\n": continue
+		if line == "@END ATTRIBUTE_ENCLOSURE\n": continue
 
 		var_match = var_re.match(line)
-		line_str = u''
+		line_str = ''
 		if var_match != None:
 			line_str = line_str + var_match.group(1)
 			func_match = func_re.match(var_match.group(2))
 			if func_match == None:
-				line_str = line_str + unicode(static_vars[var_match.group(2)])
+				line_str = line_str + str(static_vars[var_match.group(2)])
 			else:
 				paramlist = []
 				for param in func_match.group(2).split(','):
@@ -150,15 +150,15 @@ def process_template(req, db, static_vars, template_name, lang, module, level):
 						paramlist.append(static_vars[param])
 				retstr = _call_handler(db, module, func_match.group(1), paramlist)
 				line_str = line_str + retstr
-			line_str = line_str + var_match.group(3) + u'\n'
+			line_str = line_str + var_match.group(3) + '\n'
 		else:
 			line_str = line_str + line
 		if first_line:
-			if static_vars.has_key('UID'): uid = static_vars['UID']
+			if 'UID' in static_vars: uid = static_vars['UID']
 			else: uid = 0
-			if static_vars.has_key('UNAME'): uname = static_vars['UNAME']
+			if 'UNAME' in static_vars: uname = static_vars['UNAME']
 			else: uname = 0
-			if static_vars.has_key('WID'): wid = static_vars['WID']
+			if 'WID' in static_vars: wid = static_vars['WID']
 			else: wid = 0
 			if level == 0:
 				joheaders.page_header_navbar_level0(req, line_str.strip(),
@@ -172,10 +172,10 @@ def process_template(req, db, static_vars, template_name, lang, module, level):
 
 # Returns the session key of the request or '' if the key was not set or it is malformed
 def get_session(req):
-	if req.headers_in.has_key('Cookie'):
-		c = Cookie.SimpleCookie()
+	if 'Cookie' in req.headers_in:
+		c = http.cookies.SimpleCookie()
 		c.load(req.headers_in['Cookie'])
-		if c.has_key('session'):
+		if 'session' in c:
 			sess = c['session'].value
 			if len(sess) != 40: return ''
 			for ch in sess:
@@ -197,7 +197,7 @@ def get_login_user(req):
 	
 	db.query("update appuser set session_exp = CURRENT_TIMESTAMP + interval '%i seconds' where uid = %i" \
 	         % (_config.SESSION_TIMEOUT, result[0]))
-	return (result[0], unicode(result[1], 'UTF-8'), True)
+	return (result[0], str(result[1], 'UTF-8'), True)
 
 # Returns True, if given user is an administrator
 def is_admin(uid):
@@ -214,7 +214,7 @@ def escape_form_value(string):
 # Converts a string to a form that is suitable for use in a URL
 # The input should be ordinary (not Unicode) string
 def escape_url(string):
-	return urllib.quote_plus(string)
+	return urllib.parse.quote_plus(string)
 
 # Converts a string to a form that is suitable for use in html document text
 def escape_html(string):
@@ -222,7 +222,7 @@ def escape_html(string):
 
 # Decodes a string from html form to unicode
 def decode_form_value(string):
-	return unicode(urllib.unquote_plus(string), 'UTF-8')
+	return str(urllib.parse.unquote_plus(string), 'UTF-8')
 
 # Converts an unicode string to a form that is suitable for use in a SQL statement
 def escape_sql_string(string):
@@ -246,7 +246,7 @@ def get_param(req, name, default):
 	for field in req.form.list:
 		if field.name == name:
 			try:
-				return unicode(field.value, 'UTF-8')
+				return str(field.value, 'UTF-8')
 			except UnicodeError:
 				# Simply ignore invalid UTF-8 sequences and return default value instead
 				return default
@@ -262,23 +262,23 @@ def integer_prefix(string):
 
 # Returns a link matching the given comment string
 def _comment_link(comment):
-	if comment.startswith(u'('):
+	if comment.startswith('('):
 		leading_chars = 1
-		lead = u'('
+		lead = '('
 	else:
 		leading_chars = 0
-		lead = u''
+		lead = ''
 	cstr = comment[leading_chars:]
-	if cstr.startswith(u'#'):
+	if cstr.startswith('#'):
 		(nlen, wid) = integer_prefix(cstr[1:])
 		if nlen == 0: return comment
-		return lead + u'<a href="%s/word/edit?wid=%i">%s</a>' \
+		return lead + '<a href="%s/word/edit?wid=%i">%s</a>' \
 		       % (_config.WWW_ROOT_DIR, wid, cstr[:nlen+1]) \
 		       + cstr[nlen+1:]
-	elif cstr.startswith(u'wid#'):
+	elif cstr.startswith('wid#'):
 		(nlen, wid) = integer_prefix(cstr[4:])
 		if nlen == 0: return comment
-		return lead + u'<a href="%s/word/edit?wid=%i">%s</a>' \
+		return lead + '<a href="%s/word/edit?wid=%i">%s</a>' \
 		       % (_config.WWW_ROOT_DIR, wid, cstr[:nlen+4]) \
 		       + cstr[nlen+4:]
 	else: return comment
@@ -286,7 +286,7 @@ def _comment_link(comment):
 # Turn special identifiers in word comments into links
 def comment_links(comment):
 	comment_parts = comment.split()
-	newcomment = u''
+	newcomment = ''
 	for part in comment_parts:
-		newcomment = newcomment + _comment_link(part) + u' '
+		newcomment = newcomment + _comment_link(part) + ' '
 	return newcomment

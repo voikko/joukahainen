@@ -49,7 +49,7 @@ def page_header_nonavbar(req, title):
 def _page_header_internal(req, title, h1, uid, uname, wid):
 	req.content_type = "text/html; charset=UTF-8"
 	req.send_http_header()
-	jotools.write(req, u"""<?xml version="1.0" encoding="UTF-8"?>
+	jotools.write(req, """<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fi" lang="fi">
@@ -64,9 +64,9 @@ def _page_header_internal(req, title, h1, uid, uname, wid):
 <body onload="initPage()">
 <div class="topbar">""" % (title, _config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR,
                            _config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR))
-	jotools.write(req, u"\n<h1>%s</h1>" % h1)
+	jotools.write(req, "\n<h1>%s</h1>" % h1)
 	if uid == None:
-		jotools.write(req, u"""
+		jotools.write(req, """
 <div class="login">
 <form method="post" action="%s/user/login"><p>
 <label>%s: <input type="text" size="12" name="username" /></label>&nbsp;
@@ -75,17 +75,17 @@ def _page_header_internal(req, title, h1, uid, uname, wid):
 <input type="submit" value="%s" />
 </p></form>
 </div>
-""" % (_config.WWW_ROOT_DIR, _(u'Username'), _(u'Password'), wid, _(u'Log in')))
+""" % (_config.WWW_ROOT_DIR, _('Username'), _('Password'), wid, _('Log in')))
 	else:
-		jotools.write(req, u"""
+		jotools.write(req, """
 <div class="login">
 <form method="post" action="%s/user/logout"><p>
 <input type="hidden" name="wid" value="%i" />
 <input type="submit" value="%s %s" />
 </p></form>
 </div>
-""" % (_config.WWW_ROOT_DIR, wid, _(u'Log out user'), uname))
-	jotools.write(req, u'<div class="clear"></div></div><div class="main">\n')
+""" % (_config.WWW_ROOT_DIR, wid, _('Log out user'), uname))
+	jotools.write(req, '<div class="clear"></div></div><div class="main">\n')
 
 # Outputs the shared html header for toplevel page
 def page_header_navbar_level0(req, title, uid, uname):
@@ -96,15 +96,15 @@ def page_header_navbar_level0(req, title, uid, uname):
 # Outputs the shared html header for level 1 subpage
 def page_header_navbar_level1(req, title, uid, uname, wid = 0):
 	title = jotools.escape_html(title)
-	h1 = u'<a href="..">Joukahainen</a> &gt; %s' % title
+	h1 = '<a href="..">Joukahainen</a> &gt; %s' % title
 	_page_header_internal(req, title, h1, uid, uname, wid)
 
 # Outputs the shared html header for level 2 subpage
 def page_header_navbar_level2(req, title1, link1, title2, uid, uname, wid = 0):
 	title1 = jotools.escape_html(title1)
 	title2 = jotools.escape_html(title2)
-	title = title1 + u' &gt; ' + title2
-	h1 = u'<a href="..">Joukahainen</a> &gt; <a href="%s">%s</a> &gt; %s' % (link1, title1, title2)
+	title = title1 + ' &gt; ' + title2
+	h1 = '<a href="..">Joukahainen</a> &gt; <a href="%s">%s</a> &gt; %s' % (link1, title1, title2)
 	_page_header_internal(req, title, h1, uid, uname, wid)
 
 # Outputs the shared frameset header
@@ -138,18 +138,18 @@ def redirect_header(req, location):
 	req.headers_out['location'] = location_s
 	req.status = mod_python.apache.HTTP_MOVED_TEMPORARILY
 	req.send_http_header()
-	jotools.write(req, _(u"Redirecting to %s") % location_s)
+	jotools.write(req, _("Redirecting to %s") % location_s)
 
 # Outputs a page containing error message
 def error_page(req, errortext):
-	page_header_nonavbar(req, u'Joukahainen: %s' % _(u'error'))
-	jotools.write(req, u'<h1>%s</h1><p>%s</p>\n' % (_(u'Error'), errortext))
+	page_header_nonavbar(req, 'Joukahainen: %s' % _('error'))
+	jotools.write(req, '<h1>%s</h1><p>%s</p>\n' % (_('Error'), errortext))
 	page_footer_plain(req)
 
 # Outputs a page telling about successful operation
 def ok_page(req, message):
-	page_header_nonavbar(req, u'Joukahainen: %s' % _(u'operation succeeded'))
-	jotools.write(req, u'<h1>%s</h1><p>%s</p>\n' % (_(u'operation succeeded'), message))
-	jotools.write(req, u'<p><a href="%s">%s ...</a></p>\n' \
-	           % (_config.WWW_ROOT_DIR + '/', _(u'Back to front page')))
+	page_header_nonavbar(req, 'Joukahainen: %s' % _('operation succeeded'))
+	jotools.write(req, '<h1>%s</h1><p>%s</p>\n' % (_('operation succeeded'), message))
+	jotools.write(req, '<p><a href="%s">%s ...</a></p>\n' \
+	           % (_config.WWW_ROOT_DIR + '/', _('Back to front page')))
 	page_footer_plain(req)
