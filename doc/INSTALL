@@ -25,7 +25,7 @@ configured:
 - PostgreSQL database server and client
 - Python
 - mod_python (Python <-> Apache)
-- python-pygresql (Python <-> PostgreSQL)
+- python3-pygresql (Python <-> PostgreSQL)
 - gettext
 - Git
 - GNU make (other variants may work as well) 

@@ -18,18 +18,15 @@
 
 # This file contains html headers, footers and related functions
 
-import mod_python.apache
 import _config
-import _apply_config
+import gettext
 import jotools
-import joindex
 
-_ = _apply_config.translation.ugettext
+_ = gettext.gettext
 
 # Outputs the shared header for a page with no navigation bar
 def page_header_nonavbar(req, title):
 	req.content_type = "text/html; charset=UTF-8"
-	req.send_http_header()
 	req.write("""<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -48,7 +45,6 @@ def page_header_nonavbar(req, title):
 # Outputs the shared html header for ordinary pages
 def _page_header_internal(req, title, h1, uid, uname, wid):
 	req.content_type = "text/html; charset=UTF-8"
-	req.send_http_header()
 	jotools.write(req, """<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -110,7 +106,6 @@ def page_header_navbar_level2(req, title1, link1, title2, uid, uname, wid = 0):
 # Outputs the shared frameset header
 def frame_header(req, title):
 	req.content_type = "text/html; charset=UTF-8"
-	req.send_http_header()
 	req.write("""<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
@@ -136,8 +131,7 @@ def frame_footer(req):
 def redirect_header(req, location):
 	location_s = location.encode('UTF-8')
 	req.headers_out['location'] = location_s
-	req.status = mod_python.apache.HTTP_MOVED_TEMPORARILY
-	req.send_http_header()
+	req.status = jotools.HTTP_MOVED_PERMANENTLY
 	jotools.write(req, _("Redirecting to %s") % location_s)
 
 # Outputs a page containing error message

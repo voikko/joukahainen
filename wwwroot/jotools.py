@@ -23,14 +23,18 @@ import re
 import http.cookies
 import time
 import urllib.request, urllib.parse, urllib.error
+import gettext
 import jodb
 import joheaders
 import _pg
 import _config
-import _apply_config
+from functions import checkword
 from xml.sax import saxutils
+from flask import request, Response
 
-_ = _apply_config.translation.ugettext
+HTTP_MOVED_PERMANENTLY = 301
+
+_ = gettext.gettext
 
 def _call_handler(db, module, funcname, paramlist):
 	if module == 'joeditors':
@@ -44,9 +48,6 @@ def _call_handler(db, module, funcname, paramlist):
 def toint(string):
 	if string.isdigit(): return int(string)
 	else: return 0
-
-# Checks if string looks like a valid word
-checkword = _apply_config.jotools_checkword
 
 # Checks if string is safe to be used as a Posix regular expression
 RECHARS = "abcdefghijklmnoôpqrstuüvwxyzåäöszèéšžáàóâABCDEFGHIJKLMNOÔPQRSTUÜVWXYZÅÄÖŠŽÈÉŠŽµΩΩ-'|_%*()[]+.:?$^"
@@ -84,7 +85,7 @@ def checkid(string):
 	return True
 
 def write(req, string):
-	req.write(string.encode("UTF-8"))
+	req.write(string)
 
 def errormsg(req, error):
 	write(req, error)
@@ -290,3 +291,19 @@ def comment_links(comment):
 	for part in comment_parts:
 		newcomment = newcomment + _comment_link(part) + ' '
 	return newcomment
+
+class Request_wrapper:
+	def __init__(self):
+		self.content = ""
+		self.status = 200
+		self.headers_in = request.headers
+		self.headers_out = {}
+	
+	def write(self, text):
+		self.content += text
+	
+	def response(self):
+		resp = Response(self.content, status=self.status)
+		for key, value in self.headers_out.items():
+			resp.headers[key] = value
+		return resp

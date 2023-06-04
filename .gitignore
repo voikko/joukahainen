@@ -1,4 +1,6 @@
 *~
 langpacks/fi/voikko_dev_prefs.py
 transl
-pylib/_config.py
+wwwroot/_config.py
+wwwroot/__pycache__
+*.bak

@@ -23,6 +23,7 @@ import voikkoutils
 import voikkoinfl
 import xml.sax.saxutils
 import time
+from functools import reduce
 
 # Path to Voikko data directory
 VOIKKO_DATA = voikkoutils.get_preference('voikko_data_dir')
@@ -58,14 +59,14 @@ def _get_infl_vowel_type(db, wid, word):
 	# Check alternative spellings
 	altforms_res = db.query('SELECT related_word FROM related_word WHERE wid = %i' % wid)
 	for altform_r in altforms_res.getresult():
-		altform = unicode(altform_r[0], 'UTF-8')
-		if altform.replace(u'|', u'').replace(u'=', u'') == word:
+		altform = str(altform_r[0], 'UTF-8')
+		if altform.replace('|', '').replace('=', '') == word:
 			return voikkoutils.get_wordform_infl_vowel_type(altform)
 	# Return the default
 	return voikkoutils.get_wordform_infl_vowel_type(word)
 
 
-WCHARS = u"aáàâãæbcdefghiíìîïjklmnńñoóòôõøpqrstuüúùûvwxyýÿzåäöszèéêëšžçðßþABCDEFGHIJKLMNŃOÔPQRSTUÜVWXYZÅÄÖŠŽÈÉŠŽµΩΩ-'|=.1234567890"
+WCHARS = "aáàâãæbcdefghiíìîïjklmnńñoóòôõøpqrstuüúùûvwxyýÿzåäöszèéêëšžçðßþABCDEFGHIJKLMNŃOÔPQRSTUÜVWXYZÅÄÖŠŽÈÉŠŽµΩΩ-'|=.1234567890"
 # Checks if string looks like a valid word. This is a mandatory function.
 def checkword(string):
 	for c in string:
@@ -89,9 +90,9 @@ def _get_inflection_gradation(db, wid):
 	                    "WHERE wid = %i AND aid = 1") % wid)
 	if results.ntuples() != 1: return None
 	result = results.getresult()[0]
-	infclass_parts = unicode(result[0], 'UTF-8').split('-')
+	infclass_parts = str(result[0], 'UTF-8').split('-')
 	if len(infclass_parts) == 1:
-		infclass_main = unicode(result[0], 'UTF-8')
+		infclass_main = str(result[0], 'UTF-8')
 		grad_type = '-'
 	elif len(infclass_parts) == 2:
 		infclass_main = infclass_parts[0]
@@ -123,25 +124,25 @@ def _get_structure_for_word(db, wid, word):
 	      % wid
 	results = db.query(sql)
 	if results.ntuples() != 1: return word
-	return unicode(results.getresult()[0][0], 'UTF-8')
+	return str(results.getresult()[0][0], 'UTF-8')
 
 # Inflection table for a Finnish noun or verb.
 def word_inflection(db, wid, word, classid):
 	if classid in [1, 2]: characteristic_forms = CHARACTERISTIC_NOUN_FORMS
 	elif classid == 3: characteristic_forms = CHARACTERISTIC_VERB_FORMS
-	else: return u"(ei taivutuksia tämän sanaluokan sanoille)"
+	else: return "(ei taivutuksia tämän sanaluokan sanoille)"
 	
 	infclass_parts = _get_inflection_gradation(db, wid)
-	if infclass_parts == None: return u"(ei taivutusluokkaa)"
+	if infclass_parts == None: return "(ei taivutusluokkaa)"
 	(infclass_main, grad_type) = infclass_parts
 	
 	word_class = _get_inflection_type(classid, infclass_main)
 	if word_class == None: return "(taivutuksia ei ole saatavilla tai virheellinen taivutusluokka)"
 	
 	wordWithStructure = _get_structure_for_word(db, wid, word)
-	tableid = u"inftable%i" % wid
-	retdata = u''
-	note = u''
+	tableid = "inftable%i" % wid
+	retdata = ''
+	note = ''
 	have_only_characteristic = True
 	inflected_words = voikkoinfl.inflectWordWithType(wordWithStructure, word_class, infclass_main, grad_type,
 	                                                 _get_infl_vowel_type(db, wid, word))
@@ -158,14 +159,14 @@ def word_inflection(db, wid, word, classid):
 	for inflected_word in inflected_words:
 		if no_singular and inflected_word.formName in SINGULAR_FORMS: continue
 		if previous_inflected.formName != inflected_word.formName:
-			if previous_inflected.formName != u"" and len(inflist) > 0:
+			if previous_inflected.formName != "" and len(inflist) > 0:
 				if previous_inflected.isCharacteristic:
-					htmlclass = u' class="characteristic"'
+					htmlclass = ' class="characteristic"'
 				else:
 					htmlclass = ''
 					have_only_characteristic = False
-				infs = reduce(lambda x, y: u"%s, %s" % (x, y), inflist)
-				retdata = retdata + (u"<tr%s><td>%s</td><td>%s</td></tr>\n" %
+				infs = reduce(lambda x, y: "%s, %s" % (x, y), inflist)
+				retdata = retdata + ("<tr%s><td>%s</td><td>%s</td></tr>\n" %
 				          (htmlclass, previous_inflected.formName, infs))
 			inflist = []
 			previous_inflected = inflected_word
@@ -173,15 +174,15 @@ def word_inflection(db, wid, word, classid):
 			inflist.append(inflected_word.inflectedWord)
 	note = word_class.note
 	
-	table_header = u'<table class="inflection" id="%s">\n<tr><th colspan="2">' % tableid
+	table_header = '<table class="inflection" id="%s">\n<tr><th colspan="2">' % tableid
 	if not have_only_characteristic:
 		table_header = table_header \
-		               + u'<a href="javascript:switchDetailedDisplay(\'%s\');" id="%s"></a>' \
-			     % (tableid, tableid + u'a')
-	table_header = table_header + u'Taivutus</th></tr>\n'
-	if note == u'': notetext = u''
-	else: notetext = u'<p>%s</p>\n' % note
-	return notetext + table_header + retdata + u'</table>\n'
+		               + '<a href="javascript:switchDetailedDisplay(\'%s\');" id="%s"></a>' \
+			     % (tableid, tableid + 'a')
+	table_header = table_header + 'Taivutus</th></tr>\n'
+	if note == '': notetext = ''
+	else: notetext = '<p>%s</p>\n' % note
+	return notetext + table_header + retdata + '</table>\n'
 
 def _get_xml_flags(flags, flagType, flagMap):
 	results = []
@@ -189,7 +190,7 @@ def _get_xml_flags(flags, flagType, flagMap):
 		if flagId in flagMap:
 			flag = flagMap[flagId]
 			if flag.xmlGroup == flagType:
-				results.append(u'<flag>%s</flag>' % flag.xmlFlag)
+				results.append('<flag>%s</flag>' % flag.xmlFlag)
 	return results
 
 def _write_xml_forms(db, req, wid, word):
@@ -198,15 +199,15 @@ def _write_xml_forms(db, req, wid, word):
 	altforms = []
 	base_word = None
 	for res in altforms_res.getresult():
-		altform = unicode(res[0], 'UTF-8')
-		if altform.replace(u"=", u"").replace(u"|", u"") == word: base_word = altform
-		else: altforms.append(unicode(res[0], 'UTF-8'))
-	if base_word == None and len(altforms) > 0: req.write(u'<!-- ERROR: base form missing -->')
+		altform = str(res[0], 'UTF-8')
+		if altform.replace("=", "").replace("|", "") == word: base_word = altform
+		else: altforms.append(str(res[0], 'UTF-8'))
+	if base_word == None and len(altforms) > 0: req.write('<!-- ERROR: base form missing -->')
 	if base_word != None: altforms = [base_word] + altforms
 	if len(altforms) == 0: altforms.append(word)
 	req.write('\t<forms>\n')
 	for form in altforms:
-		req.write((u'\t\t<form>%s</form>\n' % form).encode('UTF-8'))
+		req.write(('\t\t<form>%s</form>\n' % form).encode('UTF-8'))
 	req.write('\t</forms>\n')
 
 def _write_xml_classes(req, wid, classid, flags):
@@ -217,12 +218,12 @@ def _write_xml_classes(req, wid, classid, flags):
 			if 12 in flags: req.write('\t\t<wclass>pnoun_lastname</wclass>\n')
 			if 13 in flags: req.write('\t\t<wclass>pnoun_place</wclass>\n')
 			if 14 in flags: req.write('\t\t<wclass>pnoun_misc</wclass>\n')
-		else: req.write(u'\t\t<wclass>noun</wclass>\n')
+		else: req.write('\t\t<wclass>noun</wclass>\n')
 	elif classid == 2:
-		if 10 in flags: req.write(u'\t\t<wclass>noun</wclass>\n')
-		req.write(u'\t\t<wclass>adjective</wclass>\n')
+		if 10 in flags: req.write('\t\t<wclass>noun</wclass>\n')
+		req.write('\t\t<wclass>adjective</wclass>\n')
 	elif classid == 3:
-		req.write(u'\t\t<wclass>verb</wclass>\n')
+		req.write('\t\t<wclass>verb</wclass>\n')
 	elif classid == 4:
 		if len(set(flags) & set([45])) > 0:
 			req.write('\t\t<wclass>interjection</wclass>\n')
@@ -231,22 +232,22 @@ def _write_xml_classes(req, wid, classid, flags):
 		elif len(set(flags) & set([59])) > 0:
 			req.write('\t\t<wclass>conjunction</wclass>\n')
 	elif classid == 5:
-		req.write(u'\t\t<wclass>prefix</wclass>\n')
+		req.write('\t\t<wclass>prefix</wclass>\n')
 	elif classid == 6:
-		req.write(u'\t\t<wclass>adverb</wclass>\n')
+		req.write('\t\t<wclass>adverb</wclass>\n')
 	req.write('\t</classes>\n')
 
 def _write_xml_inflection(req, flags, strings, flagMap):
 	elements = []
 	
 	for s in strings:
-		if s[0] == 1: elements.append(u'<infclass>%s</infclass>' % s[1])
-		if s[0] == 16: elements.append(u'<infclass type="historical">%s</infclass>' % s[1])
+		if s[0] == 1: elements.append('<infclass>%s</infclass>' % s[1])
+		if s[0] == 16: elements.append('<infclass type="historical">%s</infclass>' % s[1])
 	
 	if 22 in flags:
-		if 23 in flags: elements.append(u'<vtype>aä</vtype>')
-		else: elements.append(u'<vtype>ä</vtype>')
-	elif 23 in flags: elements.append(u'<vtype>a</vtype>')
+		if 23 in flags: elements.append('<vtype>aä</vtype>')
+		else: elements.append('<vtype>ä</vtype>')
+	elif 23 in flags: elements.append('<vtype>a</vtype>')
 	
 	for f in _get_xml_flags(flags, 'inflection', flagMap): elements.append(f)
 	
@@ -268,7 +269,7 @@ def _write_xml_frequency(req, flags, integers, flagMap):
 	elements = []
 	
 	for i in integers:
-		if i[0] == 38: elements.append(u'<fclass>%i</fclass>' % i[1])
+		if i[0] == 38: elements.append('<fclass>%i</fclass>' % i[1])
 	
 	for f in _get_xml_flags(flags, 'frequency', flagMap): elements.append(f)
 	
@@ -283,10 +284,10 @@ def _write_xml_info(req, strings):
 	
 	for s in strings:
 		if s[0] == 18:
-			elements.append(u'<description>%s</description>' \
+			elements.append('<description>%s</description>' \
 			                % xml.sax.saxutils.escape(s[1]))
 		if s[0] == 28:
-			elements.append(u'<link>%s</link>' \
+			elements.append('<link>%s</link>' \
 			                % xml.sax.saxutils.escape(s[1]))
 	
 	if len(elements) > 0:
@@ -317,7 +318,7 @@ def _write_xml_word(db, req, wid, word, wclass, flagMap):
 	integers = []
 	flags = []
 	for r in results:
-		if r[1] != None: strings.append((r[0], unicode(r[1], 'UTF-8')))
+		if r[1] != None: strings.append((r[0], str(r[1], 'UTF-8')))
 		elif r[2] != None: integers.append((r[0], r[2]))
 		else: flags.append(r[0])
 	
@@ -340,14 +341,14 @@ def _convertFlagMapKeysToJoukahainenId(originalMap):
 	"""Converts a map of flags with arbitary keys to map of
 	flags with Joukahainen id numbers as keys."""
 	mapById = {}
-	for (key, flag) in originalMap.iteritems():
+	for (key, flag) in originalMap.items():
 		mapById[flag.joukahainen] = flag
 	return mapById
 
 def _jooutput_xml(req, db, query):
 	req.content_type = "application/xml"
 	req.send_http_header()
-	req.write((u'''<?xml version="1.0" encoding="UTF-8" ?>
+	req.write(('''<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE wordlist SYSTEM "wordlist.dtd">
 <!--
   This file is generated by vocabulary management application Joukahainen.
@@ -385,7 +386,7 @@ def _jooutput_xml(req, db, query):
 	"ORDER BY w.wid") % query)
 	for result in results.getresult():
 		wid = result[0]
-		word = unicode(result[1], 'UTF-8')
+		word = str(result[1], 'UTF-8')
 		wclass = result[2]
 		_write_xml_word(db, req, wid, word, wclass, flagMap)
 	
@@ -395,7 +396,7 @@ def _jooutput_xml(req, db, query):
 # Lists the language specific output types. This is a mandatory function
 def jooutput_list_supported_types():
 	types = []
-	types.append(('xml', u'Tulosta XML-muodossa'))
+	types.append(('xml', 'Tulosta XML-muodossa'))
 	return types
 
 # Language specific list output. This is a mandatory function
@@ -403,20 +404,20 @@ def jooutput_call(req, outputtype, db, query):
 	if outputtype == 'xml':
 		_jooutput_xml(req, db, query)
 	else:
-		joheaders.error_page(req, _(u'Unsupported output type'))
+		joheaders.error_page(req, _('Unsupported output type'))
 
 # Returns information about the classification of the word in the format used by
 # the Research Institute for the Languages of Finland
 def kotus_class(db, wid, word, classid):
 	infclass_parts = _get_inflection_gradation(db, wid)
-	if infclass_parts == None: return u""
+	if infclass_parts == None: return ""
 	(infclass_main, grad_type) = infclass_parts
 	
 	word_class = _get_inflection_type(classid, infclass_main)
 	if word_class == None: return ""
 	
-	return u'<span class="fheader">Kotus-luokka:</span> <span class="fsvalue">%s</span>' \
-	       % (reduce(lambda x, y: u"%s, %s" % (x, y), word_class.kotusClasses) + \
+	return '<span class="fheader">Kotus-luokka:</span> <span class="fsvalue">%s</span>' \
+	       % (reduce(lambda x, y: "%s, %s" % (x, y), word_class.kotusClasses) + \
 	          word_class.kotusGradClass(word, grad_type))
 
 # Returns a link target of the inflection class finder for a word or None,
@@ -425,4 +426,4 @@ def find_infclass(db, word, classid):
 	if classid in [1, 2]: finderclass = 1
 	elif classid == 3: finderclass = 3
 	else: return None
-	return u"'/findclass/classlist?word=%s&class=%i'" % (word, finderclass)
+	return "'/findclass/classlist?word=%s&class=%i'" % (word, finderclass)
