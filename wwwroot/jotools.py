@@ -227,7 +227,7 @@ def decode_form_value(string):
 
 # Converts an unicode string to a form that is suitable for use in a SQL statement
 def escape_sql_string(string):
-	return _pg.escape_string(string.encode('UTF-8'))
+	return _pg.escape_string(string)
 
 # Returns a list that has all unique elements of the argument list. The returned list is sorted
 # according to element values. The original list must be sortable
@@ -244,14 +244,7 @@ def unique(oldlist):
 
 # Returns the value of given request parameter or default if parameter is not set
 def get_param(req, name, default):
-	for field in req.form.list:
-		if field.name == name:
-			try:
-				return str(field.value, 'UTF-8')
-			except UnicodeError:
-				# Simply ignore invalid UTF-8 sequences and return default value instead
-				return default
-	return default
+	return request.args.get(name, default)
 
 # Returns the integer prefix of the given string or 0, if no such prefix was found
 def integer_prefix(string):

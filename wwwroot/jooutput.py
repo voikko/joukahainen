@@ -22,9 +22,10 @@ import joheaders
 import jotools
 import jodb
 import _config
-import _apply_config
+import gettext
+from flask import request
 
-_ = _apply_config.translation.ugettext
+_ = gettext.gettext
 
 def _print_html_line(db, wid, word, wclass):
 	results = db.query("SELECT wid FROM flag_attribute_value WHERE aid in (24, 26)" +
@@ -36,18 +37,18 @@ def _print_html_line(db, wid, word, wclass):
 	return line
 
 def _html(req, db, query):
-	offset_s = `jotools.toint(jotools.get_param(req, 'offset', u'0'))`
-	limit_s = `jotools.toint(jotools.get_param(req, 'limit', u'200'))`
-	if limit_s == u'0': limit_s = u'ALL'
+	offset_s = repr(jotools.toint(jotools.get_param(req, 'offset', '0')))
+	limit_s = repr(jotools.toint(jotools.get_param(req, 'limit', '200')))
+	if limit_s == '0': limit_s = 'ALL'
 	
-	param_s = u''
-	for field in req.form.list:
-		if not field.name in ['limit', 'offset'] and jotools.checkid(field.name):
-			param_s = param_s + field.name + u'=' + jotools.get_param(req, field.name, u'') + u'&'
+	param_s = ''
+	for field in request.args.keys():
+		if not field in ['limit', 'offset'] and jotools.checkid(field):
+			param_s = param_s + field + '=' + jotools.get_param(req, field, '') + '&'
 	
 	results = db.query("%s LIMIT %s OFFSET %s" % (query, limit_s, offset_s))
 	if results.ntuples() == 0:
-		joheaders.error_page(req, _(u'No matching words were found'))
+		joheaders.error_page(req, _('No matching words were found'))
 		return "\n"
 	elif results.ntuples() == 1:
 		joheaders.redirect_header(req, _config.WWW_ROOT_DIR + "/word/edit?wid=%i" \
@@ -56,17 +57,15 @@ def _html(req, db, query):
 	else:
 		(uid, uname, editable) = jotools.get_login_user(req)
 		joheaders.page_header_navbar_level1(req, _('Search results'), uid, uname)
-		jotools.write(req, u'<table><tr><th>%s</th><th>%s</th></tr>\n' \
+		jotools.write(req, '<table><tr><th>%s</th><th>%s</th></tr>\n' \
 		                   % (_("Word"), _("Word class")))
 		for result in results.getresult():
-			jotools.write(req, _print_html_line(db, result[0],
-			              unicode(result[1], 'UTF-8'),
-				    unicode(result[2], 'UTF-8')))
-		jotools.write(req, u"</table>\n")
-		if not limit_s == u'ALL' and results.ntuples() == jotools.toint(limit_s):
-			jotools.write(req, (u'<p><a href="wlist?%soffset=%i&limit=%s">' +
-			              u"%s ...</a></p>\n") % (param_s, int(offset_s)+int(limit_s),
-				    limit_s, _(u'More results')))	
+			jotools.write(req, _print_html_line(db, result[0], result[1], result[2]))
+		jotools.write(req, "</table>\n")
+		if not limit_s == 'ALL' and results.ntuples() == jotools.toint(limit_s):
+			jotools.write(req, ('<p><a href="wlist?%soffset=%i&limit=%s">' +
+			              "%s ...</a></p>\n") % (param_s, int(offset_s)+int(limit_s),
+				    limit_s, _('More results')))	
 	joheaders.page_footer_plain(req)
 	return '\n'
 
