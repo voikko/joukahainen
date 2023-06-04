@@ -18,9 +18,26 @@ def index():
     joheaders.page_footer_plain(req)
     return req.response()
 
-@app.route('/word')
-def word():
-    return Response("<span style='color:red'>Joukahaista päivitetään, ja se palaa käyttöön kesän 2023 aikana.</span>", status=503)
+@app.route('/word/edit')
+def word_edit():
+    req = jotools.Request_wrapper()
+    wid = jotools.get_param(req, 'wid', None)
+    if (wid == None):
+        joheaders.error_page(req, _('Parameter %s is required') % 'wid')
+        return req.response()
+    wid_n = jotools.toint(wid)
+    db = jodb.connect()
+    results = db.query("select word, class from word where wid = %i" % wid_n)
+    if results.ntuples() == 0:
+        joheaders.error_page(req, _('Word %i does not exist') % wid_n)
+        return req.response()
+    wordinfo = results.getresult()[0]
+    (uid, uname, editable) = jotools.get_login_user(req)
+    static_vars = {'WID': wid_n, 'WORD': wordinfo[0], 'CLASSID': wordinfo[1],
+                   'UID': uid, 'UNAME': uname, 'EDITABLE': editable}
+    jotools.process_template(req, db, static_vars, 'word_edit', _config.LANG, 'joeditors', 1)
+    joheaders.page_footer_plain(req)
+    return req.response()
 
 @app.route('/query/wlist')
 def query_wlist():

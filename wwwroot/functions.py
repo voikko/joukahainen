@@ -59,7 +59,7 @@ def _get_infl_vowel_type(db, wid, word):
 	# Check alternative spellings
 	altforms_res = db.query('SELECT related_word FROM related_word WHERE wid = %i' % wid)
 	for altform_r in altforms_res.getresult():
-		altform = str(altform_r[0], 'UTF-8')
+		altform = altform_r[0]
 		if altform.replace('|', '').replace('=', '') == word:
 			return voikkoutils.get_wordform_infl_vowel_type(altform)
 	# Return the default
@@ -90,9 +90,9 @@ def _get_inflection_gradation(db, wid):
 	                    "WHERE wid = %i AND aid = 1") % wid)
 	if results.ntuples() != 1: return None
 	result = results.getresult()[0]
-	infclass_parts = str(result[0], 'UTF-8').split('-')
+	infclass_parts = result[0].split('-')
 	if len(infclass_parts) == 1:
-		infclass_main = str(result[0], 'UTF-8')
+		infclass_main = result[0]
 		grad_type = '-'
 	elif len(infclass_parts) == 2:
 		infclass_main = infclass_parts[0]
@@ -124,7 +124,7 @@ def _get_structure_for_word(db, wid, word):
 	      % wid
 	results = db.query(sql)
 	if results.ntuples() != 1: return word
-	return str(results.getresult()[0][0], 'UTF-8')
+	return results.getresult()[0][0]
 
 # Inflection table for a Finnish noun or verb.
 def word_inflection(db, wid, word, classid):
@@ -199,9 +199,9 @@ def _write_xml_forms(db, req, wid, word):
 	altforms = []
 	base_word = None
 	for res in altforms_res.getresult():
-		altform = str(res[0], 'UTF-8')
+		altform = res[0]
 		if altform.replace("=", "").replace("|", "") == word: base_word = altform
-		else: altforms.append(str(res[0], 'UTF-8'))
+		else: altforms.append(res[0])
 	if base_word == None and len(altforms) > 0: req.write('<!-- ERROR: base form missing -->')
 	if base_word != None: altforms = [base_word] + altforms
 	if len(altforms) == 0: altforms.append(word)

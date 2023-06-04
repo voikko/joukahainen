@@ -20,29 +20,29 @@
 
 import types
 import _config
-import _apply_config
+import gettext
 
-_ = _apply_config.translation.ugettext
+_ = gettext.gettext
 
 def login_logout(db, uid, uname, wid):
 	if uid == None:
-		return u"""
+		return """
 <form method="post" action="%s/user/login"><p>
 <label>%s: <input type="text" name="username" /></label>&nbsp;
 <label>%s: <input type="password" name="password" /></label>&nbsp;
 <input type="hidden" name="wid" value="%i" />
 <input type="submit" value="%s" />
 </p></form>
-""" % (_config.WWW_ROOT_DIR, _(u'Username'), _(u'Password'), wid, _(u'Log in'))
-	return u"""
+""" % (_config.WWW_ROOT_DIR, _('Username'), _('Password'), wid, _('Log in'))
+	return """
 <form method="post" action="%s/user/logout"><p>
 <input type="hidden" name="wid" value="%i" />
 <input type="submit" value="%s %s" />
 </p></form>
-""" % (_config.WWW_ROOT_DIR, wid, _(u'Log out user'), uname)
+""" % (_config.WWW_ROOT_DIR, wid, _('Log out user'), uname)
 
 def call(db, funcname, paramlist):
 	if funcname == 'login_logout':
-		if len(paramlist) != 3: return _(u"Error: % parameters expected" % 3)
+		if len(paramlist) != 3: return _("Error: % parameters expected" % 3)
 		return login_logout(db, paramlist[0], paramlist[1], paramlist[2])
-	return _(u"Error: unknown function")
+	return _("Error: unknown function")
