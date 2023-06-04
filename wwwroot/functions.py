@@ -207,7 +207,7 @@ def _write_xml_forms(db, req, wid, word):
 	if len(altforms) == 0: altforms.append(word)
 	req.write('\t<forms>\n')
 	for form in altforms:
-		req.write(('\t\t<form>%s</form>\n' % form).encode('UTF-8'))
+		req.write('\t\t<form>%s</form>\n' % form)
 	req.write('\t</forms>\n')
 
 def _write_xml_classes(req, wid, classid, flags):
@@ -254,7 +254,7 @@ def _write_xml_inflection(req, flags, strings, flagMap):
 	if len(elements) > 0:
 		req.write('\t<inflection>\n')
 		for element in elements:
-			req.write('\t\t%s\n' % element.encode('UTF-8'))
+			req.write('\t\t%s\n' % element)
 		req.write('\t</inflection>\n')
 
 def _write_xml_flagset(req, flags, flagMap, flagname):
@@ -262,7 +262,7 @@ def _write_xml_flagset(req, flags, flagMap, flagname):
 	if len(elements) > 0:
 		req.write('\t<%s>\n' % flagname)
 		for element in elements:
-			req.write('\t\t%s\n' % element.encode('UTF-8'))
+			req.write('\t\t%s\n' % element)
 		req.write('\t</%s>\n' % flagname)
 
 def _write_xml_frequency(req, flags, integers, flagMap):
@@ -276,7 +276,7 @@ def _write_xml_frequency(req, flags, integers, flagMap):
 	if len(elements) > 0:
 		req.write('\t<frequency>\n')
 		for element in elements:
-			req.write('\t\t%s\n' % element.encode('UTF-8'))
+			req.write('\t\t%s\n' % element)
 		req.write('\t</frequency>\n')
 
 def _write_xml_info(req, strings):
@@ -293,14 +293,14 @@ def _write_xml_info(req, strings):
 	if len(elements) > 0:
 		req.write('\t<info>\n')
 		for element in elements:
-			req.write('\t\t%s\n' % element.encode('UTF-8'))
+			req.write('\t\t%s\n' % element)
 		req.write('\t</info>\n')
 
 def _write_xml_baseform(req, strings):
 	for s in strings:
 		if s[0] == 46:
 			req.write('\t<baseform>')
-			req.write(xml.sax.saxutils.escape(s[1]).encode('UTF-8'))
+			req.write(xml.sax.saxutils.escape(s[1]))
 			req.write('</baseform>\n')
 
 def _write_xml_word(db, req, wid, word, wclass, flagMap):
@@ -318,7 +318,7 @@ def _write_xml_word(db, req, wid, word, wclass, flagMap):
 	integers = []
 	flags = []
 	for r in results:
-		if r[1] != None: strings.append((r[0], str(r[1], 'UTF-8')))
+		if r[1] != None: strings.append((r[0], r[1]))
 		elif r[2] != None: integers.append((r[0], r[2]))
 		else: flags.append(r[0])
 	
@@ -347,7 +347,6 @@ def _convertFlagMapKeysToJoukahainenId(originalMap):
 
 def _jooutput_xml(req, db, query):
 	req.content_type = "application/xml"
-	req.send_http_header()
 	req.write(('''<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE wordlist SYSTEM "wordlist.dtd">
 <!--
@@ -375,7 +374,7 @@ def _jooutput_xml(req, db, query):
   Time of generation: %s
 -->
 <wordlist xml:lang="fi">
-''' % time.strftime("%Y-%m-%d %H:%M:%S %Z")).encode('UTF-8'))
+''' % time.strftime("%Y-%m-%d %H:%M:%S %Z")))
 	
 	flagMapByName = voikkoutils.readFlagAttributes(VOIKKO_DATA + "/words/flags.txt")
 	flagMap = _convertFlagMapKeysToJoukahainenId(flagMapByName)
@@ -386,7 +385,7 @@ def _jooutput_xml(req, db, query):
 	"ORDER BY w.wid") % query)
 	for result in results.getresult():
 		wid = result[0]
-		word = str(result[1], 'UTF-8')
+		word = result[1]
 		wclass = result[2]
 		_write_xml_word(db, req, wid, word, wclass, flagMap)
 	

@@ -155,7 +155,7 @@ def _rwords_edit_form(db, wid):
 		retstr = retstr + '<h2>%s</h2>\n<p>\n' % _('Remove alternative forms')
 	for result in results.getresult():
 		retstr = retstr + '<label><input type="checkbox" value="on" name="rword%i" />' % result[0]
-		retstr = retstr + jotools.escape_html(str(result[1], 'UTF-8'))
+		retstr = retstr + jotools.escape_html(result[1])
 		retstr = retstr + '</label><br />\n'
 	if results.ntuples() > 0:
 		retstr = retstr + '</p>\n'
@@ -174,7 +174,7 @@ def _wiki_link(db, wikiattr, wid):
 	results = db.query(("SELECT value FROM string_attribute_value WHERE " +
 	                    "aid = %i and wid = %i") % (wikiattr, wid))
 	if results.ntuples() == 0: return _('Word in Wiki')
-	wikiurl = str(results.getresult()[0][0], 'UTF-8')
+	wikiurl = results.getresult()[0][0]
 	if not wikiurl.startswith('http://') and not wikiurl.startswith('https://'):
 		return _('Word in Wiki')
 	return '<a href=%s>%s</a>' % (jotools.escape_form_value(wikiurl), _('Word in Wiki')) 

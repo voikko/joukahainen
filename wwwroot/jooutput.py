@@ -21,6 +21,7 @@
 import joheaders
 import jotools
 import jodb
+import functions
 import _config
 import gettext
 from flask import request
@@ -74,10 +75,10 @@ def call(req, outputtype, query):
 	if outputtype == 'html':
 		_html(req, db, query)
 	else:
-		_apply_config.jooutput_call(req, outputtype, db, query)
+		functions.jooutput_call(req, outputtype, db, query)
 
 def list_supported_types():
 	types = []
 	types.append(('html', _('Output as page with links')))
-	langtypes = _apply_config.jooutput_list_supported_types()
+	langtypes = functions.jooutput_list_supported_types()
 	return types + langtypes

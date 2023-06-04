@@ -291,12 +291,13 @@ class Request_wrapper:
 		self.status = 200
 		self.headers_in = request.headers
 		self.headers_out = {}
+		self.content_type = "text/html; charset=UTF-8"
 	
 	def write(self, text):
 		self.content += text
 	
 	def response(self):
-		resp = Response(self.content, status=self.status)
+		resp = Response(self.content, status=self.status, mimetype=self.content_type)
 		for key, value in self.headers_out.items():
 			resp.headers[key] = value
 		return resp

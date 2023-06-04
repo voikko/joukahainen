@@ -32,62 +32,6 @@ import jodb
 
 _ = _apply_config.translation.ugettext
 
-def form(req):
-	db = jodb.connect()
-	(uid, uname, editable) = jotools.get_login_user(req)
-	joheaders.page_header_navbar_level1(req, _('Search database'), uid, uname)
-	jotools.write(req, '<form method="get" action="wlist">\n<p>')
-	jotools.write(req, '<label>%s: <input type="text" name="word" /></label></p>\n' % _('Word'))
-	jotools.write(req, '<p><label><input type="checkbox" name="wordre" /> %s</label>\n' \
-	              % _('Use regular expression'))
-	jotools.write(req, ' <b>%s</b> <label><input type="checkbox" name="wordsimplere" /> %s</label><br />\n' \
-	              % (_('or'), _('Case insensitive search')))
-	jotools.write(req, '<label><input type="checkbox" name="altforms" /> %s</label></p>\n' \
-	              % _('Search from alternative spellings'))
-	
-	wclasses = db.query("SELECT classid, name FROM wordclass ORDER BY classid").getresult()
-	jotools.write(req, '<h2>%s</h2>\n' % _('Word class'))
-	jotools.write(req, '<p>%s ' % _('Word class is'))
-	jotools.write(req, '<select name="wordclass">\n')
-	jotools.write(req, '<option selected="selected" value="">(%s)</option>\n' % _('any'))
-	for (classid, name) in wclasses:
-		jotools.write(req, '<option value="%i">%s</option>\n' % (classid, str(name, 'UTF-8')))
-	jotools.write(req, '</select></p>\n')
-	
-	textattrs = db.query("SELECT aid, descr FROM attribute WHERE type = 1 ORDER BY descr, aid").getresult()
-	jotools.write(req, '<h2>%s</h2>\n' % _('Text attributes'))
-	jotools.write(req, '<p><select name="textaid">\n')
-	jotools.write(req, '<option selected="selected" value="">(%s)</option>\n' % _('select attribute'))
-	for (aid, dsc) in textattrs:
-		jotools.write(req, '<option value="%i">%s</option>\n' % (aid, str(dsc, 'UTF-8')))
-	jotools.write(req, '</select> %s <input type="text" name="textvalue" /><br />\n' % _('is'))
-	
-	flagattrs = db.query("SELECT aid, descr FROM attribute WHERE type = 2 ORDER BY descr, aid").getresult()
-	jotools.write(req, '</p><h2>%s</h2>' % _('Flags set'))
-	jotools.write(req, '<ul class="cblist">')
-	for (aid, dsc) in flagattrs:
-		jotools.write(req, '<li><label><input type="checkbox" name="flagon%i" />%s</label></li>\n' \
-		              % (aid, str(dsc, 'UTF-8')))
-	jotools.write(req, '</ul>\n')
-	jotools.write(req, '<h2>%s</h2>' % _('Flags not set'))
-	jotools.write(req, '<ul class="cblist">')
-	for (aid, dsc) in flagattrs:
-		jotools.write(req, '<li><label><input type="checkbox" name="flagoff%i" />%s</label></li>\n' \
-		              % (aid, str(dsc, 'UTF-8')))
-	jotools.write(req, '</ul>\n')
-	
-	jotools.write(req, '<h2>%s</h2>\n<p>' % _('Output type'))
-	for (tname, tdesc) in jooutput.list_supported_types():
-		if tname == 'html': selected = 'checked="checked"'
-		else: selected = ''
-		jotools.write(req, ('<label><input type="radio" name="listtype" value="%s" %s />' +
-		                    '%s</label><br />\n') % (tname, selected, tdesc))
-	jotools.write(req, '</p><p><input type="submit" value="%s" /><input type="reset" value="%s" /></p>\n' \
-	              % (_('Search'), _('Reset')))
-	jotools.write(req, '</form>\n')
-	joheaders.page_footer_plain(req)
-	return '\n'
-
 def listchanges(req, sdate = None, edate = None):
 	db = jodb.connect()
 	(uid, uname, editable) = jotools.get_login_user(req)
