@@ -31,6 +31,7 @@ import _config
 from functions import checkword
 from xml.sax import saxutils
 from flask import request, Response
+from io import StringIO
 
 HTTP_MOVED_PERMANENTLY = 301
 
@@ -287,17 +288,17 @@ def comment_links(comment):
 
 class Request_wrapper:
 	def __init__(self):
-		self.content = ""
+		self.content = StringIO()
 		self.status = 200
 		self.headers_in = request.headers
 		self.headers_out = {}
 		self.content_type = "text/html; charset=UTF-8"
 	
 	def write(self, text):
-		self.content += text
+		self.content.write(text)
 	
 	def response(self):
-		resp = Response(self.content, status=self.status, mimetype=self.content_type)
+		resp = Response(self.content.getvalue(), status=self.status, mimetype=self.content_type)
 		for key, value in self.headers_out.items():
 			resp.headers[key] = value
 		return resp
