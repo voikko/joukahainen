@@ -5,7 +5,9 @@ import joheaders
 import jooutput
 import re
 import gettext
+import hashlib
 import _config
+import os
 from ehdotasanoja import ehdotasanoja_index
 
 _ = gettext.gettext
@@ -190,6 +192,71 @@ def query_wlist():
 def ehdotasanoja():
     req = jotools.Request_wrapper()
     ehdotasanoja_index(req)
+    return req.response()
+
+@app.route('/user/login', methods = ['POST'])
+def login():
+    req = jotools.Request_wrapper()
+    password = jotools.get_param(req, 'password', None)
+    username = jotools.get_param(req, 'username', None)
+    if username == None or password == None or not jotools.checkuname(username):
+        joheaders.error_page(req,
+                         _("Missing or incorrect username or password"))
+        return req.response()
+    
+    pwhash = hashlib.sha1((_config.PW_SALT + password).encode('UTF-8')).hexdigest()
+    db = jodb.connect_private()
+    results = db.query(("select uid, isadmin from appuser where uname = '%s' and pwhash = '%s' " +
+                        "and disabled = FALSE") % (jotools.escape_sql_string(username), pwhash))
+    if results.ntuples() == 0:
+        joheaders.error_page(req, _("Incorrect username or password"))
+        return req.response()
+    
+    (uid, isadmin) = results.getresult()[0]
+    if isadmin == 'f' and _config.ONLY_ADMIN_LOGIN_ALLOWED:
+        joheaders.error_page(req, _("Only administrator logins are allowed at the moment"))
+        return req.response()
+    
+    # Generate session key
+    sesssha = hashlib.sha1()
+    sesssha.update(username.encode('UTF-8'))
+    sesssha.update(pwhash.encode('UTF-8'))
+    sesssha.update(os.urandom(15))
+    sesskey = sesssha.hexdigest()
+    
+    db.query(("update appuser set session_key = '%s', session_exp = CURRENT_TIMESTAMP + " +
+              "interval '%i seconds' where uid = %i") % (sesskey, _config.SESSION_TIMEOUT, uid))
+    if _config.WWW_ROOT_DIR == '': cookiepath = '/'
+    else: cookiepath = _config.WWW_ROOT_DIR
+    req.headers_out['Set-Cookie'] = 'session=%s; path=%s' % (sesskey, cookiepath)
+    wid = jotools.get_param(req, 'wid', None)
+    if wid == None: wid_n = 0
+    else: wid_n = jotools.toint(wid)
+    if wid_n != 0:
+        joheaders.redirect_header(req, _config.WWW_ROOT_DIR + "/word/edit?wid=%i" % wid_n)
+    elif jotools.get_param(req, 'redir', None) != None:
+        joheaders.redirect_header(req, _config.WWW_ROOT_DIR +
+                                       jotools.get_param(req, 'redir', ''))
+    else: joheaders.redirect_header(req, _config.WWW_ROOT_DIR + "/")
+    req.write('</html>')
+    return req.response()
+
+@app.route('/user/logout', methods = ['POST'])
+def logout():
+    req = jotools.Request_wrapper()
+    session = jotools.get_session(req)
+    if session != '':
+        db = jodb.connect_private()
+        db.query(("update appuser set session_key = NULL, session_exp = NULL " +
+                  "where session_key = '%s'") % jotools.escape_sql_string(session))
+    req.headers_out['Set-Cookie'] = 'session=; path=%s; expires=Thu, 01-Jan-1970 00:00:01 GMT' \
+                                    % _config.WWW_ROOT_DIR
+    wid = jotools.get_param(req, 'wid', None)
+    if wid == None: wid_n = 0
+    else: wid_n = jotools.toint(wid)
+    if wid_n == 0: joheaders.redirect_header(req, _config.WWW_ROOT_DIR + "/")
+    else: joheaders.redirect_header(req, _config.WWW_ROOT_DIR + "/word/edit?wid=%i" % wid_n)
+    req.write('</html>')
     return req.response()
 
 @app.route('/jscripts.js')

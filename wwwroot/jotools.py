@@ -192,14 +192,14 @@ def get_login_user(req):
 	if session == '': return (None, None, False)
 	db = jodb.connect_private()
 	results = db.query(("select uid, uname, isadmin from appuser where session_key = '%s' " +
-	                   "and session_exp > CURRENT_TIMESTAMP") % session)
+	                   "and session_exp > CURRENT_TIMESTAMP") % escape_sql_string(session))
 	if results.ntuples() != 1: return (None, None, False)
 	result = results.getresult()[0]
 	if result[2] == 'f' and _config.ONLY_ADMIN_LOGIN_ALLOWED: return (None, None, False)
 	
 	db.query("update appuser set session_exp = CURRENT_TIMESTAMP + interval '%i seconds' where uid = %i" \
 	         % (_config.SESSION_TIMEOUT, result[0]))
-	return (result[0], str(result[1], 'UTF-8'), True)
+	return (result[0], result[1], True)
 
 # Returns True, if given user is an administrator
 def is_admin(uid):
