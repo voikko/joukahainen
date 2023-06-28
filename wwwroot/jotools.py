@@ -222,13 +222,9 @@ def escape_url(string):
 def escape_html(string):
 	return saxutils.escape(string)
 
-# Decodes a string from html form to unicode
-def decode_form_value(string):
-	return str(urllib.parse.unquote_plus(string), 'UTF-8')
-
 # Converts an unicode string to a form that is suitable for use in a SQL statement
 def escape_sql_string(string):
-	return _pg.escape_string(string)
+	return str(_pg.escape_string(string.encode('UTF-8')), 'UTF-8')
 
 # Returns a list that has all unique elements of the argument list. The returned list is sorted
 # according to element values. The original list must be sortable
@@ -245,6 +241,8 @@ def unique(oldlist):
 
 # Returns the value of given request parameter or default if parameter is not set
 def get_param(req, name, default):
+	if request.method == 'POST':
+		return request.form.get(name, default)
 	return request.args.get(name, default)
 
 # Returns the integer prefix of the given string or 0, if no such prefix was found

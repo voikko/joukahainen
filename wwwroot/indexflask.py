@@ -6,6 +6,7 @@ import jooutput
 import re
 import gettext
 import _config
+from ehdotasanoja import ehdotasanoja_index
 
 _ = gettext.gettext
 
@@ -183,6 +184,12 @@ def query_wlist():
     
     outputtype = jotools.get_param(req, "listtype", 'html')
     jooutput.call(req, outputtype, select)
+    return req.response()
+
+@app.route('/ehdotasanoja', methods = ['POST', 'GET'])
+def ehdotasanoja():
+    req = jotools.Request_wrapper()
+    ehdotasanoja_index(req)
     return req.response()
 
 @app.route('/jscripts.js')
