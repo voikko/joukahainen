@@ -11,6 +11,7 @@ import _config
 import os
 from functools import reduce
 from ehdotasanoja import ehdotasanoja_index
+from findclass import classlist
 
 _ = gettext.gettext
 
@@ -451,6 +452,12 @@ def query_wlist():
 def ehdotasanoja():
     req = jotools.Request_wrapper()
     ehdotasanoja_index(req)
+    return req.response()
+
+@app.route('/findclass/classlist')
+def findclass_classlist():
+    req = jotools.Request_wrapper()
+    classlist(req)
     return req.response()
 
 @app.route('/user/login', methods = ['POST'])

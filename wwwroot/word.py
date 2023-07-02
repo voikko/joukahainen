@@ -32,35 +32,6 @@ from functools import reduce
 
 _ = _apply_config.translation.ugettext
 
-def edit(req, wid = None):
-	# Sometimes browser may close the TCP session before page is fully
-	# loaded, which leads to IOError when trying to write the response.
-	# Typically this occurs when Firefox does link prefetching from
-	# Google search. Building the page can be safely aborted, but we
-	# catch the exception here so that it does not show up in the Apache
-	# error log.
-	try:
-		return _edit(req, wid)
-	except IOError:
-		return ""
-
-def _edit(req, wid):
-	if (wid == None):
-		joheaders.error_page(req, _('Parameter %s is required') % 'wid')
-		return '\n'
-	wid_n = jotools.toint(wid)
-	db = jodb.connect()
-	results = db.query("select word, class from word where wid = %i" % wid_n)
-	if results.ntuples() == 0:
-		joheaders.error_page(req, _('Word %i does not exist') % wid_n)
-		return '\n'
-	wordinfo = results.getresult()[0]
-	(uid, uname, editable) = jotools.get_login_user(req)
-	static_vars = {'WID': wid_n, 'WORD': str(wordinfo[0], 'UTF-8'), 'CLASSID': wordinfo[1],
-	               'UID': uid, 'UNAME': uname, 'EDITABLE': editable}
-	jotools.process_template(req, db, static_vars, 'word_edit', _config.LANG, 'joeditors', 1)
-	joheaders.page_footer_plain(req)
-	return '\n'
 
 # Returns a html class selector for a list of classes in form (cid, description). If cid != None,
 # then that class is already selected (as a hidden field). Row is the number of editable row

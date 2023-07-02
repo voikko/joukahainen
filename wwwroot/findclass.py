@@ -18,23 +18,18 @@
 
 # This file contains tools to find inflection class for a word
 
-from mod_python import apache
-
 import sys
-import _config
-import _apply_config
 import voikkoutils
 import voikkoinfl
 import joheaders
 import jotools
-import jooutput
-import jodb
+from functools import reduce
 
 # Path to Voikko data directory
 VOIKKO_DATA = voikkoutils.get_preference('voikko_data_dir')
 
 def _display_form(req, classid, grad_type, word):
-	jotools.write(req, u'''
+	jotools.write(req, '''
 <div class="rightinfo">
 <h2>Astevaihteluluokat</h2>
 <p>Vastaavat Kotus-astevaihteluluokat suluissa luokan nimen perässä. Joukahaisen
@@ -97,47 +92,47 @@ def _display_form(req, classid, grad_type, word):
 <label>Sana: <input type="text" name="word" value="%s"/></label><br />
 <label>Sanaluokka: <select name="class">''' % word)
 	if classid == 3:
-		jotools.write(req, u'''
+		jotools.write(req, '''
 <option value="1">Nomini</option>
 <option selected="selected" value="3">Verbi</option>''')
 	else:
-		jotools.write(req, u'''
+		jotools.write(req, '''
 <option selected="selected" value="1">Nomini</option>
 <option value="3">Verbi</option>''')
-	jotools.write(req, u'''
+	jotools.write(req, '''
 </select></label><br />
 <label>Astevaihteluluokka: <select name="gclass">''')
-	if grad_type == u'-':
-		jotools.write(req, u'<option selected="selected" value="-">ei astevaihtelua</option>')
+	if grad_type == '-':
+		jotools.write(req, '<option selected="selected" value="-">ei astevaihtelua</option>')
 	else:
-		jotools.write(req, u'<option value="-">ei astevaihtelua</option>')
+		jotools.write(req, '<option value="-">ei astevaihtelua</option>')
 	for i in range(1, 7):
-		if grad_type == (u'av%i' % i):
-			jotools.write(req, u'<option selected="selected" ' \
-			              + (u'value="av%i">av%i</option>' % (i, i)))
+		if grad_type == ('av%i' % i):
+			jotools.write(req, '<option selected="selected" ' \
+			              + ('value="av%i">av%i</option>' % (i, i)))
 		else:
-			jotools.write(req, u'<option value="av%i">av%i</option>' % (i, i))
-	jotools.write(req, u'''
+			jotools.write(req, '<option value="av%i">av%i</option>' % (i, i))
+	jotools.write(req, '''
 </select></label><br />
 <input type="submit" value="Hae mahdolliset taivutukset" /></p>
 </form>''')
 
 def classlist(req):
 	(uid, uname, editable) = jotools.get_login_user(req)
-	joheaders.page_header_navbar_level1(req, u'Etsi sanalle taivutusluokka', uid, uname)
+	joheaders.page_header_navbar_level1(req, 'Etsi sanalle taivutusluokka', uid, uname)
 	
-	word = jotools.get_param(req, 'word', u'')
+	word = jotools.get_param(req, 'word', '')
 	if not jotools.checkword(word):
-		joheaders.error_page(req, u'Sanassa on kiellettyjä merkkejä')
+		joheaders.error_page(req, 'Sanassa on kiellettyjä merkkejä')
 		return '\n'
 	
 	# Sanaa ei annettu, joten näytetään pelkkä lomake
 	if len(word) == 0:
-		_display_form(req, 1, u'-', u'')
+		_display_form(req, 1, '-', '')
 		joheaders.page_footer_plain(req)
 		return '\n'
 	
-	classid = jotools.toint(jotools.get_param(req, 'class', u'0'))
+	classid = jotools.toint(jotools.get_param(req, 'class', '0'))
 	if classid == 1:
 		classdatafile = VOIKKO_DATA + "/subst.aff"
 	elif classid == 3:
@@ -146,17 +141,17 @@ def classlist(req):
 		joheaders.page_footer_plain(req)
 		return '\n'
 	else:
-		joheaders.error_page(req, u'Sanaluokkaa ei ole olemassa')
+		joheaders.error_page(req, 'Sanaluokkaa ei ole olemassa')
 		return '\n'
 	
-	grad_type = jotools.get_param(req, 'gclass', u'-')
-	if not grad_type in [u'-', u'av1', u'av2', u'av3', u'av4', u'av5', u'av6']:
-		joheaders.error_page(req, u'Taivutusluokkaa ei ole olemassa')
+	grad_type = jotools.get_param(req, 'gclass', '-')
+	if not grad_type in ['-', 'av1', 'av2', 'av3', 'av4', 'av5', 'av6']:
+		joheaders.error_page(req, 'Taivutusluokkaa ei ole olemassa')
 		return '\n'
-	if grad_type == u'-':
-		grad_type_s = u''
+	if grad_type == '-':
+		grad_type_s = ''
 	else:
-		grad_type_s = u'-' + grad_type
+		grad_type_s = '-' + grad_type
 	
 	_display_form(req, classid, grad_type, word)
 	
@@ -172,23 +167,23 @@ def classlist(req):
 		inflist = []
 		inflected_words.append(voikkoinfl.InflectedWord())
 		jotools.write(req, '<hr /><h2 class="infclass">' + infclass_main + grad_type_s + '</h2>')
-		if word_class.note != u'':
-			jotools.write(req, u'<p>%s</p>\n' % word_class.note)
-		jotools.write(req, u'<p>Kotus-luokka: %s</p>' % \
-		              reduce(lambda x, y: u"%s, %s" % (x, y), word_class.kotusClasses))
+		if word_class.note != '':
+			jotools.write(req, '<p>%s</p>\n' % word_class.note)
+		jotools.write(req, '<p>Kotus-luokka: %s</p>' % \
+		              reduce(lambda x, y: "%s, %s" % (x, y), word_class.kotusClasses))
 		
-		jotools.write(req, u'<table class="border">\n')
+		jotools.write(req, '<table class="border">\n')
 		for inflected_word in inflected_words:
 			if previous_inflected.formName != inflected_word.formName:
-				if previous_inflected.formName != u"" and len(inflist) > 0:
+				if previous_inflected.formName != "" and len(inflist) > 0:
 					if previous_inflected.isCharacteristic:
-						infs = reduce(lambda x, y: u"%s, %s" % (x, y), inflist)
-						jotools.write(req, (u"<tr><td>%s</td><td>%s</td></tr>\n" %
+						infs = reduce(lambda x, y: "%s, %s" % (x, y), inflist)
+						jotools.write(req, ("<tr><td>%s</td><td>%s</td></tr>\n" %
 						          (previous_inflected.formName, infs)))
 				inflist = []
 				previous_inflected = inflected_word
 			if not inflected_word.inflectedWord in inflist:
 				inflist.append(inflected_word.inflectedWord)
-		jotools.write(req, u'</table>\n')
+		jotools.write(req, '</table>\n')
 	joheaders.page_footer_plain(req)
 	return '\n'
