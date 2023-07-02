@@ -47,6 +47,108 @@ def word_edit():
     joheaders.page_footer_plain(req)
     return req.response()
 
+@app.route('/word/change', methods = ['POST'])
+def change():
+    req = jotools.Request_wrapper()
+    wid = jotools.get_param(req, 'wid', None)
+    (uid, uname, editable) = jotools.get_login_user(req)
+    if not editable:
+        joheaders.error_page(req, _('You are not allowed to edit data'))
+        return req.response()
+    if (wid == None):
+        joheaders.error_page(req, _('Parameter %s is required') % 'wid')
+        return req.response()
+    
+    wid_n = jotools.toint(wid)
+    db = jodb.connect()
+    db.query("begin")
+    wclass_results = db.query("select class from word where wid = $1", (wid_n,))
+    if wclass_results.ntuples() == 0:
+        joheaders.error_page(req, _('Word %i does not exist') % wid_n)
+        db.query("rollback")
+        return req.response()
+    wclass = wclass_results.getresult()[0][0]
+    edfield_results = db.query("select a.type, a.aid, a.descr from attribute a, attribute_class ac " +
+                               "where a.aid = ac.aid and ac.classid = $1 and a.editable = TRUE", (wclass,))
+    eid = db.query("select nextval('event_eid_seq')").getresult()[0][0]
+    event_inserted = False
+    messages = []
+    
+    for attribute in edfield_results.getresult():
+        if attribute[0] == 1: # string attribute
+            html_att = 'string%i' % attribute[1]
+            newval = jotools.get_param(req, html_att, None)
+            if newval == None: continue
+            
+            vresults = db.query("select s.value from string_attribute_value s where " +
+                                "s.wid = $1 and s.aid = $2", (wid_n, attribute[1]))
+            if vresults.ntuples() == 0: oldval = ""
+            else: oldval = vresults.getresult()[0][0]
+            if oldval == newval: continue
+            if not event_inserted:
+                db.query("insert into event(eid, eword, euser) values($1, $2, $3)", (eid, wid_n, uid))
+                event_inserted = True
+            if newval == '':
+                db.query("delete from string_attribute_value where wid = $1 and aid = $2", (wid_n, attribute[1]))
+            elif oldval == '':
+                db.query("insert into string_attribute_value(wid, aid, value, eevent) " +
+                         "values($1, $2, $3, $4)", (wid_n, attribute[1], newval, eid))
+            else:
+                db.query("update string_attribute_value set value=$1, eevent=$2 where wid=$3 and aid=$4",
+                    (newval, eid, wid_n, attribute[1]))
+            messages.append("%s: '%s' -> '%s'" % (attribute[2],
+                            oldval, newval))
+        if attribute[0] == 3: # integer attribute
+            html_att = 'int%i' % attribute[1]
+            newval_s = jotools.get_param(req, html_att, None)
+            if newval_s == None: continue
+            newval_s = newval_s.strip()
+            if newval_s == '':
+                newval = None
+            else:
+                try: newval = int(newval_s)
+                except ValueError: continue
+                # Limit value range to prevent troubles with storing the
+                # value into the database
+                if newval < -1000000 or newval > 1000000: continue
+            
+            vresults = db.query("select i.value from int_attribute_value i where " +
+                                "i.wid = $1 and i.aid = $2", (wid_n, attribute[1]))
+            if vresults.ntuples() == 0: oldval = None
+            else: oldval = vresults.getresult()[0][0]
+            if oldval == newval: continue
+            if not event_inserted:
+                db.query("insert into event(eid, eword, euser) values($1, $2, $3)", (eid, wid_n, uid))
+                event_inserted = True
+            if newval == None:
+                db.query("delete from int_attribute_value where wid = $1 and aid = $2", (wid_n, attribute[1]))
+            elif oldval == None:
+                db.query("insert into int_attribute_value(wid, aid, value, eevent) " +
+                         "values($1, $2, $3, $4)", (wid_n, attribute[1], newval, eid))
+            else:
+                db.query("update int_attribute_value set value=$1, eevent=$2 where wid=$3 and aid=$4",
+                    (newval, eid, wid_n, attribute[1]))
+            if oldval == None: oldval_s = _('(None)')
+            else: oldval_s = repr(oldval)
+            if newval == None: newval_s = _('(None)')
+            else: newval_s = repr(newval)
+            messages.append("%s: %s -> %s" % (attribute[2],
+                            oldval_s, newval_s))
+    
+    comment = jotools.get_param(req, 'comment', '')
+    
+    if comment != '':
+        if not event_inserted:
+            db.query("insert into event(eid, eword, euser) values($1, $2, $3)", (eid, wid_n, uid))
+            event_inserted = True
+        db.query("update event set comment = $1 where eid = $2", (comment, eid))
+    if event_inserted and len(messages) > 0:
+        mess_str = reduce(lambda x, y: x + "\n" + y, messages, "")
+        db.query("update event set message = $1 where eid = $2", (mess_str, eid))
+    db.query("commit")
+    joheaders.redirect_header(req, 'edit?wid=%i' % wid_n)
+    return req.response()
+
 @app.route('/word/flags', methods = ['POST', 'GET'])
 def word_flags():
     req = jotools.Request_wrapper()
@@ -75,9 +177,6 @@ def word_flags():
         jotools.write(req, '<p>%s</p>\n' % joeditors.call(db, 'word_class', [classid]))
         jotools.write(req, joeditors.call(db, 'flag_edit_form', [wid_n, classid]))
         joheaders.page_footer_plain(req)
-        return req.response()
-    if request.method != 'POST':
-        joheaders.error_page(req, _('Only GET and POST requests are allowed'))
         return req.response()
     db.query("begin")
     edfield_results = db.query("SELECT a.aid, a.descr, CASE WHEN fav.wid IS NULL THEN 'f' ELSE 't' END " +
@@ -117,6 +216,85 @@ def word_flags():
         if not event_inserted:
             db.query("insert into event(eid, eword, euser) values($1, $2, $3)", \
                      (eid, wid_n, uid))
+            event_inserted = True
+        db.query("update event set comment = $1 where eid = $2", (comment, eid))
+    if event_inserted and len(messages) > 0:
+        mess_str = reduce(lambda x, y: x + "\n" + y, messages, "")
+        db.query("update event set message = $1 where eid = $2", (mess_str, eid))
+    db.query("commit")
+    joheaders.redirect_header(req, 'edit?wid=%i' % wid_n)
+    return req.response()
+
+@app.route('/word/rwords', methods = ['POST', 'GET'])
+def rwords():
+    req = jotools.Request_wrapper()
+    wid = jotools.get_param(req, 'wid', None)
+    (uid, uname, editable) = jotools.get_login_user(req)
+    if not editable:
+        joheaders.error_page(req, _('You are not allowed to edit data'))
+        return req.response()
+    if wid == None:
+        joheaders.error_page(req, _('Parameter %s is required') % 'wid')
+        return req.response()
+    wid_n = jotools.toint(wid)
+    db = jodb.connect()
+    results = db.query("select word, class from word where wid = $1", (wid_n,))
+    if results.ntuples() == 0:
+        joheaders.error_page(req, _('Word %i does not exist') % wid_n)
+        return req.response()
+    wordinfo = results.getresult()[0]
+    if request.method == 'GET': # show editor
+        word = wordinfo[0]
+        classid = wordinfo[1]
+        title1 = _('Word') + ': ' + word
+        link1 = 'edit?wid=%i' % wid_n
+        title2 = _('related words')
+        joheaders.page_header_navbar_level2(req, title1, link1, title2, uid, uname, wid_n)
+        jotools.write(req, '<p>%s</p>\n' % joeditors.call(db, 'word_class', [classid]))
+        jotools.write(req, joeditors.call(db, 'rwords_edit_form', [wid_n]))
+        joheaders.page_footer_plain(req)
+        return req.response()
+    db.query("begin")
+    rword_results = db.query("SELECT rwid, related_word FROM related_word WHERE wid = $1", (wid_n,))
+    rword_res = rword_results.getresult()
+    eid = db.query("select nextval('event_eid_seq')").getresult()[0][0]
+    event_inserted = False
+    messages = []
+    
+    for attribute in rword_res:
+        html_att = 'rword%i' % attribute[0]
+        if jotools.get_param(req, html_att, '') == 'on': remove = True
+        else: remove = False
+        
+        if not remove: continue
+        if not event_inserted:
+            db.query("insert into event(eid, eword, euser) values($1, $2, $3)", \
+                     (eid, wid_n, uid))
+            event_inserted = True
+        db.query("delete from related_word where wid = $1 and rwid = $2", (wid_n, attribute[0]))
+        messages.append(_("Alternative spelling removed: '%s'") % jotools.escape_html(attribute[1]))
+    
+    newwords = jotools.get_param(req, 'add', '')
+    for word in jotools.unique(newwords.split()):
+        if not jotools.checkword(word): continue
+        already_listed = False
+        for attribute in rword_res:
+            if word == attribute[1]:
+                already_listed = True
+                break
+        if already_listed: continue
+        if not event_inserted:
+            db.query("insert into event(eid, eword, euser) values($1, $2, $3)", (eid, wid_n, uid))
+            event_inserted = True
+        db.query("insert into related_word(wid, eevent, related_word) values($1, $2, $3)", \
+                 (wid_n, eid, word))
+        messages.append(_("Alternative spelling added: '%s'") % jotools.escape_html(word))
+    
+    comment = jotools.get_param(req, 'comment', '')
+    
+    if comment != '':
+        if not event_inserted:
+            db.query("insert into event(eid, eword, euser) values($1, $2, $3)", (eid, wid_n, uid))
             event_inserted = True
         db.query("update event set comment = $1 where eid = $2", (comment, eid))
     if event_inserted and len(messages) > 0:
