@@ -127,17 +127,16 @@ def _message_log(db, wid):
 	return retstr
 
 def _flag_edit_form(db, wid, classid):
-	results = db.query(("SELECT a.aid, a.descr, CASE WHEN fav.wid IS NULL THEN 'f' ELSE 't' END " +
-	                    "FROM attribute_class ac, attribute a " +
-	                    "LEFT OUTER JOIN flag_attribute_value fav ON (a.aid = fav.aid and fav.wid = %i) " +
-	                    "WHERE a.aid = ac.aid AND ac.classid = %i AND a.type = 2" +
-			"ORDER BY a.descr") % (wid, classid))
+	results = db.query("SELECT a.aid, a.descr, CASE WHEN fav.wid IS NULL THEN 'f' ELSE 't' END " +
+	                   "FROM attribute_class ac, attribute a " +
+	                   "LEFT OUTER JOIN flag_attribute_value fav ON (a.aid = fav.aid and fav.wid = $1) " +
+	                   "WHERE a.aid = ac.aid AND ac.classid = $2 AND a.type = 2 ORDER BY a.descr", (wid, classid))
 	if results.ntuples() == 0: return "(%s)" % _('No flags available')
 	retstr = '<form method="post" action="flags"><p>\n'
 	for result in results.getresult():
 		retstr = retstr + '<label><input type="checkbox" value="on" name="attr%i"' % result[0]
 		if result[2] == 't': retstr = retstr + ' checked="checked"'
-		retstr = retstr + ' />' + jotools.escape_html(str(result[1], 'UTF-8'))
+		retstr = retstr + ' />' + jotools.escape_html(result[1])
 		retstr = retstr + '</label><br />\n'
 	retstr = retstr + '''<input type="hidden" name="wid" value="%i" /></p>
 <p><span class="fheader">%s:</span>

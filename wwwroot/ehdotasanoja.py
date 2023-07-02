@@ -44,7 +44,7 @@ def _allow_new_word(req, privdb, substract_from_quota):
 	new_date = datetime.date.today().isoformat()
 	if substract_from_quota: privdb.query("BEGIN")
 	results = privdb.query("SELECT last_access_date, access_count FROM guestaccess " +
-	                       "WHERE ip = '%s'" % current_ip)
+	                       "WHERE ip = $1", (current_ip,))
 	
 	if results.ntuples() > 0:
 		add_record = False
@@ -63,10 +63,10 @@ def _allow_new_word(req, privdb, substract_from_quota):
 	
 	if substract_from_quota:
 		if results.ntuples() == 0:
-			privdb.query("INSERT INTO guestaccess(ip) VALUES('%s')" % current_ip)
+			privdb.query("INSERT INTO guestaccess(ip) VALUES($1)", (current_ip,))
 		else:
-			privdb.query(("UPDATE guestaccess SET last_access_date = '%s', " + \
-			              "access_count = %i WHERE ip = '%s'") % \
+			privdb.query(("UPDATE guestaccess SET last_access_date = $1, " + \
+			              "access_count = $2 WHERE ip = $3"), \
 				   (new_date, new_access_count, current_ip))
 		privdb.query("COMMIT")
 	return True
@@ -75,19 +75,17 @@ def _is_old_word(req, db, word):
 	"Checks if given word should be rejected. Returns an error message or None, if word is OK."
 	
 	# Previously suggested words
-	results = db.query("SELECT word FROM raw_word WHERE word = '%s'" \
-	                   % jotools.escape_sql_string(word))
+	results = db.query("SELECT word FROM raw_word WHERE word = $1", (word,))
 	if results.ntuples() > 0: return "Sanaa on jo ehdotettu lisättäväksi."
 	
 	# Words in database
-	results = db.query("SELECT word FROM word WHERE word = '%s'" \
-	                   % jotools.escape_sql_string(word))
+	results = db.query("SELECT word FROM word WHERE word = $1", (word,))
 	if results.ntuples() > 0: return '<a href="query/wlist?word=%s">Sana on jo tietokannassa</a>.' \
 	                          % jotools.escape_url(word.encode('UTF-8'))
 	
 	# Alternative spellings
 	results = db.query("SELECT wid FROM related_word WHERE replace(replace(related_word, " +
-	                   "'=', ''), '|', '') LIKE '%s'" % jotools.escape_sql_string(word))
+	                   "'=', ''), '|', '') LIKE $1", (word,))
 	if results.ntuples() > 0: return '<a href="word/edit?wid=%i">Sana on jo tietokannassa</a>.' \
 	                          % results.getresult()[0][0]
 	
@@ -186,10 +184,8 @@ def ehdotasanoja_index(req):
 				_print_error_forbidden(req)
 			else:
 				db.query("INSERT INTO raw_word(word, info, notes) " +
-				         "VALUES('%s', '%s', '%s')" % \
-				         (jotools.escape_sql_string(word),
-				          jotools.escape_sql_string(wtype),
-				          jotools.escape_sql_string(comment)))
+				         "VALUES($1, $2, $3)", \
+				         (word, wtype, comment))
 				jotools.write(req, '<p class="ok">Ehdotuksesi on tallennettu. ' +
 				                   'Kiitos avusta!</p>')
 				_print_entry_form(req, db)

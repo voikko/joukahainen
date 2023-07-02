@@ -2,12 +2,14 @@ from flask import Flask, request, Response, send_file
 import jodb
 import jotools
 import joheaders
+import joeditors
 import jooutput
 import re
 import gettext
 import hashlib
 import _config
 import os
+from functools import reduce
 from ehdotasanoja import ehdotasanoja_index
 
 _ = gettext.gettext
@@ -33,7 +35,7 @@ def word_edit():
         return req.response()
     wid_n = jotools.toint(wid)
     db = jodb.connect()
-    results = db.query("select word, class from word where wid = %i" % wid_n)
+    results = db.query("select word, class from word where wid = $1", (wid_n,))
     if results.ntuples() == 0:
         joheaders.error_page(req, _('Word %i does not exist') % wid_n)
         return req.response()
@@ -43,6 +45,85 @@ def word_edit():
                    'UID': uid, 'UNAME': uname, 'EDITABLE': editable}
     jotools.process_template(req, db, static_vars, 'word_edit', _config.LANG, 'joeditors', 1)
     joheaders.page_footer_plain(req)
+    return req.response()
+
+@app.route('/word/flags', methods = ['POST', 'GET'])
+def word_flags():
+    req = jotools.Request_wrapper()
+    wid = jotools.get_param(req, 'wid', None)
+    (uid, uname, editable) = jotools.get_login_user(req)
+    if not editable:
+        joheaders.error_page(req, _('You are not allowed to edit data'))
+        return req.response()
+    if wid == None:
+        joheaders.error_page(req, _('Parameter %s is required') % 'wid')
+        return req.response()
+    wid_n = jotools.toint(wid)
+    db = jodb.connect()
+    results = db.query("select word, class from word where wid = $1", (wid_n,))
+    if results.ntuples() == 0:
+        joheaders.error_page(req, _('Word %i does not exist') % wid_n)
+        return req.response()
+    wordinfo = results.getresult()[0]
+    if request.method == 'GET': # show editor
+        word = wordinfo[0]
+        classid = wordinfo[1]
+        title1 = _('Word') + ': ' + word
+        link1 = 'edit?wid=%i' % wid_n
+        title2 = _('flags')
+        joheaders.page_header_navbar_level2(req, title1, link1, title2, uid, uname, wid_n)
+        jotools.write(req, '<p>%s</p>\n' % joeditors.call(db, 'word_class', [classid]))
+        jotools.write(req, joeditors.call(db, 'flag_edit_form', [wid_n, classid]))
+        joheaders.page_footer_plain(req)
+        return req.response()
+    if request.method != 'POST':
+        joheaders.error_page(req, _('Only GET and POST requests are allowed'))
+        return req.response()
+    db.query("begin")
+    edfield_results = db.query("SELECT a.aid, a.descr, CASE WHEN fav.wid IS NULL THEN 'f' ELSE 't' END " +
+                        "FROM attribute_class ac, attribute a " +
+                        "LEFT OUTER JOIN flag_attribute_value fav ON (a.aid = fav.aid and fav.wid = $1) " +
+                        "WHERE a.aid = ac.aid AND ac.classid = $2 AND a.type = 2 " +
+                        "ORDER BY a.descr", (wid_n, wordinfo[1]))
+    eid = db.query("select nextval('event_eid_seq')").getresult()[0][0]
+    event_inserted = False
+    messages = []
+    
+    for attribute in edfield_results.getresult():
+        html_att = 'attr%i' % attribute[0]
+        if jotools.get_param(req, html_att, '') == 'on': newval = True
+        else: newval = False
+        
+        if attribute[2] == 't': oldval = True
+        else: oldval = False
+        
+        if oldval == newval: continue
+        if not event_inserted:
+            db.query("insert into event(eid, eword, euser) values($1, $2, $3)", \
+                     (eid, wid_n, uid))
+            event_inserted = True
+        if newval == False:
+            db.query("delete from flag_attribute_value where wid = $1 " +
+                      "and aid = $2", (wid_n, attribute[0]))
+            messages.append(_("Flag removed: '%s'") % attribute[1])
+        if newval == True:
+            db.query("insert into flag_attribute_value(wid, aid, eevent) " +
+                     "values($1, $2, $3)", (wid_n, attribute[0], eid))
+            messages.append(_("Flag added: '%s'") % attribute[1])
+    
+    comment = jotools.get_param(req, 'comment', '')
+    
+    if comment != '':
+        if not event_inserted:
+            db.query("insert into event(eid, eword, euser) values($1, $2, $3)", \
+                     (eid, wid_n, uid))
+            event_inserted = True
+        db.query("update event set comment = $1 where eid = $2", (comment, eid))
+    if event_inserted and len(messages) > 0:
+        mess_str = reduce(lambda x, y: x + "\n" + y, messages, "")
+        db.query("update event set message = $1 where eid = $2", (mess_str, eid))
+    db.query("commit")
+    joheaders.redirect_header(req, 'edit?wid=%i' % wid_n)
     return req.response()
 
 @app.route('/query/form')
@@ -206,8 +287,7 @@ def login():
     
     pwhash = hashlib.sha1((_config.PW_SALT + password).encode('UTF-8')).hexdigest()
     db = jodb.connect_private()
-    results = db.query(("select uid, isadmin from appuser where uname = '%s' and pwhash = '%s' " +
-                        "and disabled = FALSE") % (jotools.escape_sql_string(username), pwhash))
+    results = db.query(("select uid, isadmin from appuser where uname = $1 and pwhash = $2 and disabled = FALSE"), (username, pwhash))
     if results.ntuples() == 0:
         joheaders.error_page(req, _("Incorrect username or password"))
         return req.response()
@@ -247,8 +327,8 @@ def logout():
     session = jotools.get_session(req)
     if session != '':
         db = jodb.connect_private()
-        db.query(("update appuser set session_key = NULL, session_exp = NULL " +
-                  "where session_key = '%s'") % jotools.escape_sql_string(session))
+        db.query("update appuser set session_key = NULL, session_exp = NULL " +
+                 "where session_key = $1", (session,))
     req.headers_out['Set-Cookie'] = 'session=; path=%s; expires=Thu, 01-Jan-1970 00:00:01 GMT' \
                                     % _config.WWW_ROOT_DIR
     wid = jotools.get_param(req, 'wid', None)
