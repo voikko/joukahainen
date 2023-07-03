@@ -1,4 +1,5 @@
 from flask import Flask, request, Response, send_file
+from _pg import ProgrammingError
 import jodb
 import jotools
 import joheaders
@@ -775,6 +776,110 @@ def logout():
     if wid_n == 0: joheaders.redirect_header(req, _config.WWW_ROOT_DIR + "/")
     else: joheaders.redirect_header(req, _config.WWW_ROOT_DIR + "/word/edit?wid=%i" % wid_n)
     req.write('</html>')
+    return req.response()
+
+@app.route('/user/addform', methods = ['GET'])
+def user_addform():
+    req = jotools.Request_wrapper()
+    (uid, uname, editable) = jotools.get_login_user(req)
+    if not jotools.is_admin(uid):
+        joheaders.error_page(req, _('You must be an administrator to do this'))
+        return req.response()
+    joheaders.page_header_navbar_level1(req, _('Add user'), uid, uname)
+    jotools.write(req, '''
+<form method="post" action="add">
+<table>
+<tr><td>%s</td><td><input type="text" name="firstname" /></td></tr>
+<tr><td>%s</td><td><input type="text" name="lastname" /></td></tr>
+<tr><td>%s</td><td><input type="text" name="uname" /></td></tr>
+<tr><td>%s</td><td><input type="text" name="email" /></td></tr>
+<tr><td>%s</td><td><input type="text" name="passwd" /></td></tr>
+</table>
+<input type="submit" value="%s" />
+</form>
+'''        % (_('First name'), _('Last name'), _('Username'), _('Email address'),
+              _('Password'), _('Add user')))
+    joheaders.page_footer_plain(req)
+    return req.response()
+
+@app.route('/user/add', methods = ['POST'])
+def user_add():
+    req = jotools.Request_wrapper()
+    (uid, uname, editable) = jotools.get_login_user(req)
+    if not jotools.is_admin(uid):
+        joheaders.error_page(req, _('You must be an administrator to do this'))
+        return req.response()
+    datafields = ['firstname', 'lastname', 'uname', 'email', 'passwd']
+    values = {}
+    for datafield in datafields:
+        values[datafield] = jotools.get_param(req, datafield, '')
+        if datafield != 'passwd':
+            values[datafield] = jotools.escape_sql_string(values[datafield])
+        if datafield not in ['email', 'passwd'] and values[datafield] == '':
+            joheaders.error_page(req, _('Required field %s is missing') % datafield)
+            return req.response()
+    if values['passwd'] == '':
+        joheaders.error_page(req, _('Required field %s is missing') % 'passwd')
+        return req.response()
+    pwhash = hashlib.sha1((_config.PW_SALT + values['passwd']).encode('UTF-8')).hexdigest()
+    privdb = jodb.connect_private()
+    newuid = privdb.query("SELECT nextval('appuser_uid_seq')").getresult()[0][0]
+    try:
+        privdb.query(("INSERT INTO appuser(uid, uname, firstname, lastname, email, pwhash)" +
+                      "VALUES(%i, '%s', '%s', '%s', '%s', '%s')") % (newuid, values['uname'],
+                values['firstname'], values['lastname'], values['email'], pwhash))
+    except ProgrammingError:
+        joheaders.error_page(req, _('User name is already in use'))
+        return req.response()
+    db = jodb.connect()
+    db.query(("INSERT INTO appuser(uid, uname, firstname, lastname, email)" +
+              "VALUES(%i, '%s', '%s', '%s', '%s')") % (newuid, values['uname'],
+        values['firstname'], values['lastname'], values['email']))
+    joheaders.ok_page(req, _('New user was added succesfully'))
+    return req.response()
+
+@app.route('/user/passwdform', methods = ['GET'])
+def user_passwdform():
+    req = jotools.Request_wrapper()
+    (uid, uname, editable) = jotools.get_login_user(req)
+    if uid == None:
+        joheaders.error_page(req, _('You must be logged in to do this'))
+        return req.response()
+    joheaders.page_header_navbar_level1(req, _('Change password'), uid, uname)
+    jotools.write(req, '''
+<form method="post" action="changepasswd">
+<table>
+<tr><td>%s</td><td><input type="password" name="oldpw" /></td></tr>
+<tr><td>%s</td><td><input type="password" name="newpw" /></td></tr>
+</table>
+<input type="submit" value="%s" />
+</form>
+'''        % (_('Old password'), _('New password'), _('Change password')))
+    joheaders.page_footer_plain(req)
+    return req.response()
+
+@app.route('/user/changepasswd', methods = ['POST'])
+def user_changepasswd():
+    req = jotools.Request_wrapper()
+    (uid, uname, editable) = jotools.get_login_user(req)
+    if uid == None:
+        joheaders.error_page(req, _('You must be logged in to do this'))
+        return req.response()
+    oldpw = jotools.get_param(req, 'oldpw', '')
+    newpw = jotools.get_param(req, 'newpw', '')
+    if oldpw == '' or newpw == '':
+        joheaders.error_page(req, _('Required field is missing'))
+        return req.response()
+    oldpwhash = hashlib.sha1((_config.PW_SALT + oldpw).encode('UTF-8')).hexdigest()
+    db = jodb.connect_private()
+    results = db.query(("select uid from appuser where uid = %i and pwhash = '%s'") \
+                       % (uid, oldpwhash))
+    if results.ntuples() == 0:
+        joheaders.error_page(req, _("Incorrect old password"))
+        return req.response()
+    newpwhash = hashlib.sha1((_config.PW_SALT + newpw).encode('UTF-8')).hexdigest()
+    db.query("update appuser set pwhash = '%s' where uid = %i" % (newpwhash, uid))
+    joheaders.ok_page(req, _('Password was changed succesfully'))
     return req.response()
 
 @app.route('/jscripts.js')

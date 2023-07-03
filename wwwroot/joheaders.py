@@ -39,7 +39,7 @@ def page_header_nonavbar(req, title):
 </head>
 <body onload="initPage()">
 <div class="main">
-""" % (title.encode('UTF-8'), _config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR,
+""" % (title, _config.WWW_ROOT_DIR, _config.WWW_ROOT_DIR,
                               _config.WWW_ROOT_DIR))
 
 # Outputs the shared html header for ordinary pages
