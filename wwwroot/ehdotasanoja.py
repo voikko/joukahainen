@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2007 Harri Pitkänen (hatapitk@iki.fi)
+# Copyright 2007 - 2023 Harri Pitkänen (hatapitk@iki.fi)
 # This file is part of Joukahainen, a vocabulary management application
 
 # This program is free software: you can redistribute it and/or modify
