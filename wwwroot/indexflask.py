@@ -7,6 +7,7 @@ import jooutput
 import word as joword
 import re
 import gettext
+import random
 import hashlib
 import _config
 import os
@@ -388,6 +389,91 @@ Make the required changes and mark the words that you still want to add.''') + '
                            % _('Back to main page'))
         joheaders.page_footer_plain(req)
         return req.response()
+
+@app.route('/word/categories', methods = ['GET'])
+def word_categories():
+    req = jotools.Request_wrapper()
+    (uid, uname, editable) = jotools.get_login_user(req)
+    if not editable:
+        joheaders.error_page(req, _('You are not allowed to edit data'))
+        return req.response()
+    db = jodb.connect()
+    results = db.query("SELECT coalesce(info, ''), count(*) FROM raw_word " +
+                       "WHERE processed = FALSE " +
+                       "GROUP BY coalesce(info, '') " +
+                       "ORDER BY coalesce(info, '') ")
+    if results.ntuples() == 0:
+        joheaders.error_page(req, _('There are no words to be added'))
+        return req.response()
+    joheaders.page_header_navbar_level1(req, _("Add words"), uid, uname)
+    jotools.write(req, "<p>%s:</p>\n" \
+                       % _('Choose a category from which you want to add words'))
+    jotools.write(req, "<table><tr><th>%s</th><th>%s</th></tr>\n" \
+                       % (_('Category'), _('Words left')))
+    for result in results.getresult():
+        cat = result[0]
+        if cat == '': cats = '(' + _('no category') + ')'
+        else: cats = cat
+        jotools.write(req, ('<tr><td><a href="add_from_db?category=%s">%s</a></td>' +
+                            '<td>%i</td></tr>\n') \
+          % (jotools.escape_url(result[0]), jotools.escape_html(cats), result[1]))
+    jotools.write(req, "</table>\n")
+    jotools.write(req, '<p><a href="add_from_db">%s ...</a></p>\n' % _('All words'))
+    joheaders.page_footer_plain(req)
+    return req.response()
+
+@app.route('/word/add_from_db', methods = ['GET'])
+def word_add_from_db():
+    req = jotools.Request_wrapper()
+    (uid, uname, editable) = jotools.get_login_user(req)
+    if not editable:
+        joheaders.error_page(req, _('You are not allowed to edit data'))
+        return req.response()
+    db = jodb.connect()
+    words_per_page = 15
+    category = jotools.get_param(req, 'category', None)
+    if category == None: condition = ""
+    else: condition = "AND coalesce(info, '') = '%s'" \
+                      % jotools.escape_sql_string(category)
+    results = db.query("SELECT count(*) FROM raw_word WHERE processed = FALSE %s" \
+                       % condition)
+    nwords = results.getresult()[0][0]
+    if nwords <= words_per_page: limit = ""
+    else: limit = "LIMIT %i OFFSET %i" % (words_per_page,
+                  random.randint(0, nwords - words_per_page))
+    results = db.query(("SELECT word, coalesce(notes, '') FROM raw_word " +
+                        "WHERE processed = FALSE %s " +
+                        "ORDER BY word %s") % (condition, limit))
+    if results.ntuples() == 0 and category == None:
+        joheaders.error_page(req, _('There are no words to be added'))
+        return req.response()
+    if results.ntuples() == 0 and category != None:
+        joheaders.error_page(req, _('There are no words to be added') + ' ' +
+                  _('in category %s') % jotools.escape_html(category))
+        return req.response()
+    class_res = db.query("select classid, name from wordclass").getresult()
+    joheaders.page_header_navbar_level1(req, _("Add words"), uid, uname)
+    jotools.write(req, '<form method="post" action="add">\n')
+    jotools.write(req, '<table class="border">\n')
+    jotools.write(req, '<tr><th>%s</th><th>%s</th><th>%s</th></tr>\n' \
+                       % (_('Word'), _('Word class'), _('Notes')))
+    i = 0
+    for result in results.getresult():
+        word = result[0]
+        notes = result[1]
+        jotools.write(req, '<tr><td><input type="hidden" name="origword%i" value=%s />' \
+                               % (i, jotools.escape_form_value(word)))
+        jotools.write(req, '<input type="text" name="word%i" value=%s /></td><td>' \
+                           % (i, jotools.escape_form_value(word)))
+        jotools.write(req, joword.get_class_selector(class_res, None, i, True))
+        jotools.write(req, '</td><td>')
+        jotools.write(req, jotools.escape_html(notes))
+        jotools.write(req, '</td></tr>\n')
+        i = i + 1
+    jotools.write(req, '</table>\n' +
+                       '<p><input type="submit" value="%s"></p></form>\n' % _("Add words"))
+    joheaders.page_footer_plain(req)
+    return req.response()
 
 @app.route('/query/form')
 def query_form():
