@@ -23,10 +23,9 @@ import jotools
 import jodb
 import functions
 import _config
-import gettext
 from flask import request
 
-_ = gettext.gettext
+_ = _config.transl
 
 def _print_html_line(db, wid, word, wclass):
 	results = db.query("SELECT wid FROM flag_attribute_value WHERE aid in (24, 26)" +

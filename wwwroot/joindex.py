@@ -20,9 +20,8 @@
 
 import types
 import _config
-import gettext
 
-_ = gettext.gettext
+_ = _config.transl
 
 def login_logout(db, uid, uname, wid):
 	if uid == None:

@@ -19,10 +19,9 @@
 # This file contains html headers, footers and related functions
 
 import _config
-import gettext
 import jotools
 
-_ = gettext.gettext
+_ = _config.transl
 
 # Outputs the shared header for a page with no navigation bar
 def page_header_nonavbar(req, title):

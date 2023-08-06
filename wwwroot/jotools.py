@@ -23,7 +23,6 @@ import re
 import http.cookies
 import time
 import urllib.request, urllib.parse, urllib.error
-import gettext
 import jodb
 import joheaders
 import _pg
@@ -35,7 +34,7 @@ from io import StringIO
 
 HTTP_MOVED_PERMANENTLY = 301
 
-_ = gettext.gettext
+_ = _config.transl
 
 def _call_handler(db, module, funcname, paramlist):
 	if module == 'joeditors':

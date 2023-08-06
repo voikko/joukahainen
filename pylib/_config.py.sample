@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Application configuration file for Joukahainen
+# Make a copy of this file as wwwroot/_config.py and edit as needed
 
 # Installation directory
 INSTALLATION_DIRECTORY = u'/var/lib/joukahainen'
@@ -28,3 +29,5 @@ DB_PUBLIC_DATABASE = 'joukahainen'
 DB_PRIVATE_DATABASE = 'joukahainen_private'
 DB_USER = 'joukahainen'
 DB_PASSWORD = 'write_password_here'
+
+transl = gettext.translation('joukahainen', INSTALLATION_DIRECTORY + '/transl', [LANG], fallback=True).gettext

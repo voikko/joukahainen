@@ -7,7 +7,6 @@ import joeditors
 import jooutput
 import word as joword
 import re
-import gettext
 import random
 import hashlib
 import time
@@ -18,7 +17,7 @@ from functools import reduce
 from ehdotasanoja import ehdotasanoja_index
 from findclass import classlist
 
-_ = gettext.gettext
+_ = _config.transl
 
 app = Flask(__name__)
 

@@ -22,9 +22,8 @@ import joindex
 import jotools
 import functions
 import _config
-import gettext
 
-_ = gettext.gettext
+_ = _config.transl
 
 def _word_class(db, classid):
 	results = db.query("SELECT name FROM wordclass WHERE classid = %i" % classid)

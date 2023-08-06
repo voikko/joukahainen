@@ -19,14 +19,14 @@
 # This file contains the word editor
 
 import sys
-import gettext
+import _config
 import joheaders
 import jotools
 import joeditors
 import jodb
 from functools import reduce
 
-_ = gettext.gettext
+_ = _config.transl
 
 # Returns a html class selector for a list of classes in form (cid, description). If cid != None,
 # then that class is already selected (as a hidden field). Row is the number of editable row
