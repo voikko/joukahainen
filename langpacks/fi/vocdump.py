@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 # Copyright 2006 - 2007 Harri Pitkänen (hatapitk@iki.fi)
@@ -41,47 +41,47 @@ from getopt import getopt
 
 # ====== Settings ======
 
-optlist, args = getopt(sys.argv[1:], u'', \
-	[u'joukahainen_url=', u'dump_dir=', u'pgdump_command=', u'db_name=', u'db_port='])
+optlist, args = getopt(sys.argv[1:], '', \
+	['joukahainen_url=', 'dump_dir=', 'pgdump_command=', 'db_name=', 'db_port='])
 
 for opt, val in optlist:
-	if opt == u'--joukahainen_url':
+	if opt == '--joukahainen_url':
 		JOUKAHAINEN_URL = val
-	elif opt == u'--dump_dir':
+	elif opt == '--dump_dir':
 		DUMP_DIR = val
-	elif opt == u'--pgdump_command':
+	elif opt == '--pgdump_command':
 		PGDUMP_COMMAND = val
-	elif opt == u'--db_name':
+	elif opt == '--db_name':
 		DB_NAME = val
-	elif opt == u'--db_port':
+	elif opt == '--db_port':
 		DB_PORT = val
 
 # Derived/unchanging configuration
-JOUKAHAINEN_VOC_URL = JOUKAHAINEN_URL + u'/sanastot'
-VOC_DUMP_DIR = DUMP_DIR + u'/sanastot'
-DB_DUMP_DIR = DUMP_DIR + u'/pgdumps'
-WGET_COMMAND = u'wget'
+JOUKAHAINEN_VOC_URL = JOUKAHAINEN_URL + '/sanastot'
+VOC_DUMP_DIR = DUMP_DIR + '/sanastot'
+DB_DUMP_DIR = DUMP_DIR + '/pgdumps'
+WGET_COMMAND = 'wget'
 
 # Special vocabularies, format (id, name, description)
 SPECIAL_VOCS = [
-	(15, u'atk', u'Tietotekniikan erikoissanasto'),
-	(19, u'kasvatustiede', u'Kasvatustieteen erikoissanasto'),
-	(33, u'laaketiede', u'Lääketieteen erikoissanasto'),
-	(36, u'matluonnontiede', u'Matematiikan, fysiikan ja kemian erikoissanasto'),
-	(35, u'vieraskieliset', u'Vieraskieliset sanat ja nimet')
+	(15, 'atk', 'Tietotekniikan erikoissanasto'),
+	(19, 'kasvatustiede', 'Kasvatustieteen erikoissanasto'),
+	(33, 'laaketiede', 'Lääketieteen erikoissanasto'),
+	(36, 'matluonnontiede', 'Matematiikan, fysiikan ja kemian erikoissanasto'),
+	(35, 'vieraskieliset', 'Vieraskieliset sanat ja nimet')
 ]
 
 # ====== Functions ======
 
 # Dumps the contents of the database to the given file
 def dump_database(filename):
-	dbfile = os.open(filename, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0644)
-	subprocess.call([PGDUMP_COMMAND, u'-F', u'c', u'-p', DB_PORT, DB_NAME], stdout=dbfile)
+	dbfile = os.open(filename, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o644)
+	subprocess.call([PGDUMP_COMMAND, '-F', 'c', '-p', DB_PORT, DB_NAME], stdout=dbfile)
 	os.close(dbfile)
 
 # Dumps the contents of the default vocabulary to a file
 def dump_default_vocabulary(filename):
-	subprocess.call(u'"%s" -q "%s/query/wlist?listtype=xml" -O - | gzip > "%s"' % \
+	subprocess.call('"%s" -q "%s/query/wlist?listtype=xml" -O - | gzip > "%s"' % \
 	                (WGET_COMMAND, JOUKAHAINEN_URL, filename), shell=True)
 
 # The date for new files
@@ -102,11 +102,11 @@ def cleanup_dates():
 
 # Writes an entry to the vocabulary update index file
 def write_index_entry(indexfile, filename, localpath, description, update_date):
-	indexfile.write(u'[lex]\n')
-	indexfile.write(u'%s/%s\n' % (JOUKAHAINEN_VOC_URL, filename))
-	indexfile.write(u'%s\n' % localpath)
-	indexfile.write(u'%s\n' % update_date)
-	indexfile.write(u'%s\n\n' % description)
+	indexfile.write('[lex]\n')
+	indexfile.write('%s/%s\n' % (JOUKAHAINEN_VOC_URL, filename))
+	indexfile.write('%s\n' % localpath)
+	indexfile.write('%s\n' % update_date)
+	indexfile.write('%s\n\n' % description)
 
 # Removes a file or symbolic link if it exists.
 def remove(filename):
@@ -119,20 +119,20 @@ def remove(filename):
 cdate = current_date()
 
 # The default vocabulary
-new_dvoc_name = VOC_DUMP_DIR + u'/' + DB_NAME + u'-' + cdate + u'.xml.gz'
-dvoc_link_name = VOC_DUMP_DIR + u'/' + DB_NAME + u'.xml.gz'
+new_dvoc_name = VOC_DUMP_DIR + '/' + DB_NAME + '-' + cdate + '.xml.gz'
+dvoc_link_name = VOC_DUMP_DIR + '/' + DB_NAME + '.xml.gz'
 dump_default_vocabulary(new_dvoc_name)
 remove(dvoc_link_name)
 os.symlink(new_dvoc_name, dvoc_link_name)
 
 # Database dumps
-new_dbdump_name = DB_DUMP_DIR + u'/' + DB_NAME + u'-' + cdate + u'.pgdump'
-dbdump_link_name = DB_DUMP_DIR + u'/' + DB_NAME + u'.pgdump'
+new_dbdump_name = DB_DUMP_DIR + '/' + DB_NAME + '-' + cdate + '.pgdump'
+dbdump_link_name = DB_DUMP_DIR + '/' + DB_NAME + '.pgdump'
 dump_database(new_dbdump_name)
 remove(dbdump_link_name)
 os.symlink(new_dbdump_name, dbdump_link_name)
 
 # Old file cleanup
 for cldate in cleanup_dates():
-	remove(VOC_DUMP_DIR + u'/' + DB_NAME + u'-' + cldate + u'.xml.gz')
-	remove(DB_DUMP_DIR + u'/' + DB_NAME + u'-' + cldate + u'.pgdump')
+	remove(VOC_DUMP_DIR + '/' + DB_NAME + '-' + cldate + '.xml.gz')
+	remove(DB_DUMP_DIR + '/' + DB_NAME + '-' + cldate + '.pgdump')

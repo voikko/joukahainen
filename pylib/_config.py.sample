@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import gettext
+
 # Application configuration file for Joukahainen
 # Make a copy of this file as wwwroot/_config.py and edit as needed
 
